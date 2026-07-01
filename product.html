@@ -102,7 +102,6 @@
         }
 
         .input-group input:focus { border-color: #d4af37; }
-        .input-group input[type="file"] { padding: 8px; background-color: #f7fafc; cursor: pointer; }
 
         .add-btn {
             width: 100%;
@@ -187,8 +186,8 @@
         
         <div class="admin-box">
             <div class="input-group">
-                <label>БҮТЭЭГДЭХҮҮНИЙ ЗУРАГ</label>
-                <input type="file" id="prodImage" accept="image/*">
+                <label>БҮТЭЭГДЭХҮҮНИЙ ЗУРГИЙН ЛИНК (URL)</label>
+                <input type="text" id="prodImageUrl" placeholder="https://example.com/image.jpg">
             </div>
             <div class="input-group">
                 <label>БҮТЭЭГДЭХҮҮНИЙ НЭР</label>
@@ -196,65 +195,82 @@
             </div>
             <div class="input-group">
                 <label>БҮТЭЭГДЭХҮҮНИЙ ҮНЭ</label>
-                <input type="text" id="prodPrice" placeholder="Үнэ оруулах... (Жишээ: 50,000 ₮)">
+                <input type="text" id="prodPrice" placeholder="Үнэ оруулах... (Жишээ: 45,000 ₮)">
             </div>
             <button class="add-btn" onclick="addProduct()">+</button>
         </div>
 
         <div class="product-list-title">Нэмэгдсэн бараанууд</div>
         <div class="product-list" id="productList">
-            </div>
+        </div>
     </div>
 
     <script>
+        // Хуудас нээгдэхэд өмнөх бараануудыг харуулах
+        window.onload = function() {
+            displayProducts();
+        };
+
         function addProduct() {
             var name = document.getElementById("prodName").value;
             var price = document.getElementById("prodPrice").value;
-            var imageInput = document.getElementById("prodImage");
+            var imageUrl = document.getElementById("prodImageUrl").value;
 
             if (name === "" || price === "") {
                 alert("Нэр болон үнийг оруулна уу!");
                 return;
             }
 
-            var list = document.getElementById("productList");
-            var item = document.createElement("div");
-            item.className = "product-item";
+            // Хэрэв зураггүй бол хайрцагны зураг тавина
+            var finalImg = imageUrl !== "" ? imageUrl : "https://images.unsplash.com/photo-1542291026-7eec264c27ff";
 
-            if (imageInput.files && imageInput.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    item.innerHTML = `
-                        <div class="prod-left">
-                            <img src="${e.target.result}" class="prod-thumb" alt="product">
-                            <div class="prod-details">
-                                <p class="prod-title">${name}</p>
-                                <span class="prod-price">${price}</span>
-                            </div>
-                        </div>
-                        <button class="delete-btn" onclick="this.parentElement.parentElement.remove()">Устгах</button>
-                    `;
-                    list.appendChild(item);
-                }
-                reader.readAsDataURL(imageInput.files[0]);
-            } else {
-                item.innerHTML = `
-                    <div class="prod-left">
-                        <div class="prod-thumb" style="display: flex; align-items: center; justify-content: center; font-size: 24px;">📦</div>
-                        <div class="prod-details">
-                            <p class="prod-title">${name}</p>
-                            <span class="prod-price">${price}</span>
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="this.parentElement.parentElement.remove()">Устгах</button>
-                `;
-                list.appendChild(item);
-            }
+            var newProduct = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                image: finalImg
+            };
+
+            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
+            products.push(newProduct);
+            localStorage.setItem("shop_products", JSON.stringify(products));
+
+            displayProducts();
 
             // Цэвэрлэх
             document.getElementById("prodName").value = "";
             document.getElementById("prodPrice").value = "";
-            imageInput.value = "";
+            document.getElementById("prodImageUrl").value = "";
+        }
+
+        function displayProducts() {
+            var list = document.getElementById("productList");
+            list.innerHTML = ""; 
+            
+            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
+
+            products.forEach(function(prod) {
+                var item = document.createElement("div");
+                item.className = "product-item";
+                item.innerHTML = `
+                    <div class="prod-left">
+                        <img src="${prod.image}" class="prod-thumb" alt="product">
+                        <div class="prod-details">
+                            <p class="prod-title">${prod.name}</p>
+                            <span class="prod-price">${prod.price}</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteProduct(${prod.id})">Устгах</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function deleteProduct(id) {
+            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
+            products = products.filter(p => p.id !== id);
+            localStorage.setItem("shop_products", JSON.stringify(products));
+            displayProducts();
         }
     </script>
 
