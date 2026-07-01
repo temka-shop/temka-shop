@@ -1,0 +1,93 @@
+/* Ерөнхий тохиргоо */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Навигаци / Толгой хэсэг */
+header {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-mx: 15px;
+    margin: 0 10px;
+}
+
+header nav a:hover {
+    color: #ff9900;
+}
+
+.cart-icon {
+    background-color: #ff9900;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* Бүтээгдэхүүний хэсэг */
+main {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Барааны карт */
+.product-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e44d26;
+}
+
+.add-to-cart-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #218838;
+}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бараа Удирдах - T&E Дэлгүүр</title>
+    <style>
+        /* Үндсэн тохиргоо */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 24px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .back-btn {
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            color: #1e2430;
+            transition: 0.2s;
+        }
+        .back-btn:hover { color: #d4af37; }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #1e2430;
+            text-transform: uppercase;
+        }
+        .logo span { color: #d4af37; }
+        .header-spacer { width: 90px; }
+
+        /* Баннер */
+        .hero-section {
+            background: linear-gradient(135deg, #1e2430 0%, #2a3244 100%);
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 { font-size: 26px; margin: 0 0 5px 0; font-weight: 700; }
+        .hero-section p { font-size: 13px; color: #b9c1cb; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Контент хэсэг */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        .admin-box {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-group input:focus { border-color: #d4af37; }
+        .input-group input[type="file"] { padding: 8px; background-color: #f7fafc; cursor: pointer; }
+
+        .add-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #1e2430;
+            color: #ffffff;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .add-btn:hover { background-color: #d4af37; }
+
+        /* Жагсаалт */
+        .product-list-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e2430;
+            margin: 40px 0 20px 0;
+            text-align: left;
+        }
+
+        .product-list {
+            background-color: #ffffff;
+            border-radius: 15px;
+            border: 1px solid #edf2f7;
+            padding: 10px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .product-item:last-child { border-bottom: none; }
+        .prod-left { display: flex; align-items: center; gap: 15px; }
+
+        .prod-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #edf2f7;
+        }
+
+        .prod-details { text-align: left; }
+        .prod-title { font-weight: 600; color: #1e2430; margin: 0 0 4px 0; }
+        .prod-price { font-size: 14px; color: #718096; }
+
+        .delete-btn {
+            background-color: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .delete-btn:hover { background-color: #ef4444; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="back-btn">← Буцах</a>
+        <div class="logo">T&E <span>Админ</span></div>
+        <div class="header-spacer"></div>
+    </div>
+
+    <div class="hero-section">
+        <h1>T&E АДМИН</h1>
+        <p>БАРАА УДИРДЛАГА</p>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="admin-box">
+            <div class="input-group">
+                <label>БҮТЭЭГДЭХҮҮНИЙ ЗУРАГ</label>
+                <input type="file" id="prodImage" accept="image/*">
+            </div>
+            <div class="input-group">
+                <label>БҮТЭЭГДЭХҮҮНИЙ НЭР</label>
+                <input type="text" id="prodName" placeholder="Нэр оруулах...">
+            </div>
+            <div class="input-group">
+                <label>БҮТЭЭГДЭХҮҮНИЙ ҮНЭ</label>
+                <input type="text" id="prodPrice" placeholder="Үнэ оруулах... (Жишээ: 50,000 ₮)">
+            </div>
+            <button class="add-btn" onclick="addProduct()">+</button>
+        </div>
+
+        <div class="product-list-title">Нэмэгдсэн бараанууд</div>
+        <div class="product-list" id="productList">
+            </div>
+    </div>
+
+    <script>
+        function addProduct() {
+            var name = document.getElementById("prodName").value;
+            var price = document.getElementById("prodPrice").value;
+            var imageInput = document.getElementById("prodImage");
+
+            if (name === "" || price === "") {
+                alert("Нэр болон үнийг оруулна уу!");
+                return;
+            }
+
+            var list = document.getElementById("productList");
+            var item = document.createElement("div");
+            item.className = "product-item";
+
+            if (imageInput.files && imageInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    item.innerHTML = `
+                        <div class="prod-left">
+                            <img src="${e.target.result}" class="prod-thumb" alt="product">
+                            <div class="prod-details">
+                                <p class="prod-title">${name}</p>
+                                <span class="prod-price">${price}</span>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="this.parentElement.parentElement.remove()">Устгах</button>
+                    `;
+                    list.appendChild(item);
+                }
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                item.innerHTML = `
+                    <div class="prod-left">
+                        <div class="prod-thumb" style="display: flex; align-items: center; justify-content: center; font-size: 24px;">📦</div>
+                        <div class="prod-details">
+                            <p class="prod-title">${name}</p>
+                            <span class="prod-price">${price}</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="this.parentElement.parentElement.remove()">Устгах</button>
+                `;
+                list.appendChild(item);
+            }
+
+            // Цэвэрлэх
+            document.getElementById("prodName").value = "";
+            document.getElementById("prodPrice").value = "";
+            imageInput.value = "";
+        }
+    </script>
+
+</body>
+</html>
