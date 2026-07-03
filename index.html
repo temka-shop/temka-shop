@@ -3,82 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEMKA SHOPP - Манай дэлгүүрт тавтай морил</title>
+    <title>TEMKA SHOPP - Ухаалаг Дэлгүүр</title>
     <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --background: #f8fafc;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .header {
-            background-color: #1a252f;
-            color: white;
-            width: 100%;
-            max-width: 1200px;
-            text-align: center;
-            padding: 20px 0;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        .product-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px 0;
-        }
-        .product-card {
-            background-color: white;
-            border: 1px solid #e1e8ed;
-            padding: 20px;
-            width: 260px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .product-title {
-            font-size: 16px;
-            margin: 15px 0 10px 0;
-            color: #333;
-        }
-        .product-price {
-            font-weight: bold;
-            color: #e44d26;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .btn-buy {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            width: 100%;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-buy:hover {
-            background-color: #27ae60;
+            color: #334155;
         }
 
-        /* Захиалгын цонхны загвар (Modal) */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            padding: 40px 0;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px 0;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Хит барааны ухаалаг шошго */
+        .hit-badge {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: linear-gradient(45deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 15px 0 8px 0;
+            color: var(--primary);
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--danger);
+            font-size: 20px;
+            margin: 0 0 15px 0;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-buy:hover {
+            opacity: 0.9;
+        }
+
+        /* Захиалгын цонх */
         .modal {
             display: none; 
             position: fixed; 
@@ -87,137 +152,140 @@
             top: 0;
             width: 100%; 
             height: 100%; 
-            background-color: rgba(0,0,0,0.5); 
+            background-color: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background-color: white;
-            padding: 25px;
-            border-radius: 16px;
+            padding: 30px;
+            border-radius: 24px;
             width: 90%;
-            max-width: 440px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            max-width: 460px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
         }
+
         .close-btn {
             position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 24px;
+            right: 25px;
+            top: 20px;
+            font-size: 28px;
             cursor: pointer;
-            color: #aaa;
-        }
-        .close-btn:hover {
-            color: black;
+            color: #94a3b8;
+            transition: color 0.2s;
         }
 
-        /* Үнийн мэдээллийн хэсэг */
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
         .price-details {
             text-align: center;
-            margin-bottom: 15px;
-        }
-        .price-text {
-            font-weight: bold;
-            color: #e44d26;
-            font-size: 15px;
-            margin: 4px 0;
-        }
-        .product-views-text {
-            color: #3498db;
-            font-size: 13px;
-            font-weight: bold;
-            margin: 5px 0;
-        }
-        .shipping-text {
-            color: #7f8c8d;
-            font-size: 13px;
-            margin: 2px 0;
-        }
-        .total-text {
-            color: #2ecc71;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 6px 0;
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 20px;
         }
 
-        /* ДАНСНЫ ХЭСГИЙН ЗАГВАР */
-        .modal-bank-card {
-            background-color: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid #e1e8ed;
-            text-align: left;
+        .price-text {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+            margin: 0 0 5px 0;
         }
+
+        .product-views-text {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .total-text {
+            color: var(--success);
+            font-size: 18px;
+            font-weight: 700;
+            margin: 8px 0 0 0;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 8px;
+        }
+
+        /* Дансны карт */
+        .modal-bank-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
         .bank-info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #e1e8ed;
-            padding-bottom: 6px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
         }
+
         .bank-info-row:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0;
         }
+
         .bank-info-label {
-            color: #7f8c8d;
+            color: #64748b;
+            font-weight: 500;
         }
-        .bank-info-value-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+
         .bank-info-value {
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 700;
+            color: var(--primary);
         }
-        .bank-info-value.blue {
-            color: #0056b3;
-        }
-        .bank-info-value.red {
-            color: #c0392b;
+
+        .bank-info-value.blue { color: #1d4ed8; }
+        .bank-info-value.red { 
+            color: var(--danger);
             text-align: right;
             font-size: 12px;
-            max-width: 200px;
-            line-height: 1.3;
+            line-height: 1.4;
+            max-width: 220px;
         }
+
         .btn-copy {
-            background-color: #e2e8f0;
-            border: none;
-            padding: 2px 6px;
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            padding: 4px 8px;
             font-size: 11px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            color: #4a5568;
-            font-weight: bold;
+            font-weight: 600;
+            margin-left: 8px;
+            transition: all 0.2s;
         }
+
         .btn-copy:hover {
-            background-color: #cbd5e1;
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
         
         .btn-close-modal {
-            background-color: #e44d26;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 15px;
             width: 100%;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 12px;
+            font-size: 15px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 15px;
-            transition: background-color 0.2s;
-            box-shadow: 0 2px 4px rgba(228, 77, 38, 0.2);
-        }
-        .btn-close-modal:hover {
-            background-color: #c0392b;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
         }
     </style>
 </head>
@@ -225,46 +293,38 @@
 
     <div class="header">
         <h1>TEMKA SHOPP</h1>
-        <p>Манай дэлгүүрт тавтай морил</p>
+        <p>Ирээдүйн ухаалаг онлайн дэлгүүр</p>
     </div>
 
-    <h2>Бүтээгдэхүүнүүд</h2>
+    <div class="section-title">Манай бүтээгдэхүүнүүд</div>
 
     <div class="product-container" id="homeProductGrid">
-        <p style='color:#888; font-size:16px;'>Ачаалж байна...</p>
+        <p style='color:#64748b; font-size:16px;'>Барааг ачаалж байна...</p>
     </div>
 
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="window.closeModal()">&times;</span>
             
-            <h2 style="margin: 0 0 5px 0; color: #1a252f; text-align: center; font-size: 24px; font-weight: 800; letter-spacing: 1px;">TEMKA SHOPP</h2>
-            <h4 style="margin: 0 0 15px 0; color: #7f8c8d; text-align: center; font-weight: 600;">🛒 Захиалга баталгаажуулах</h4>
+            <h3 style="margin: 0 0 5px 0; color: var(--primary); text-align: center; font-size: 22px; font-weight: 800;">🛒 Захиалга Баталгаажуулах</h3>
+            <p style="margin: 0 0 20px 0; color: #64748b; text-align: center; font-size: 14px;">Төлбөрөө шилжүүлээд захиалгаа дуусгаарай</p>
             
             <div class="price-details">
                 <p class="price-text" id="modalProductTitle"></p>
-                <p class="product-views-text" id="modalProductViews">👀 Энэ барааг үзсэн: 0 удаа</p>
-                <p class="shipping-text">Хүргэлт: +3,000₮</p>
+                <p class="product-views-text" id="modalProductViews">👀 Үзсэн тоо: 0</p>
                 <p class="total-text" id="modalTotalWithShipping"></p>
             </div>
             
             <div class="modal-bank-card">
                 <div class="bank-info-row">
-                    <span class="bank-info-label">Банк:</span>
-                    <span class="bank-info-value blue">Худалдаа Хөгжлийн Банк (ХХБ)</span>
+                    <span class="bank-info-label">Хүлээн авах банк:</span>
+                    <span class="bank-info-value blue">ХХБ</span>
                 </div>
                 <div class="bank-info-row">
                     <span class="bank-info-label">Дансны дугаар:</span>
-                    <div class="bank-info-value-container">
+                    <div>
                         <span class="bank-info-value" id="bankAcc">428025046</span>
                         <button class="btn-copy" onclick="window.copyText('bankAcc', this)">Хуулах</button>
-                    </div>
-                </div>
-                <div class="bank-info-row">
-                    <span class="bank-info-label">IBAN код:</span>
-                    <div class="bank-info-value-container">
-                        <span class="bank-info-value" id="bankIban" style="font-size: 11px;">MN390004000428025046</span>
-                        <button class="btn-copy" onclick="window.copyText('bankIban', this)">Хуулах</button>
                     </div>
                 </div>
                 <div class="bank-info-row">
@@ -273,11 +333,11 @@
                 </div>
                 <div class="bank-info-row">
                     <span class="bank-info-label">Гүйлгээний утга:</span>
-                    <span class="bank-info-value red">Утасны дугаар, дүүрэг, хороо, байраа бичээрэй</span>
+                    <span class="bank-info-value red">Утасны дугаар, хаягаа заавал бичээрэй!</span>
                 </div>
             </div>
 
-            <button class="btn-close-modal" onclick="window.closeModal()">Манай дэлгүүрийг сонгосонд баярлалаа 🔥🔥🔥</button>
+            <button class="btn-close-modal" onclick="window.closeModal()">Төлбөрөө хийлээ 👍</button>
         </div>
     </div>
 
@@ -308,20 +368,26 @@
                 grid.innerHTML = ""; 
                 
                 if (!snapshot.exists()) {
-                    grid.innerHTML = "<p style='color:#888; font-size:16px;'>Одоогоор бараа байхгүй байна.</p>";
+                    grid.innerHTML = "<p style='color:#64748b;'>Одоогоор бараа байхгүй байна.</p>";
                     return;
                 }
                 
                 snapshot.forEach(function(childSnapshot) {
-                    var prodId = childSnapshot.key; // Барааны ID-г авч байна
+                    var prodId = childSnapshot.key;
                     var prod = childSnapshot.val();
+                    var views = prod.views || 0;
+                    
                     var card = document.createElement("div");
                     card.className = "product-card";
                     
+                    // Хэрэв үзсэн тоо 5-аас их бол ХИТ БАРАА шошго харуулна
+                    var hitBadgeHTML = views >= 5 ? <div class="hit-badge">🔥 ХИТ БАРАА</div> : '';
+                    
                     card.innerHTML = `
-                        <img src="${prod.image || 'https://via.placeholder.com/260x200'}" alt="${prod.name}">
+                        ${hitBadgeHTML}
+                        <img src="${prod.image || 'https://via.placeholder.com/280x220'}" alt="${prod.name}">
                         <h3 class="product-title">${prod.name}</h3>
-                        <p class="product-price">${prod.price}₮</p>
+                        <p class="product-price">${parseInt(prod.price).toLocaleString()}₮</p>
                         <button class="btn-buy" onclick="window.openModal('${prodId}', '${prod.name}', '${prod.price}')">Захиалах</button>
                     `;
                     grid.appendChild(card);
@@ -333,19 +399,17 @@
             var numericPrice = parseInt(price.toString().replace(/,/g, '')) || 0;
             var totalWithShipping = numericPrice + 3000;
             
-            document.getElementById("modalProductTitle").innerText = "Сонгосон бараа: " + name + " - " + price + "₮";
-            document.getElementById("modalTotalWithShipping").innerText = "Шилжүүлэх нийт дүн: " + totalWithShipping.toLocaleString() + "₮";
+            document.getElementById("modalProductTitle").innerText = name;
+            document.getElementById("modalTotalWithShipping").innerText = "Нийт шилжүүлэх дүн: " + totalWithShipping.toLocaleString() + "₮ (Хүргэлттэй)";
             
-            // ТУХАЙН БАРААНЫ ҮЗСЭН ТООГ FIREBASE ДЭЭР 1-ЭЭР НЭМЭГДҮҮЛЭХ
             var productViewsRef = database.ref('products/' + prodId + '/views');
             productViewsRef.transaction(function(currentViews) {
                 return (currentViews || 0) + 1;
             });
 
-            // ШИНЭЧЛЭГДСЭН ҮЗСЭН ТООГ ЦОНХОН ДЭЭР ХАРУУЛАХ
             productViewsRef.on('value', function(snapshot) {
                 var viewsCount = snapshot.val() || 0;
-                document.getElementById("modalProductViews").innerText = "👀 Энэ барааг үзсэн: " + viewsCount + " удаа";
+                document.getElementById("modalProductViews").innerText = "👀 Энэ барааг хүмүүс " + viewsCount + " удаа сонирхсон байна";
             });
                 
             document.getElementById("orderModal").style.display = "flex";
@@ -360,19 +424,16 @@
             navigator.clipboard.writeText(text).then(function() {
                 var oldText = btnElement.innerText;
                 btnElement.innerText = "Хуулагдлаа!";
-                btnElement.style.backgroundColor = "#2ecc71";
+                btnElement.style.backgroundColor = "#10b981";
                 btnElement.style.color = "white";
                 
                 setTimeout(function() {
                     btnElement.innerText = oldText;
-                    btnElement.style.backgroundColor = "#e2e8f0";
-                    btnElement.style.color = "#4a5568";
+                    btnElement.style.backgroundColor = "white";
+                    btnElement.style.color = "initial";
                 }, 2000);
-            }).catch(function(err) {
-                alert("Хуулж чадсангүй: ", err);
             });
         }
     </script>
-
 </body>
 </html>
