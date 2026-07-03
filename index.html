@@ -90,7 +90,6 @@
             border-radius: 12px;
         }
 
-        /* Хит барааны ухаалаг шошго */
         .hit-badge {
             position: absolute;
             top: 25px;
@@ -143,7 +142,6 @@
             opacity: 0.9;
         }
 
-        /* Захиалгын цонх */
         .modal {
             display: none; 
             position: fixed; 
@@ -213,7 +211,6 @@
             padding-top: 8px;
         }
 
-        /* Дансны карт */
         .modal-bank-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border-radius: 16px;
@@ -377,18 +374,20 @@
                     var prod = childSnapshot.val();
                     var views = prod.views || 0;
                     
+                    var rawPrice = prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : "0";
+                    var numericPrice = parseInt(rawPrice) || 0;
+                    
                     var card = document.createElement("div");
                     card.className = "product-card";
                     
-                    // Хэрэв үзсэн тоо 5-аас их бол ХИТ БАРАА шошго харуулна
                     var hitBadgeHTML = views >= 5 ? <div class="hit-badge">🔥 ХИТ БАРАА</div> : '';
                     
                     card.innerHTML = `
                         ${hitBadgeHTML}
                         <img src="${prod.image || 'https://via.placeholder.com/280x220'}" alt="${prod.name}">
                         <h3 class="product-title">${prod.name}</h3>
-                        <p class="product-price">${parseInt(prod.price).toLocaleString()}₮</p>
-                        <button class="btn-buy" onclick="window.openModal('${prodId}', '${prod.name}', '${prod.price}')">Захиалах</button>
+                        <p class="product-price">${numericPrice.toLocaleString()}₮</p>
+                        <button class="btn-buy" onclick="window.openModal('${prodId}', '${prod.name}', '${numericPrice}')">Захиалах</button>
                     `;
                     grid.appendChild(card);
                 });
