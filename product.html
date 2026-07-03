@@ -202,15 +202,38 @@
 
         <div class="product-list-title">Нэмэгдсэн бараанууд</div>
         <div class="product-list" id="productList">
+            <p style="text-align: center; color: #888; padding: 20px;">Ачаалж байна...</p>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
-        // Хуудас нээгдэхэд өмнөх бараануудыг харуулах
+        // 2. Firebase Холболтын Тохиргоо
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
+            authDomain: "temka-shop.firebaseapp.com",
+            databaseURL: "https://temka-shop-default-rtdb.firebaseio.com",
+            projectId: "temka-shop",
+            storageBucket: "temka-shop.firebasestorage.app",
+            messagingSenderId: "1057963752042",
+            appId: "1:1057963752042:web:9e0c88d308ac1cc9c92813",
+            measurementId: "G-9H3NQML5TV"
+        };
+
+        // Firebase-ийг ажиллуулах
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        // Хуудас нээгдэхэд Firebase-ээс бараа уншиж харуулах
         window.onload = function() {
             displayProducts();
         };
 
+        // Firebase рүү бараа нэмэх функц
         function addProduct() {
             var name = document.getElementById("prodName").value;
             var price = document.getElementById("prodPrice").value;
@@ -221,56 +244,61 @@
                 return;
             }
 
-            // Хэрэв зураггүй бол хайрцагны зураг тавина
             var finalImg = imageUrl !== "" ? imageUrl : "https://images.unsplash.com/photo-1542291026-7eec264c27ff";
 
-            var newProduct = {
-                id: Date.now(),
+            // Firebase-ийн 'products' цуглуулга руу датаг шидэж байна
+            database.ref('products').push({
                 name: name,
                 price: price,
                 image: finalImg
-            };
-
-            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
-            products.push(newProduct);
-            localStorage.setItem("shop_products", JSON.stringify(products));
-
-            displayProducts();
-
-            // Цэвэрлэх
-            document.getElementById("prodName").value = "";
-            document.getElementById("prodPrice").value = "";
-            document.getElementById("prodImageUrl").value = "";
-        }
-
-        function displayProducts() {
-            var list = document.getElementById("productList");
-            list.innerHTML = ""; 
-            
-            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
-
-            products.forEach(function(prod) {
-                var item = document.createElement("div");
-                item.className = "product-item";
-                item.innerHTML = `
-                    <div class="prod-left">
-                        <img src="${prod.image}" class="prod-thumb" alt="product">
-                        <div class="prod-details">
-                            <p class="prod-title">${prod.name}</p>
-                            <span class="prod-price">${prod.price}</span>
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteProduct(${prod.id})">Устгах</button>
-                `;
-                list.appendChild(item);
+            }).then(() => {
+                // Амжилттай нэмэгдвэл форм цэвэрлэнэ
+                document.getElementById("prodName").value = "";
+                document.getElementById("prodPrice").value = "";
+                document.getElementById("prodImageUrl").value = "";
+            }).catch((error) => {
+                alert("Алдаа гарлаа: " + error.message);
             });
         }
 
-        function deleteProduct(id) {
-            var products = JSON.parse(localStorage.getItem("shop_products")) || [];
-            products = products.filter(p => p.id !== id);
-            localStorage.setItem("shop_products", JSON.stringify(products));
-            displayProducts();
+        // Firebase-ээс бараануудыг бодит цагаар авч харуулах
+        function displayProducts() {
+            var list = document.getElementById("productList");
+            
+            database.ref('products').on('value', function(snapshot) {
+                list.innerHTML = ""; 
+                
+                if (!snapshot.exists()) {
+                    list.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Одоогоор ямар нэгэн бараа байхгүй байна.</p>';
+                    return;
+                }
+
+                snapshot.forEach(function(childSnapshot) {
+                    var prod = childSnapshot.val();
+                    var key = childSnapshot.key; // Firebase дээрх давтагдашгүй ID түлхүүр
+                    
+                    var item = document.createElement("div");
+                    item.className = "product-item";
+                    item.innerHTML = `
+                        <div class="prod-left">
+                            <img src="${prod.image}" class="prod-thumb" alt="product">
+                            <div class="prod-details">
+                                <p class="prod-title">${prod.name}</p>
+                                <span class="prod-price">${prod.price}</span>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteProduct('${key}')">Устгах</button>
+                    `;
+                    list.appendChild(item);
+                });
+            });
+        }
+
+        // Firebase-ээс бараа устгах функц
+        function deleteProduct(key) {
+            if(confirm("Энэ барааг устгахдаа итгэлтэй байна уу?")) {
+                database.ref('products/' + key).remove();
+            }
         }
     </script>
 
