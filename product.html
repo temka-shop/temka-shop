@@ -2,215 +2,205 @@
 <html lang="mn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бараа Удирдах - T&E Дэлгүүр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T&E АДМИН ПАНЕЛЬ</title>
     <style>
-        /* Үндсэн тохиргоо */
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
         }
 
-        /* Header */
-        .header {
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8fafc;
+            padding: 12px;
+            color: #334155;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 15px 24px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
-
-        .back-btn {
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            color: #1e2430;
-            transition: 0.2s;
-        }
-        .back-btn:hover { color: #d4af37; }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #1e2430;
-            text-transform: uppercase;
-        }
-        .logo span { color: #d4af37; }
-        .header-spacer { width: 90px; }
-
-        /* Баннер */
-        .hero-section {
-            background: linear-gradient(135deg, #1e2430 0%, #2a3244 100%);
-            color: #ffffff;
-            padding: 30px 20px;
-            text-align: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-        }
-
-        .hero-section h1 { font-size: 26px; margin: 0 0 5px 0; font-weight: 700; }
-        .hero-section p { font-size: 13px; color: #b9c1cb; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Контент хэсэг */
-        .main-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px 60px 20px;
         }
 
         .admin-box {
-            background-color: #ffffff;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid #edf2f7;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-
-        .input-group input {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
             width: 100%;
-            padding: 12px 16px;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-top: 10px;
+        }
+
+        .back-link {
+            color: #b45309;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
-            font-size: 15px;
-            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #f8fafc;
+            color: #334155;
             outline: none;
-            transition: 0.2s;
         }
 
-        .input-group input:focus { border-color: #d4af37; }
+        .form-group input:focus {
+            border-color: #1e293b;
+            background-color: white;
+        }
 
-        .add-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: #1e2430;
-            color: #ffffff;
+        .btn-add {
+            background-color: #1e293b;
+            color: white;
             border: none;
-            font-size: 20px;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 10px;
             cursor: pointer;
-            transition: 0.2s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .add-btn:hover { background-color: #d4af37; }
 
-        /* Жагсаалт */
-        .product-list-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e2430;
-            margin: 40px 0 20px 0;
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 25px 0 12px 0;
+            width: 100%;
+            max-width: 500px;
             text-align: left;
         }
 
         .product-list {
-            background-color: #ffffff;
-            border-radius: 15px;
-            border: 1px solid #edf2f7;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .admin-prod-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 10px;
-        }
-
-        .product-item {
+            margin-bottom: 10px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid #f1f5f9;
+            justify-content: space-between;
         }
 
-        .product-item:last-child { border-bottom: none; }
-        .prod-left { display: flex; align-items: center; gap: 15px; }
-
-        .prod-thumb {
+        .admin-prod-card img {
             width: 50px;
             height: 50px;
-            border-radius: 8px;
             object-fit: cover;
-            background-color: #edf2f7;
+            border-radius: 6px;
+            margin-right: 12px;
         }
 
-        .prod-details { text-align: left; }
-        .prod-title { font-weight: 600; color: #1e2430; margin: 0 0 4px 0; }
-        .prod-price { font-size: 14px; color: #718096; }
+        .prod-info {
+            flex-grow: 1;
+            text-align: left;
+        }
 
-        .delete-btn {
+        .prod-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .prod-price {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ef4444;
+            margin-top: 2px;
+        }
+
+        .btn-delete {
             background-color: #fee2e2;
             color: #ef4444;
             border: none;
             padding: 6px 12px;
             border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
         }
-        .delete-btn:hover { background-color: #ef4444; color: white; }
+
+        .btn-delete:hover {
+            background-color: #fca5a5;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="index.html" class="back-btn">← Буцах</a>
-        <div class="logo">T&E <span>Админ</span></div>
-        <div class="header-spacer"></div>
-    </div>
+    <div class="admin-box">
+        <a href="index.html" class="back-link">← Буцах</a>
+        <h2>T&E АДМИН</h2>
 
-    <div class="hero-section">
-        <h1>T&E АДМИН</h1>
-        <p>БАРАА УДИРДЛАГА</p>
-    </div>
-
-    <div class="main-content">
-        
-        <div class="admin-box">
-            <div class="input-group">
-                <label>БҮТЭЭГДЭХҮҮНИЙ ЗУРГИЙН ЛИНК (URL)</label>
-                <input type="text" id="prodImageUrl" placeholder="https://example.com/image.jpg">
-            </div>
-            <div class="input-group">
-                <label>БҮТЭЭГДЭХҮҮНИЙ НЭР</label>
-                <input type="text" id="prodName" placeholder="Нэр оруулах...">
-            </div>
-            <div class="input-group">
-                <label>БҮТЭЭГДЭХҮҮНИЙ ҮНЭ</label>
-                <input type="text" id="prodPrice" placeholder="Үнэ оруулах... (Жишээ: 45,000 ₮)">
-            </div>
-            <button class="add-btn" onclick="addProduct()">+</button>
+        <div class="form-group">
+            <label>Зургийн линк (URL)</label>
+            <input type="text" id="prodImage" placeholder="https://example.com/image.jpg">
         </div>
 
-        <div class="product-list-title">Нэмэгдсэн бараанууд</div>
-        <div class="product-list" id="productList">
-            <p style="text-align: center; color: #888; padding: 20px;">Ачаалж байна...</p>
+        <div class="form-group">
+            <label>Бүтээгдэхүүний нэр</label>
+            <input type="text" id="prodName" placeholder="Нэр оруулах...">
         </div>
+
+        <div class="form-group">
+            <label>Бүтээгдэхүүний үнэ</label>
+            <input type="text" id="prodPrice" placeholder="Үнээ оруулах... (Жишээ нь: 45,000)">
+        </div>
+
+        <button class="btn-add" onclick="window.addProduct()">＋ Бараа нэмэх</button>
+    </div>
+
+    <div class="section-title">Нэмэгдсэн бараанууд</div>
+
+    <div class="product-list" id="adminProductList">
+        <p style="color:#64748b; font-size:14px; text-align:center; padding: 20px; background: white; border-radius:12px; border: 1px solid #e2e8f0;">Ачаалж байна...</p>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // 2. Firebase Холболтын Тохиргоо
+        // Чиний Firebase тохиргоо (Яг таг зөв холболт)
         const firebaseConfig = {
             apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
             authDomain: "temka-shop.firebaseapp.com",
@@ -222,85 +212,80 @@
             measurementId: "G-9H3NQML5TV"
         };
 
-        // Firebase-ийг ажиллуулах
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const database = firebase.database();
 
-        // Хуудас нээгдэхэд Firebase-ээс бараа уншиж харуулах
+        // Баазаас бараануудыг уншиж админ дээр жагсаах функц
         window.onload = function() {
-            displayProducts();
-        };
+            var listDiv = document.getElementById("adminProductList");
+            if (!listDiv) return;
 
-        // Firebase рүү бараа нэмэх функц
-        function addProduct() {
-            var name = document.getElementById("prodName").value;
-            var price = document.getElementById("prodPrice").value;
-            var imageUrl = document.getElementById("prodImageUrl").value;
-
-            if (name === "" || price === "") {
-                alert("Нэр болон үнийг оруулна уу!");
-                return;
-            }
-
-            var finalImg = imageUrl !== "" ? imageUrl : "https://images.unsplash.com/photo-1542291026-7eec264c27ff";
-
-            // Firebase-ийн 'products' цуглуулга руу датаг шидэж байна
-            database.ref('products').push({
-                name: name,
-                price: price,
-                image: finalImg
-            }).then(() => {
-                // Амжилттай нэмэгдвэл форм цэвэрлэнэ
-                document.getElementById("prodName").value = "";
-                document.getElementById("prodPrice").value = "";
-                document.getElementById("prodImageUrl").value = "";
-            }).catch((error) => {
-                alert("Алдаа гарлаа: " + error.message);
-            });
-        }
-
-        // Firebase-ээс бараануудыг бодит цагаар авч харуулах
-        function displayProducts() {
-            var list = document.getElementById("productList");
-            
             database.ref('products').on('value', function(snapshot) {
-                list.innerHTML = ""; 
+                listDiv.innerHTML = "";
                 
                 if (!snapshot.exists()) {
-                    list.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Одоогоор ямар нэгэн бараа байхгүй байна.</p>';
+                    listDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding:20px; background:white; border-radius:12px;'>Одоогоор ямар ч бараа байхгүй байна.</p>";
                     return;
                 }
 
                 snapshot.forEach(function(childSnapshot) {
+                    var prodId = childSnapshot.key;
                     var prod = childSnapshot.val();
-                    var key = childSnapshot.key; // Firebase дээрх давтагдашгүй ID түлхүүр
-                    
-                    var item = document.createElement("div");
-                    item.className = "product-item";
-                    item.innerHTML = `
-                        <div class="prod-left">
-                            <img src="${prod.image}" class="prod-thumb" alt="product">
-                            <div class="prod-details">
-                                <p class="prod-title">${prod.name}</p>
-                                <span class="prod-price">${prod.price}</span>
-                            </div>
-                        </div>
-                        <button class="delete-btn" onclick="deleteProduct('${key}')">Устгах</button>
-                    `;
-                    list.appendChild(item);
+                    var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+
+                    var row = document.createElement("div");
+                    row.className = "admin-prod-card";
+                    row.innerHTML = 
+                        '<img src="' + (prod.image || 'https://via.placeholder.com/50') + '" alt="">' +
+                        '<div class="prod-info">' +
+                            '<div class="prod-name">' + prod.name + '</div>' +
+                            '<div class="prod-price">' + numericPrice.toLocaleString() + '₮</div>' +
+                        '</div>' +
+                        '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')">Устгах</button>';
+
+                    listDiv.appendChild(row);
                 });
             });
-        }
+        };
 
-        // Firebase-ээс бараа устгах функц
-        function deleteProduct(key) {
-            if(confirm("Энэ барааг устгахдаа итгэлтэй байна уу?")) {
-                database.ref('products/' + key).remove();
+        // Шинэ бараа нэмэх функц
+        window.addProduct = function() {
+            var img = document.getElementById("prodImage").value.trim();
+            var name = document.getElementById("prodName").value.trim();
+            var price = document.getElementById("prodPrice").value.trim();
+
+            if (!name || !price) {
+                alert("Бүтээгдэхүүний нэр болон үнийг заавал оруулна уу!");
+                return;
             }
-        }
-    </script>
 
+            var numericPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
+
+            database.ref('products').push({
+                image: img || "https://via.placeholder.com/200",
+                name: name,
+                price: numericPrice,
+                views: 0
+            }).then(function() {
+                alert("Бараа амжилттай нэмэгдлээ! 👍");
+                document.getElementById("prodImage").value = "";
+                document.getElementById("prodName").value = "";
+                document.getElementById("prodPrice").value = "";
+            }).catch(function(error) {
+                alert("Алдаа гарлаа: " + error.message);
+            });
+        };
+
+        // Бараа устгах функц
+        window.deleteProduct = function(prodId) {
+            if (confirm("Энэ барааг устгахдаа итгэлтэй байна уу?")) {
+                database.ref('products/' + prodId).remove().then(function() {
+                    alert("Бараа устгагдлаа.");
+                });
+            }
+        };
+    </script>
 </body>
 </html>
