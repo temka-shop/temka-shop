@@ -90,26 +90,6 @@
             border-radius: 12px;
         }
 
-        .hit-badge {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            background: linear-gradient(45deg, #f59e0b, #ef4444);
-            color: white;
-            padding: 6px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
         .product-title {
             font-size: 18px;
             font-weight: 600;
@@ -406,7 +386,6 @@
                 snapshot.forEach(function(childSnapshot) {
                     var prodId = childSnapshot.key;
                     var prod = childSnapshot.val();
-                    var views = prod.views || 0;
                     
                     var rawPrice = prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : "0";
                     var numericPrice = parseInt(rawPrice) || 0;
@@ -414,9 +393,7 @@
                     var card = document.createElement("div");
                     card.className = "product-card";
                     
-                    var hitBadgeHTML = views >= 5 ? '<div class="hit-badge">🔥 ХИТ БАРАА</div>' : '';
-                    
-                    card.innerHTML = hitBadgeHTML +
+                    card.innerHTML =
                         '<img src="' + (prod.image || 'https://via.placeholder.com/280x220') + '" alt="' + prod.name + '">' +
                         '<h3 class="product-title">' + prod.name + '</h3>' +
                         '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
