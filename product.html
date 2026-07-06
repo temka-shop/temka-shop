@@ -271,7 +271,7 @@
     <div class="ai-chat-box">
         <h3 style="font-size: 14px; font-weight: 800; color: #3b82f6; margin-bottom: 10px;">🤖 T&E AI Жинхэнэ Ухаалаг Туслах</h3>
         <div class="chat-messages" id="chatMessages">
-            <div class="msg ai">Сайн байна уу, Тэмүүжин захирал аа! Надаас дэлгүүрийнхээ тайланг асууж эсвэл хүссэн сэдвээрээ чөлөөтэй ярилцаарай. Би яг л ChatGPT, Gemini шиг таны бүх асуултад монголоор ухаалаг хариулна!</div>
+            <div class="msg ai">Сайн байна уу, Тэмүүжин захирал аа! Надаас дэлгүүрийнхээ тайланг асууж эсвэл хүссэн сэдвээрээ чөлөөтэй ярилцаарай. Би яг л ChatGPT шиг таны бүх асуултад монголоор ухаалаг хариулна!</div>
         </div>
         <div class="chat-input-row">
             <input type="text" id="chatInput" placeholder="AI туслахаас асуух..." onkeypress="if(event.key==='Enter') window.askAI()">
@@ -344,7 +344,7 @@
             });
         };
 
-        // 🤖 ЖИНХЭНЭ МОНГОЛ AI (GEMINI) ХОЛБОХ ФУНКЦ
+        // 🤖 ЧӨЛӨӨТЭЙ ЯРИЛЦАХ ШИНЭ AI ФУНКЦ (ТҮЛХҮҮР ШААРДЛАГАГҮЙ)
         window.askAI = async function() {
             var inputEl = document.getElementById("chatInput");
             var query = inputEl.value.trim();
@@ -361,32 +361,26 @@
                 productsData = "Одоогоор дэлгүүрт ямар ч бараа байхгүй байна.";
             } else {
                 currentProducts.forEach(function(p) {
-                    productsData += "- " + p.name + " барааг нийт " + p.views + " хүн сонирхож үзсэн. Үнэ: " + p.price + "₮.\n";
+                    productsData += "- " + p.name + " барааг " + p.views + " хүн үзсэн. Үнэ: " + p.price + "₮.\n";
                 });
             }
 
             // AI-д өгөх ухаалаг систем заавар (Prompt)
-            var systemPrompt = "Чи бол Тэмүүжин захирлын үүсгэсэн 'T&E' онлайн дэлгүүрийн ухаалаг AI туслах ба менежер юм. " +
+            var systemPrompt = "Чи бол Тэмүүжин захирлын 'T&E' онлайн дэлгүүрийн ухаалаг AI туслах ба менежер юм. " +
             "Захиралтай үргэлж маш найрсаг, хүндэтгэлтэй, урам зориг өгсөн өнгө аясаар, цэвэр монгол хэлээр ярилц. " +
             "Хэрэв Тэмүүжин захирал барааны хандалт, захиалга, статистик асуувал доорх дэлгүүрийн бодит датаг ашиглан маш гоё тайлагнаж өгөөрэй. " +
-            "Хэрэв өөр чөлөөт зүйл, энгийн яриа, математик, түүх, бизнес эсвэл зөвлөгөө асуувал яг л ChatGPT, Gemini шиг ухаалаг хариулж, зөвлөж чаддаг байх ёстой.\n\n" +
+            "Хэрэв өөр чөлөөт зүйл, энгийн яриа, математик, бизнес эсвэл зөвлөгөө асуувал яг л ChatGPT шиг ухаалаг хариулж, зөвлөж чаддаг байх ёстой.\n\n" +
             "ДЭЛГҮҮРИЙН ОДООГИЙН БОДИТ ДАТА:\n" + productsData + "\n\n" +
             "ЗАХИРЛЫН АСУУЛТ: " + query;
 
             try {
-                // Үнэгүй ажиллах Gemini API түлхүүрийг зөв холбосон хэсэг:
-                var p1 = "AIzaSyD";
-                var p2 = "u0gXgN1V_67F";
-                var p3 = "Ior89lH2_gG1F4bK2Wl8";
-                var cleanKey = p1 + p2 + p3;
-                
-                const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + cleanKey;
-
-                const response = await fetch(url, {
+                // Үнэгүй чөлөөт AI сервер рүү хүсэлт илгээх
+                const response = await fetch("https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: systemPrompt }] }]
+                    body: JSON.stringify({ 
+                        inputs: systemPrompt,
+                        parameters: { max_new_tokens: 250, return_full_text: false }
                     })
                 });
                 
@@ -397,7 +391,16 @@
                     chatBox.removeChild(chatBox.lastChild);
                 }
 
-                var aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Уучлаарай захирал аа, систем түр ачаалалтай байна. Дахин бичээд үзээрэй!";
+                // Хариултыг цэвэрлэж гаргах
+                var aiReply = "";
+                if (Array.isArray(data) && data[0]?.generated_text) {
+                    aiReply = data[0].generated_text.trim();
+                } else if (data.generated_text) {
+                    aiReply = data.generated_text.trim();
+                } else {
+                    aiReply = "Уучлаарай захирал аа, систем түр ачаалалтай байна. Дахин нэг бичээд үзээрэй!";
+                }
+                
                 appendMessage(aiReply, 'ai');
 
             } catch (e) {
