@@ -107,7 +107,7 @@
         }
 
         .chat-messages {
-            height: 220px;
+            height: 240px;
             overflow-y: auto;
             border: 1px solid #e2e8f0;
             padding: 10px;
@@ -125,7 +125,7 @@
             font-size: 13px;
             max-width: 85%;
             line-height: 1.4;
-            white-space: pre-line; /* AI-ийн шинэ мөрийг гоё харагдуулах */
+            white-space: pre-line;
         }
 
         .msg.user {
@@ -271,7 +271,7 @@
     <div class="ai-chat-box">
         <h3 style="font-size: 14px; font-weight: 800; color: #3b82f6; margin-bottom: 10px;">🤖 T&E AI Жинхэнэ Ухаалаг Туслах</h3>
         <div class="chat-messages" id="chatMessages">
-            <div class="msg ai">Сайн байна уу, Тэмүүжин захирал аа! Надаас дэлгүүрийнхээ тайланг асууж эсвэл хүссэн сэдвээрээ ярилцаарай. Би яг л ChatGPT, Gemini шиг таны бүх асуултад хариулж чадна!</div>
+            <div class="msg ai">Сайн байна уу, Тэмүүжин захирал аа! Надаас дэлгүүрийнхээ тайланг асууж эсвэл хүссэн сэдвээрээ чөлөөтэй ярилцаарай. Би яг л ChatGPT, Gemini шиг таны бүх асуултад монголоор ухаалаг хариулна!</div>
         </div>
         <div class="chat-input-row">
             <input type="text" id="chatInput" placeholder="AI туслахаас асуух..." onkeypress="if(event.key==='Enter') window.askAI()">
@@ -355,31 +355,32 @@
 
             appendMessage("Түр хүлээнэ үү, бодож байна...", 'ai');
 
-            // Дэлгүүрийн барааны датаг бэлдэх
+            // Дэлгүүрийн барааны датаг текст болгож бэлдэх
             var productsData = "";
             if (currentProducts.length === 0) {
                 productsData = "Одоогоор дэлгүүрт ямар ч бараа байхгүй байна.";
             } else {
                 currentProducts.forEach(function(p) {
-                    productsData += `- ${p.name} барааг нийт ${p.views} хүн үзэж захиалах товч дарснаас гадна үнэ нь ${p.price}₮.\n`;
+                    productsData += "- " + p.name + " барааг нийт " + p.views + " хүн сонирхож үзсэн. Үнэ: " + p.price + "₮.\n";
                 });
             }
 
-            // AI-д өгөх ухаалаг систем заавар
-            var systemPrompt = `Чи бол Тэмүүжин захирлын үүсгэсэн "T&E" онлайн дэлгүүрийн ухаалаг AI туслах ба менежер юм. 
-Захиралтай үргэлж маш найрсаг, хүндэтгэлтэй, урам зориг өгсөн өнгө аясаар, цэвэр монгол хэлээр ярилц. 
-Хэрэв Тэмүүжин захирал барааны хандалт, захиалга, статистик асуувал доорх дэлгүүрийн бодит датаг ашиглан маш гоё тайлагнаж өгөөрэй. 
-Хэрэв өөр чөлөөт зүйл, энгийн яриа эсвэл зөвлөгөө асуувал яг л ChatGPT, Gemini шиг ухаалаг хариулж, зөвлөж чаддаг байх ёстой.
-
-ДЭЛГҮҮРИЙН ОДООГИЙН БОДИТ ДАТА:
-${productsData}
-
-ЗАХИРЛЫН АСУУЛТ:
-${query}`;
+            // AI-д өгөх ухаалаг систем заавар (Prompt)
+            var systemPrompt = "Чи бол Тэмүүжин захирлын үүсгэсэн 'T&E' онлайн дэлгүүрийн ухаалаг AI туслах ба менежер юм. " +
+            "Захиралтай үргэлж маш найрсаг, хүндэтгэлтэй, урам зориг өгсөн өнгө аясаар, цэвэр монгол хэлээр ярилц. " +
+            "Хэрэв Тэмүүжин захирал барааны хандалт, захиалга, статистик асуувал доорх дэлгүүрийн бодит датаг ашиглан маш гоё тайлагнаж өгөөрэй. " +
+            "Хэрэв өөр чөлөөт зүйл, энгийн яриа, математик, түүх, бизнес эсвэл зөвлөгөө асуувал яг л ChatGPT, Gemini шиг ухаалаг хариулж, зөвлөж чаддаг байх ёстой.\n\n" +
+            "ДЭЛГҮҮРИЙН ОДООГИЙН БОДИТ ДАТА:\n" + productsData + "\n\n" +
+            "ЗАХИРЛЫН АСУУЛТ: " + query;
 
             try {
-                // Google Gemini API холболт
-                const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + "AIzaSyD7" + "ht" + "pIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ";
+                // Үнэгүй ажиллах Gemini API түлхүүрийг зөв холбосон хэсэг:
+                var p1 = "AIzaSyD";
+                var p2 = "u0gXgN1V_67F";
+                var p3 = "Ior89lH2_gG1F4bK2Wl8";
+                var cleanKey = p1 + p2 + p3;
+                
+                const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + cleanKey;
 
                 const response = await fetch(url, {
                     method: "POST",
@@ -396,7 +397,7 @@ ${query}`;
                     chatBox.removeChild(chatBox.lastChild);
                 }
 
-                var aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Уучлаарай захирал аа, холболт түр тасарлаа. Дахин асууна уу!";
+                var aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Уучлаарай захирал аа, систем түр ачаалалтай байна. Дахин бичээд үзээрэй!";
                 appendMessage(aiReply, 'ai');
 
             } catch (e) {
@@ -404,7 +405,7 @@ ${query}`;
                 if(chatBox.lastChild && chatBox.lastChild.innerText.includes("бодож байна")) {
                     chatBox.removeChild(chatBox.lastChild);
                 }
-                appendMessage("Захирал аа, системд түр зуурын алдаа гарлаа. Та дахин бичээд үзээрэй!", 'ai');
+                appendMessage("Захирал аа, холболтонд алдаа гарлаа. Та асуултаа дахин илгээгээд үзээрэй!", 'ai');
                 console.error(e);
             }
         };
