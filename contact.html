@@ -3,149 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Төлбөр хүлээж авах - T&E Дэлгүүр</title>
+    <title>Төлбөр төлөх - TEMKA SHOPP</title>
     <style>
         body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
             margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
-
-        .payment-box {
-            background-color: #ffffff;
-            border-radius: 24px;
-            padding: 35px 25px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
-            max-width: 420px;
+        .checkout-container {
+            background-color: white;
             width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-            border: 1px solid #edf2f7;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #1e2430;
-            margin: 0 0 4px 0;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 30px;
-        }
-
-        .info-card {
-            background-color: #f7fafc;
-            border-radius: 16px;
+            max-width: 450px;
             padding: 20px;
-            margin-bottom: 25px;
-            text-align: left;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-
-        .info-row {
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            color: #111827;
+        }
+        .section-title:first-child {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            font-size: 14px;
+            gap: 10px;
+            margin-bottom: 12px;
         }
-        .info-row:last-child {
+        .form-row .form-group {
+            flex: 1;
             margin-bottom: 0;
         }
-
-        .label {
-            color: #718096;
-            font-weight: 500;
-        }
-
-        .value {
-            color: #1e2430;
-            font-weight: 600;
-        }
-
-        .bank-name {
-            color: #1877f2;
-            font-weight: 700;
-        }
-
-        .highlight-text {
-            color: #e53e3e;
-            font-weight: 700;
-        }
-
-        /* Чиний хүссэнээр зассан шар санамж хэсэг */
-        .notice-box {
-            background-color: #fef3c7;
-            border: 1px solid #fde68a;
-            border-radius: 12px;
-            padding: 15px;
-            color: #92400e;
-            font-size: 13px;
-            line-height: 1.6;
-            text-align: left;
-            margin-bottom: 25px;
-        }
-
-        .notice-box strong {
-            color: #b45309;
-        }
-
-        .back-link {
-            display: inline-block;
-            color: #a0aec0;
-            text-decoration: none;
+        input[type="text"], input[type="email"], input[type="tel"], input[type="file"] {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
             font-size: 14px;
-            font-weight: 500;
-            transition: 0.2s;
+            box-sizing: border-box;
+            background-color: #fff;
+            color: #111827;
         }
-        .back-link:hover {
-            color: #1e2430;
+        input[type="file"] {
+            padding: 10px;
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+        input:focus {
+            outline: none;
+            border-color: #000;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-top: 8px;
+        }
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Хүргэлтийн сонголт */
+        .option-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #d1d5db;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #fff;
+        }
+        .option-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .option-left input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #000;
+        }
+        .option-subtext {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+        .option-price {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* Төлбөр төлөх товчлуур */
+        .btn-pay {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-pay:hover {
+            background-color: #1f2937;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="payment-box">
-        <h1 class="title">T&E Дэлгүүр</h1>
-        <p class="subtitle">Төлбөр хүлээн авах хуудас</p>
-
-        <div class="info-card">
-            <div class="info-row">
-                <span class="label">Банк:</span>
-                <span class="value bank-name">Худалдаа Хөгжлийн Банк (ХХБ)</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Дансны дугаар:</span>
-                <span class="value">428025046</span>
-            </div>
-            <div class="info-row">
-                <span class="label">IBAN код:</span>
-                <span class="value">MN390004000428025046</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Хүлээн авагч:</span>
-                <span class="value">Б.Тэмүүжин</span>
-            </div>
-            <div class="info-row">
-                <span class="label">Гүйлгээний утга:</span>
-                <span class="value highlight-text">Өөрийн утасны дугаар</span>
-            </div>
+    <div class="checkout-container">
+        
+        <div class="section-title">Холбоо барих мэдээлэл</div>
+        <div class="form-group">
+            <input type="email" id="email" placeholder="И-мэйл">
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="marketing">
+            <label for="marketing">Цаашид и-мэйл зэрэг мэдээлэл авмаар байна</label>
         </div>
 
-        <div class="notice-box">
-            📌 <strong>Санамж:</strong> Та дээрх данс руу төлбөрөө шилжүүлсний дараа, <strong>төлбөрийн баримт илгээх бол манай chat руу бичээрэй.</strong> Баримт ирсний дараа захиалга баталгаажих болно.
+        <div class="section-title">Хүргэлтийн мэдээлэл</div>
+        <div class="form-row">
+            <div class="form-group">
+                <input type="text" id="lastName" placeholder="Овог">
+            </div>
+            <div class="form-group">
+                <input type="text" id="firstName" placeholder="Нэр">
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" id="address" placeholder="Хаяг">
+        </div>
+        <div class="form-group">
+            <input type="text" id="entranceCode" placeholder="Орцны кодтой бол оруулна уу">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <input type="text" id="city" placeholder="Хот">
+            </div>
+            <div class="form-group">
+                <input type="text" id="extraPhone" placeholder="Нэмэлт утасны дугаар">
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="tel" id="mainPhone" placeholder="Утасны дугаар">
         </div>
 
+        <div class="section-title">Хүргэлтийн мэдээлэл</div>
+        <div class="option-box">
+            <div class="option-left">
+                <input type="radio" id="delivery" name="shipping" checked>
+                <div>
+                    <div>Хүргэлт</div>
+                    <div class="option-subtext">Энгийн хүргэлт</div>
+                </div>
+            </div>
+            <span class="option-price">3000</span>
+        </div>
+
+        <div class="section-title">Төлбөрийн баталгаажуулалт</div>
+        <div class="form-group">
+            <label style="font-size: 13px; color: #4b5563; display:block; margin-bottom: 5px;" for="receipt">Төлбөр төлсөн баримт эсвэл QR кодны зураг оруулах:</label>
+            <input type="file" id="receipt" accept="image/*">
+        </div>
+
+        <button class="btn-pay" onclick="handlePayment()">Төлбөр төлөх</button>
+        
         <a href="index.html" class="back-link">← Буцах</a>
     </div>
+
+    <script>
+        function handlePayment() {
+            var firstName = document.getElementById('firstName').value;
+            var mainPhone = document.getElementById('mainPhone').value;
+            var address = document.getElementById('address').value;
+            var receipt = document.getElementById('receipt').files[0]; // Зургаа шалгах хэсэг
+
+            if(!firstName || !mainPhone || !address) {
+                alert('Нэр, утасны дугаар, хаягаа заавал бөглөнө үү!');
+                return;
+            }
+
+            // Зургаа оруулаагүй бол сануулах
+            if(!receipt) {
+                alert('Төлбөр төлсөн баримт эсвэл QR кодны зургаа заавал оруулна уу!');
+                return;
+            }
+
+            alert('Захиалга болон зураг амжилттай бүртгэгдлээ!');
+        }
+    </script>
 
 </body>
 </html>
