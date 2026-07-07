@@ -242,7 +242,6 @@
             margin-left: 4px;
         }
 
-        /* 📱 ШИНЭ: УТАСНЫ ДУГААР ОРУУЛАХ ТАЛБАРЫН ЗАГВАР */
         .phone-input-group {
             margin-bottom: 12px;
             text-align: left;
@@ -276,6 +275,169 @@
             cursor: pointer;
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        /* ------------------ АДМИН ПАНЕЛИЙН СТИЛЬ ------------------ */
+        .admin-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-top: 30px;
+            border-top: 4px solid #1e293b;
+        }
+
+        .back-link {
+            color: #b45309;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            color: #334155;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #1e293b;
+            background-color: white;
+        }
+
+        .btn-add {
+            background-color: #1e293b;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 25px 0 12px 0;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .product-list, .order-list {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .admin-prod-card, .order-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .admin-prod-card img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 12px;
+        }
+
+        .prod-info, .order-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .prod-name, .order-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .prod-price, .order-sub {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ef4444;
+            margin-top: 2px;
+        }
+
+        .stats-container {
+            margin-top: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .stat-views {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .stat-orders {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .btn-delete {
+            background-color: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -341,9 +503,48 @@
                 <input type="number" id="userPhone" placeholder="Жишээ: 99112233">
             </div>
 
+            <div class="phone-input-group">
+                <label>2. Төлбөрийн баримт эсвэл QR зураг:</label>
+                <input type="file" id="userReceipt" accept="image/*" style="width: 100%; padding: 8px; border: 2px solid #3b82f6; border-radius: 8px; background: white; font-weight: bold;">
+            </div>
+
             <button class="btn-close-modal" onclick="window.submitOrder()">✅ Захиалга илгээх & Төлөх</button>
         </div>
     </div>
+
+
+    <div class="admin-box">
+        <a href="index.html" class="back-link">← Буцах</a>
+        <h2>T&E АДМИН ПАНЕЛЬ</h2>
+
+        <div class="form-group">
+            <label>Зургийн линк (URL)</label>
+            <input type="text" id="prodImage" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="form-group">
+            <label>Бүтээгдэхүүний нэр</label>
+            <input type="text" id="prodName" placeholder="Нэр оруулах...">
+        </div>
+
+        <div class="form-group">
+            <label>Бүтээгдэхүүний үнэ</label>
+            <input type="text" id="prodPrice" placeholder="Үнээ оруулах... (Жишээ нь: 45,000)">
+        </div>
+
+        <button class="btn-add" onclick="window.addProduct()">＋ Шинэ бараа нэмэх</button>
+    </div>
+
+    <div class="admin-section-title">🛒 Ирсэн бодит захиалгууд (Утас & Баримт)</div>
+    <div class="order-list" id="adminOrderList">
+        <p style="color:#64748b; font-size:14px; text-align:center; padding: 15px; background: white; border-radius:12px; border: 1px solid #e2e8f0;">Шинэ захиалга байхгүй байна...</p>
+    </div>
+
+    <div class="admin-section-title">📊 Барааны хандалт & Статистик</div>
+    <div class="product-list" id="adminProductList">
+        <p style="color:#64748b; font-size:14px; text-align:center; padding: 20px; background: white; border-radius:12px; border: 1px solid #e2e8f0;">Ачаалж байна...</p>
+    </div>
+
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -369,31 +570,35 @@
         let currentActiveProdName = "";
 
         window.onload = function() {
+            // Хэрэглэгчийн талын барааг унших
             var grid = document.getElementById("homeProductGrid");
-            if (!grid) return;
-            
-            database.ref('products').on('value', function(snapshot) {
-                grid.innerHTML = ""; 
-                if (!snapshot.exists()) {
-                    grid.innerHTML = "<p>Бараа олдсонгүй.</p>";
-                    return;
-                }
-                
-                snapshot.forEach(function(childSnapshot) {
-                    var prodId = childSnapshot.key;
-                    var prod = childSnapshot.val();
-                    var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
-                    
-                    var card = document.createElement("div");
-                    card.className = "product-card";
-                    card.innerHTML =
-                        '<img src="' + (prod.image || 'https://via.placeholder.com/200') + '" alt="' + prod.name + '">' +
-                        '<h3 class="product-title">' + prod.name + '</h3>' +
-                        '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
-                        '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name + '\', \'' + numericPrice + '\')">Захиалах</button>';
-                    grid.appendChild(card);
+            if (grid) {
+                database.ref('products').on('value', function(snapshot) {
+                    grid.innerHTML = ""; 
+                    if (!snapshot.exists()) {
+                        grid.innerHTML = "<p>Бараа олдсонгүй.</p>";
+                        return;
+                    }
+                    snapshot.forEach(function(childSnapshot) {
+                        var prodId = childSnapshot.key;
+                        var prod = childSnapshot.val();
+                        var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+                        
+                        var card = document.createElement("div");
+                        card.className = "product-card";
+                        card.innerHTML =
+                            '<img src="' + (prod.image || 'https://via.placeholder.com/200') + '" alt="' + prod.name + '">' +
+                            '<h3 class="product-title">' + prod.name + '</h3>' +
+                            '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
+                            '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name + '\', \'' + numericPrice + '\')">Захиалах</button>';
+                        grid.appendChild(card);
+                    });
                 });
-            });
+            }
+
+            // Админ талын бараа болон захиалгуудыг унших
+            loadProducts();
+            loadOrders();
         };
 
         window.openModal = function(prodId, name, price) {
@@ -405,12 +610,11 @@
             document.getElementById("modalProductPriceOnly").innerText = numericPrice.toLocaleString() + "₮";
             document.getElementById("modalTotalWithShipping").innerText = (numericPrice + 3000).toLocaleString() + "₮";
             document.getElementById("userPhone").value = "";
+            document.getElementById("userReceipt").value = ""; // Зургийн сонголтыг цэвэрлэх
 
-            // Санамсаргүй 4 оронтой гүйлгээний код үүсгэх
             var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById("modalOrderCode").innerText = randomCode;
             
-            // Үзсэн тоог 1-ээр ахиулах
             var viewRef = database.ref('products/' + prodId + '/views');
             viewRef.transaction(function(v) { return (v || 0) + 1; });
             viewRef.on('value', function(s) {
@@ -420,29 +624,38 @@
             document.getElementById("orderModal").style.display = "flex";
         };
 
-        // 🛒 ШИНЭ: ЗАХИАЛГЫГ БААЗ РУУ ИЛГЕЭХ ЖИНХЭНЭ ФУНКЦ
+        // 🛒 ШИНЭЧЛЭСЭН: ЗАХИАЛГЫГ БААЗ РУУ ИЛГЕЭХ ЖИНХЭНЭ ФУНКЦ
         window.submitOrder = function() {
             var phoneInput = document.getElementById("userPhone").value.trim();
             var orderCode = document.getElementById("modalOrderCode").innerText;
+            var receiptInput = document.getElementById("userReceipt");
 
             if (!phoneInput || phoneInput.length < 6) {
                 alert("Захиалга баталгаажуулахын тулд утасны дугаараа зөв оруулна уу!");
                 return;
             }
 
-            // 1. Бааз руу захиалгыг утастай нь хадгалах
+            // Зургийн шалгалт
+            if (!receiptInput.files || receiptInput.files.length === 0) {
+                alert("Төлбөр төлсөн баримт эсвэл QR кодны зургаа заавал оруулна уу!");
+                return;
+            }
+
+            var fileName = receiptInput.files[0].name;
+
+            // 1. Бааз руу утас болон баримтын нэртэй хадгалах
             database.ref('orders').push({
                 phone: phoneInput,
                 productName: currentActiveProdName,
                 orderCode: orderCode,
+                receiptImageName: fileName, // Баазад хадгалагдах зургийн нэр
                 timestamp: Date.now()
             }).then(function() {
-                // 2. Тухайн барааны 'orders' статистикийг админд харуулахын тулд 1-ээр ахиулах
                 database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) {
                     return (o || 0) + 1;
                 });
 
-                alert("Захиалга бүртгэгдлээ! 👍\n\nТа ХХБ данс руу мөнгөө шилжүүлэхдээ гүйлгээний утга дээр '" + orderCode + "' гэж заавал бичээрэй. Мөнгө орж ирсний дараа бид " + phoneInput + " дугаар руу залгах болно!");
+                alert("Захиалга болон баримт амжилттай бүртгэгдлээ! 👍\n\nТа ХХБ данс руу мөнгөө шилжүүлэхдээ гүйлгээний утга дээр '" + orderCode + "' гэж заавал бичээрэй. Мөнго орж ирсний дараа бид " + phoneInput + " дугаар руу залгах болно!");
                 window.closeModal();
             }).catch(function(err) {
                 alert("Алдаа гарлаа: " + err.message);
@@ -458,6 +671,108 @@
                 var txt = btn.innerText; btn.innerText = "Хуулагдлаа!";
                 setTimeout(function() { btn.innerText = txt; }, 2000);
             });
+        };
+
+        // ------------------ АДМИН ПАНЕЛИЙН ФУНКЦҮҮД ------------------
+        function loadProducts() {
+            var listDiv = document.getElementById("adminProductList");
+            if(!listDiv) return;
+            database.ref('products').on('value', function(snapshot) {
+                listDiv.innerHTML = "";
+                if (!snapshot.exists()) {
+                    listDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding:20px; background:white; border-radius:12px;'>Бараа байхгүй.</p>";
+                    return;
+                }
+                snapshot.forEach(function(childSnapshot) {
+                    var prodId = childSnapshot.key;
+                    var prod = childSnapshot.val();
+                    var views = prod.views || 0;
+                    var orders = prod.orders || 0;
+                    var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+
+                    var row = document.createElement("div");
+                    row.className = "admin-prod-card";
+                    row.innerHTML = 
+                        '<img src="' + (prod.image || 'https://via.placeholder.com/60') + '" alt="">' +
+                        '<div class="prod-info">' +
+                            '<div class="prod-name">' + prod.name + '</div>' +
+                            '<div class="prod-price">' + numericPrice.toLocaleString() + '₮</div>' +
+                            '<div class="stats-container">' +
+                                '<span class="stat-badge stat-views">👀 Үзсэн: ' + views + '</span>' +
+                                '<span class="stat-badge stat-orders">🛒 Захиалга: ' + orders + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')">Устгах</button>';
+                    listDiv.appendChild(row);
+                });
+            });
+        }
+
+        function loadOrders() {
+            var orderDiv = document.getElementById("adminOrderList");
+            if(!orderDiv) return;
+            database.ref('orders').on('value', function(snapshot) {
+                orderDiv.innerHTML = "";
+                if (!snapshot.exists()) {
+                    orderDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding:15px; background:white; border-radius:12px;'>Шинэ захиалга байхгүй байна...</p>";
+                    return;
+                }
+                snapshot.forEach(function(childSnapshot) {
+                    var orderId = childSnapshot.key;
+                    var order = childSnapshot.val();
+                    var receiptInfo = order.receiptImageName ? " | 📄 Баримт: " + order.receiptImageName : " | 📄 Баримт: Байхгүй";
+
+                    var card = document.createElement("div");
+                    card.className = "order-card";
+                    card.innerHTML = 
+                        '<div class="order-info">' +
+                            '<div class="order-title">📞 Утас: ' + order.phone + '</div>' +
+                            '<div class="order-sub">📦 Бараа: ' + order.productName + ' | Код: ' + (order.orderCode || 'Байхгүй') + receiptInfo + '</div>' +
+                        '</div>' +
+                        '<button class="btn-delete" style="background:#d1fae5; color:#065f46;" onclick="window.completeOrder(\'' + orderId + '\')">Хүргэсэн</button>';
+                    orderDiv.appendChild(card);
+                });
+            });
+        }
+
+        window.addProduct = function() {
+            var img = document.getElementById("prodImage").value.trim();
+            var name = document.getElementById("prodName").value.trim();
+            var price = document.getElementById("prodPrice").value.trim();
+
+            if (!name || !price) {
+                alert("Нэр болон үнийг оруулна уу!");
+                return;
+            }
+
+            var numericPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
+
+            database.ref('products').push({
+                image: img || "https://via.placeholder.com/200",
+                name: name,
+                price: numericPrice,
+                views: 0,
+                orders: 0
+            }).then(function() {
+                alert("Бараа нэмэгдлээ!");
+                document.getElementById("prodImage").value = "";
+                document.getElementById("prodName").value = "";
+                document.getElementById("prodPrice").value = "";
+            });
+        };
+
+        window.deleteProduct = function(prodId) {
+            if (confirm("Устгах уу?")) {
+                database.ref('products/' + prodId).remove();
+            }
+        };
+
+        window.completeOrder = function(orderId) {
+            if (confirm("Энэ захиалгыг хүргэж дуусгасан тул устгах уу?")) {
+                database.ref('orders/' + orderId).remove().then(function() {
+                    alert("Захиалга амжилттай хаагдлаа! 🤝");
+                });
+            }
         };
     </script>
 </body>
