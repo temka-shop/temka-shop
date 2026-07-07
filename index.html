@@ -20,7 +20,7 @@
         .product-price { font-weight: 700; color: #ef4444; font-size: 14px; margin-bottom: 8px; text-align: left; }
         .btn-buy { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 8px 4px; width: 100%; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; }
-        .modal-content { background-color: white; padding: 20px; border-radius: 20px; width: 92%; max-width: 400px; position: relative; }
+        .modal-content { background-color: white; padding: 20px; border-radius: 20px; width: 92%; max-width: 400px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #94a3b8; }
         .price-details { text-align: left; background-color: #f1f5f9; padding: 12px; border-radius: 12px; margin: 12px 0; }
         .price-text { font-weight: 700; color: #1e293b; font-size: 16px; text-align: center; margin-bottom: 4px; }
@@ -36,6 +36,10 @@
         .phone-input-group { margin-bottom: 12px; text-align: left; }
         .phone-input-group label { display: block; font-size: 11px; font-weight: bold; color: #1e293b; margin-bottom: 4px; text-transform: uppercase; }
         .phone-input-group input { width: 100%; padding: 10px; border: 2px solid #10b981; border-radius: 8px; font-size: 14px; outline: none; font-weight: bold; }
+        .address-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+        .address-group { text-align: left; }
+        .address-group label { display: block; font-size: 10px; font-weight: bold; color: #1e293b; margin-bottom: 2px; text-transform: uppercase; }
+        .address-group input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; font-weight: bold; }
         .btn-close-modal { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
     </style>
 </head>
@@ -101,8 +105,28 @@
                 <input type="number" id="userPhone" placeholder="Жишээ: 99112233">
             </div>
 
+            <div style="text-align: left; margin-bottom: 4px;"><label style="font-size: 11px; font-weight: bold; color: #1e293b; text-transform: uppercase;">2. Хүргэлтийн хаяг:</label></div>
+            <div class="address-grid">
+                <div class="address-group">
+                    <label>Дүүрэг:</label>
+                    <input type="text" id="addrDistrict" placeholder="БГД, БЗД гэх мэт">
+                </div>
+                <div class="address-group">
+                    <label>Хороо:</label>
+                    <input type="text" id="addrKhoroo" placeholder="3-р хороо гэх мэт">
+                </div>
+                <div class="address-group">
+                    <label>Байр/Хороолол:</label>
+                    <input type="text" id="addrBuilding" placeholder="12-р байр гэх мэт">
+                </div>
+                <div class="address-group">
+                    <label>Тоот:</label>
+                    <input type="text" id="addrDoor" placeholder="45 тоот гэх мэт">
+                </div>
+            </div>
+
             <div class="phone-input-group">
-                <label>2. Төлбөрийн баримт оруулах:</label>
+                <label>3. Төлбөрийн баримт оруулах:</label>
                 <input type="file" id="userReceipt" accept="image/*" style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 8px; background: white; font-weight: bold;">
             </div>
 
@@ -130,7 +154,6 @@
         }
         const database = firebase.database();
 
-        // TELEGRAM БОТНЫ ТОХИРГОО (Шинэ зөв токен)
         const TG_BOT_TOKEN = "8791135920:AAEP7B1oC3e4cYbUT3ThHxH6QmHanMzsbdU"; 
         const TG_CHAT_ID = "6759790987"; 
 
@@ -175,6 +198,12 @@
             document.getElementById("modalTotalWithShipping").innerText = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
             document.getElementById("userPhone").value = "";
             document.getElementById("userReceipt").value = "";
+            
+            // Хаягийн талбаруудыг цэвэрлэх
+            document.getElementById("addrDistrict").value = "";
+            document.getElementById("addrKhoroo").value = "";
+            document.getElementById("addrBuilding").value = "";
+            document.getElementById("addrDoor").value = "";
 
             var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById("modalOrderCode").innerText = randomCode;
@@ -192,9 +221,20 @@
             var phoneInput = document.getElementById("userPhone").value.trim();
             var orderCode = document.getElementById("modalOrderCode").innerText;
             var receiptInput = document.getElementById("userReceipt");
+            
+            // Хаягийн мэдээллүүдийг авч байна
+            var district = document.getElementById("addrDistrict").value.trim();
+            var khoroo = document.getElementById("addrKhoroo").value.trim();
+            var building = document.getElementById("addrBuilding").value.trim();
+            var door = document.getElementById("addrDoor").value.trim();
 
             if (!phoneInput || phoneInput.length < 6) {
                 alert("Захиалга баталгаажуулахын тулд утасны дугаараа зөв оруулна уу!");
+                return;
+            }
+
+            if (!district || !khoroo || !building || !door) {
+                alert("Хүргэлтийн хаягаа (Дүүрэг, Хороо, Байр, Тоот) бүрэн оруулна уу!");
                 return;
             }
 
@@ -205,8 +245,10 @@
 
             var file = receiptInput.files[0];
             var totalAmount = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
 
-            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
+            // Telegram руу очих текстэнд ХАЯГ-ыг нэмж өгөв
+            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
 
             var formData = new FormData();
             formData.append("chat_id", TG_CHAT_ID);
@@ -217,7 +259,6 @@
             submitBtn.innerText = "Илгээж байна...";
             submitBtn.disabled = true;
 
-            // Цэвэрхэн хашилттай ажиллах зөв фэтч хэсэг
             fetch("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendPhoto", {
                 method: "POST",
                 body: formData
@@ -226,11 +267,17 @@
             .then(data => {
                 if(data.ok) {
                     database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) { return (o || 0) + 1; });
-                    database.ref('orders').push({ phone: phoneInput, productName: currentActiveProdName, orderCode: orderCode, timestamp: Date.now() });
-                    alert("Захиалга амжилттай бүртгэгдлээ! 👍\n\nТаны баримт болон мэдээлэл Тэмүүжингийн Telegram руу шууд зурагтайгаа очлоо.");
+                    database.ref('orders').push({ 
+                        phone: phoneInput, 
+                        productName: currentActiveProdName, 
+                        address: fullAddress,
+                        orderCode: orderCode, 
+                        timestamp: Date.now() 
+                    });
+                    alert("Захиалга амжилттай бүртгэгдлээ! 👍\n\nХаяг болон төлбөрийн мэдээлэл Тэмүүжингийн Telegram руу зурагтайгаа очлоо.");
                     window.closeModal();
                 } else {
-                    alert("Алдаа гарлаа: Бот руу илгээж чадсангүй. Та ботоо /start хийсэн үү?");
+                    alert("Алдаа гарлаа: Бот руу илгээж чадсангүй.");
                 }
             })
             .catch(err => {
