@@ -32,7 +32,7 @@
             white-space: nowrap;
         }
         
-        /* Шинэ хайлтын хэсгийн дизайн */
+        /* Хайлтын хэсгийн дизайн */
         .search-container {
             position: relative;
             width: 100%;
@@ -157,7 +157,6 @@
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #94a3b8; }
         .price-details { text-align: left; background-color: #f8fafc; padding: 16px; border-radius: 16px; margin: 16px 0; border: 1px solid #f1f5f9; }
         .price-text { font-weight: 700; color: #0f172a; font-size: 16px; text-align: center; margin-bottom: 4px; }
-        .product-views-text { color: #2563eb; font-size: 12px; font-weight: 600; margin-bottom: 12px; text-align: center; }
         .price-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #64748b; }
         .total-text { color: #10b981; font-size: 16px; font-weight: 700; margin-top: 10px; border-top: 1px dashed #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; }
         .modal-bank-card { background: #f8fafc; border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px solid #e2e8f0; }
@@ -212,7 +211,6 @@
             
             <div class="price-details">
                 <p class="price-text" id="modalProductTitle"></p>
-                <p class="product-views-text" id="modalProductViews">👀 Үзсэн: 0</p>
                 <div class="price-row">
                     <span>Барааны үнэ:</span>
                     <span id="modalProductPriceOnly">0₮</span>
@@ -309,7 +307,7 @@
         let currentActiveProdId = "";
         let currentActiveProdName = "";
         let currentActiveProdPrice = 0;
-        let allProductsArray = []; // Бүх барааг хадгалах жагсаалт (Хайлт хийхэд ашиглана)
+        let allProductsArray = []; 
 
         window.onload = function() {
             database.ref('products').on('value', function(snapshot) {
@@ -322,11 +320,10 @@
                         });
                     });
                 }
-                window.renderProducts(allProductsArray); // Бараануудыг дэлгэцэнд хэвлэх
+                window.renderProducts(allProductsArray); 
             });
         };
 
-        // Барааг дэлгэцэнд зурах үндсэн функц
         window.renderProducts = function(productsList) {
             var grid = document.getElementById("homeProductGrid");
             if (!grid) return;
@@ -357,16 +354,12 @@
             });
         };
 
-        // Шинэ функц: Хайлт хийх үед шүүх ажиллагаа
         window.filterProducts = function() {
             var query = document.getElementById("searchInput").value.toLowerCase().trim();
-            
-            // Нэрэнд нь хайсан үг орсон бараануудыг шүүнэ
             var filtered = allProductsArray.filter(function(item) {
                 var name = item.data.name ? item.data.name.toLowerCase() : "";
                 return name.includes(query);
             });
-            
             window.renderProducts(filtered);
         };
 
@@ -393,11 +386,9 @@
             var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById("modalOrderCode").innerText = randomCode;
             
+            // Үзсэн тоог датабаазад нэмэх функц нь хэвийн ажиллаж байна (Админд хадгалагдана)
             var viewRef = database.ref('products/' + prodId + '/views');
             viewRef.transaction(function(v) { return (v || 0) + 1; });
-            viewRef.on('value', function(s) {
-                document.getElementById("modalProductViews").innerText = "👀 Энэ барааг " + (s.val() || 0) + " удаа үзсэн байна";
-            });
 
             document.getElementById("orderModal").style.display = "flex";
         };
