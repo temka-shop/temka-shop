@@ -138,8 +138,11 @@
         .product-card:hover { transform: translateY(-2px); }
         
         /* Зүрхэн товчлуурын загвар */
-        .wishlist-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; box-shadow: 0 2px 6px rgba(0,0,0,0.05); cursor: pointer; transition: color 0.2s; }
+        .wishlist-btn { position: absolute; top: 20px; right: 20px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; box-shadow: 0 2px 6px rgba(0,0,0,0.05); cursor: pointer; transition: color 0.2s; z-index: 10; }
         .wishlist-btn.active { color: #ef4444 !important; }
+
+        /* Дарахад зориулсан курсор */
+        .product-clickable-area { cursor: pointer; display: block; width: 100%; }
 
         .product-card img { width: 100% !important; height: 150px !important; object-fit: cover; border-radius: 12px; background-color: #f8fafc; }
         @media (min-width: 768px) { .product-card img { height: 200px !important; } }
@@ -174,6 +177,12 @@
         .address-group label { display: block; font-size: 10px; font-weight: 700; color: #0f172a; margin-bottom: 4px; text-transform: uppercase; }
         .address-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; font-weight: 600; }
         .btn-close-modal { background: #0f172a; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 14px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); }
+
+        /* Зургийг томруулж харах шинэ Модал (Image Preview) */
+        .image-preview-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; cursor: pointer; }
+        .image-preview-content { max-width: 90%; max-height: 80vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); object-fit: contain; animation: zoomIn 0.25s ease-out; }
+        .image-preview-title { position: absolute; bottom: 30px; color: white; font-size: 18px; font-weight: 700; background: rgba(15, 23, 42, 0.6); padding: 8px 20px; border-radius: 30px; }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -281,6 +290,11 @@
         </div>
     </div>
 
+    <div id="imagePreviewModal" class="image-preview-modal" onclick="window.closeImagePreview()">
+        <img id="previewModalImg" class="image-preview-content" src="" alt="Томруулсан зураг">
+        <div id="previewModalTitle" class="image-preview-title">Барааны нэр</div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -338,20 +352,39 @@
                 var prodId = item.id;
                 var prod = item.data;
                 var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+                var imgUrl = prod.image || 'https://via.placeholder.com/200';
                 
                 var card = document.createElement("div");
                 card.className = "product-card";
                 
+                // Барааны зураг болон нэр дээр дарахад зураг томруулж хардаг болгож өөрчлөв
                 card.innerHTML =
                     '<button class="wishlist-btn" onclick="window.toggleWishlist(this)"><i class="fa-solid fa-heart"></i></button>' +
-                    '<img src="' + (prod.image || 'https://via.placeholder.com/200') + '" alt="' + prod.name + '">' +
-                    '<div class="product-info">' +
-                        '<h3 class="product-title">' + prod.name + '</h3>' +
-                        '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
+                    '<div class="product-clickable-area" onclick="window.openImagePreview(\'' + imgUrl + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + prodId + '\')">' +
+                        '<img src="' + imgUrl + '" alt="' + prod.name + '">' +
+                        '<div class="product-info">' +
+                            '<h3 class="product-title">' + prod.name + '</h3>' +
+                            '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
+                        '</div>' +
                     '</div>' +
-                    '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name + '\', \'' + numericPrice + '\')"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>';
+                    '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + numericPrice + '\')"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>';
                 grid.appendChild(card);
             });
+        };
+
+        // ШИНЭ ФУНКЦ: Зургийг томруулж үзүүлэх болон үзсэн тоог тоолох
+        window.openImagePreview = function(imgSrc, title, prodId) {
+            document.getElementById("previewModalImg").src = imgSrc;
+            document.getElementById("previewModalTitle").innerText = title;
+            document.getElementById("imagePreviewModal").style.display = "flex";
+            
+            // Барааг товшиж үзэх үед цаанаа датабаазад үзсэн тоо нь нэмэгдэнэ
+            var viewRef = database.ref('products/' + prodId + '/views');
+            viewRef.transaction(function(v) { return (v || 0) + 1; });
+        };
+
+        window.closeImagePreview = function() {
+            document.getElementById("imagePreviewModal").style.display = "none";
         };
 
         window.filterProducts = function() {
@@ -385,10 +418,6 @@
 
             var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById("modalOrderCode").innerText = randomCode;
-            
-            // Үзсэн тоог датабаазад нэмэх функц нь хэвийн ажиллаж байна (Админд хадгалагдана)
-            var viewRef = database.ref('products/' + prodId + '/views');
-            viewRef.transaction(function(v) { return (v || 0) + 1; });
 
             document.getElementById("orderModal").style.display = "flex";
         };
