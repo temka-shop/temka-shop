@@ -323,7 +323,7 @@
                                 '<span class="stat-badge stat-orders">🛒 Захиалга: ' + orders + '</span>' +
                             '</div>' +
                         '</div>' +
-                        '<button class="btn-delete" onclick="deleteProduct(\'' + prodId + '\')">Устгах</button>';
+                        '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')">Устгах</button>';
                     listDiv.appendChild(row);
                 });
             });
@@ -348,7 +348,7 @@
                             '<div class="order-title">📞 Утас: ' + order.phone + '</div>' +
                             '<div class="order-sub">📦 Бараа: ' + order.productName + ' | Код: ' + (order.orderCode || 'Байхгүй') + '</div>' +
                         '</div>' +
-                        '<button class="btn-delete" style="background:#d1fae5; color:#065f46;" onclick="completeOrder(\'' + orderId + '\')">Хүргэсэн</button>';
+                        '<button class="btn-delete" style="background:#d1fae5; color:#065f46;" onclick="window.completeOrder(\'' + orderId + '\')">Хүргэсэн</button>';
                     orderDiv.appendChild(card);
                 });
             });
@@ -395,7 +395,7 @@
             });
         };
 
-        // УСТГАХ ФУНКЦҮҮД (Глобал болгов)
+        // УСТГАХ ФУНКЦҮҮД (window глобал дуудалтыг засав)
         window.deleteProduct = function(prodId) {
             if (confirm("Устгах уу?")) {
                 database.ref('products/' + prodId).remove();

@@ -2,595 +2,410 @@
 <html lang="mn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Миний Сагс</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Миний Сагс - T&E Shopp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            background-color: #e2e8f0; 
-            color: #1e293b; 
-            padding: 40px 10px; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 16px; }
+        
+        .cart-container { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
         }
         
-        /* Сагсны үндсэн карт */
-        .cart-container {
-            width: 100%;
-            max-width: 480px;
-            background: #f8fafc;
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        .back-btn { 
+            display: inline-block; 
+            color: #0f172a; 
+            text-decoration: none; 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
         }
         
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        .cart-header h2 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: #0f172a; }
-        .item-count-badge { background: #0f172a; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-
-        /* Барааны жагсаалтын загвар */
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .cart-item img {
-            width: 75px;
-            height: 75px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 1px solid #cbd5e1;
-            background: #fff;
-        }
-        .item-details { flex: 1; }
-        .item-title { font-weight: 700; font-size: 16px; color: #0f172a; margin-bottom: 4px; }
-        .item-price { font-weight: 700; color: #ef4444; font-size: 14px; }
-
-        /* Нэмэх хасах товчлуур */
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #fff;
-            padding: 6px 12px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
-        .quantity-btn {
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #64748b;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .quantity-val { font-weight: 700; font-size: 14px; color: #0f172a; }
-
-        /* Үнийн дүн нэгтгэл */
-        .summary-section {
-            background: #fff;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 25px 0;
-            border: 1px solid #e2e8f0;
-        }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 10px;
-        }
-        .summary-row.total {
-            border-top: 1px dashed #cbd5e1;
-            padding-top: 12px;
-            margin-top: 12px;
-            font-size: 16px;
-            font-weight: 800;
-            color: #10b981;
-        }
-
-        /* Үйлдэл хийх товчлуурууд */
-        .btn-order {
-            background: #0f172a;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-        .btn-order:hover { background: #1e293b; }
-
-        .btn-clear {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .btn-clear:hover { background: #fca5a5; }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-        .back-link:hover { color: #0f172a; }
-
-        .empty-cart {
-            padding: 50px 0;
-            text-align: center;
-            color: #64748b;
-        }
-        .empty-cart i { font-size: 45px; margin-bottom: 15px; color: #cbd5e1; }
-
-        /* Модал цонхны дизайн */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            padding: 15px;
-        }
-        .modal-content {
-            background: #f8fafc;
-            width: 100%;
-            max-width: 440px;
-            border-radius: 28px;
-            padding: 25px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.15);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px; right: 15px;
-            background: #e2e8f0;
-            border: none;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex; align-items: center; justify-content: center;
+        h2 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #0f172a; }
+        
+        .cart-item { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #f1f5f9; 
         }
         
-        /* Төлбөр шилжүүлэх мэдээллийн хүснэгт */
-        .bank-box {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+        .cart-item img { 
+            width: 50px; 
+            height: 50px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-right: 12px; 
+            background-color: #f8fafc;
         }
-        .bank-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #64748b;
-        }
-        .bank-row.total-row {
-            border-bottom: 1px dashed #e2e8f0;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
-        }
-        .bank-row span.val { font-weight: 700; color: #0f172a; }
-        .bank-row span.val.green { color: #10b981; }
-        .bank-row span.val.red { color: #ef4444; font-weight: 800; }
-        .copy-btn {
-            background: #e2e8f0;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-left: 5px;
-        }
-        .copy-btn:hover { background: #cbd5e1; }
-
-        /* Оруулах талбаруудын загвар */
-        .input-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #475569;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-        .form-group { margin-bottom: 15px; }
-        .form-control {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            background: white;
-            transition: border-color 0.2s;
-        }
-        .form-control:focus { border-color: #0f172a; }
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .btn-submit {
-            background: #0f172a;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
+        .item-info { flex-grow: 1; text-align: left; }
+        .item-name { font-size: 14px; font-weight: 600; color: #1e293b; }
+        .item-price { font-size: 13px; font-weight: 700; color: #ef4444; }
+        
+        .quantity-control { display: flex; align-items: center; gap: 10px; }
+        
+        .qty-btn { 
+            background: #f1f5f9; 
+            border: 1px solid #cbd5e1; 
+            width: 26px; 
+            height: 26px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
         }
-        .btn-submit:hover { background: #1e293b; }
+        
+        .btn-remove { 
+            background: none; 
+            border: none; 
+            color: #94a3b8; 
+            cursor: pointer; 
+            margin-left: 10px; 
+            font-size: 16px; 
+        }
+        .btn-remove:hover { color: #ef4444; }
+        
+        .cart-summary { 
+            background: #f8fafc; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin-top: 20px; 
+            border: 1px solid #f1f5f9; 
+        }
+        
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #64748b; }
+        
+        .summary-total { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: #10b981; 
+            border-top: 1px dashed #e2e8f0; 
+            padding-top: 10px; 
+            margin-top: 10px; 
+        }
+        
+        .bank-box { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 12px; 
+            margin-top: 15px; 
+            font-size: 12px; 
+        }
+        
+        .bank-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .bank-val { font-weight: bold; color: #0f172a; }
+        
+        .btn-copy { 
+            background: white; 
+            border: 1px solid #cbd5e1; 
+            padding: 2px 6px; 
+            font-size: 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+
+        .input-group { margin-top: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; }
+        
+        .address-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        
+        .btn-submit { 
+            background: #0f172a; 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); 
+        }
     </style>
 </head>
 <body>
 
-    <audio id="cashSound" src="https://assets.mixkit.co/active_storage/sfx/2017/2017-84.wav" preload="auto"></audio>
-
     <div class="cart-container">
-        <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Миний Сагс</h2>
-            <span class="item-count-badge" id="totalItemsBadge">0 бараа</span>
-        </div>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Дэлгүүр рүү буцах</a>
+        <h2>🛒 Миний сагс</h2>
+        
+        <div id="cartItemsList">
+            </div>
 
-        <div id="cartItemsList"></div>
-
-        <div class="summary-section">
+        <div class="cart-summary">
             <div class="summary-row">
-                <span>Барааны дэд дүн:</span>
-                <span id="subtotalPrice">0₮</span>
+                <span>Барааны нийт үнэ:</span>
+                <span id="itemsSubtotal">0₮</span>
             </div>
             <div class="summary-row">
                 <span>Хүргэлт:</span>
-                <span id="shippingPrice">3,000₮</span>
+                <span style="color: #2563eb;">+3,000₮</span>
             </div>
-            <div class="summary-row total">
-                <span>Нийт төлбөр:</span>
-                <span id="totalPrice">0₮</span>
+            <div class="summary-total">
+                <span>Нийт төлөх дүн:</span>
+                <span id="cartGrandTotal">0₮</span>
             </div>
         </div>
 
-        <button class="btn-order" onclick="openOrderModal()">
-            <i class="fa-solid fa-credit-card"></i> Захиалга хийх
-        </button>
-        
-        <button class="btn-clear" onclick="clearCart()">
-            <i class="fa-solid fa-trash-can"></i> Сагсыг хоослох
-        </button>
-
-        <center>
-            <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Буцах</a>
-        </center>
-    </div>
-
-    <div class="modal-overlay" id="orderModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeOrderModal()">×</button>
-            <h3 style="margin-bottom: 18px; font-size: 16px; font-weight: 800; text-align: center;">Захиалга Баталгаажуулах</h3>
-            
-            <div class="bank-box">
-                <div class="bank-row total-row">
-                    <span>Барааны үнэ:</span>
-                    <span class="val" id="modalSubtotal">0₮</span>
-                </div>
-                <div class="bank-row">
-                    <span>Хүргэлт:</span>
-                    <span class="val" style="color: #3b82f6;">+3,000₮</span>
-                </div>
-                <div class="bank-row total-row" style="border-bottom: 1px dashed #cbd5e1; padding-bottom: 10px; margin-bottom: 12px;">
-                    <span style="font-weight: 800; color: #10b981;">Нийт дүн:</span>
-                    <span class="val green" id="modalTotalPrice">0₮</span>
-                </div>
-                <div class="bank-row">
-                    <span>Банк:</span>
-                    <span class="val" style="color: #2563eb;">ХХБ (TDB)</span>
-                </div>
-                <div class="bank-row">
-                    <span>Данс:</span>
-                    <span class="val">428025046 <button class="copy-btn" onclick="copyAccount()">Хуулах</button></span>
-                </div>
-                <div class="bank-row">
-                    <span>Хүлээн авагч:</span>
-                    <span class="val">Б.Тэмүүжин</span>
-                </div>
-                <div class="bank-row">
-                    <span>Гүйлгээний утга:</span>
-                    <span class="val red" id="modalOrderCode">TE-0000</span>
+        <div class="bank-box">
+            <div class="bank-row">
+                <span>Банк:</span>
+                <span class="bank-val" style="color: #2563eb;">ХХБ (TDB)</span>
+            </div>
+            <div class="bank-row">
+                <span>Данс:</span>
+                <div>
+                    <span class="bank-val" id="cartBankAcc">428025046</span>
+                    <button class="btn-copy" onclick="copyText('cartBankAcc', this)">Хуулах</button>
                 </div>
             </div>
-
-            <div class="form-group">
-                <div class="input-title">1. Холбоо барих утасны дугаар:</div>
-                <input type="number" id="formPhone" class="form-control" placeholder="Жишээ: 99112233">
+            <div class="bank-row">
+                <span>Хүлээн авагч:</span>
+                <span class="bank-val">Б.Тэмүүжин</span>
             </div>
-
-            <div class="form-group">
-                <div class="input-title">2. Хүргэлтийн хаяг:</div>
-                <div class="grid-2" style="margin-bottom: 10px;">
-                    <div>
-                        <label style="font-size: 9px; font-weight: 700; color: #64748b; display: block; margin-bottom: 3px;">ДҮҮРЭГ:</label>
-                        <input type="text" id="formDistrict" class="form-control" placeholder="БГД, БЗД">
-                    </div>
-                    <div>
-                        <label style="font-size: 9px; font-weight: 700; color: #64748b; display: block; margin-bottom: 3px;">ХОРОО:</label>
-                        <input type="text" id="formKhoroo" class="form-control" placeholder="3-р хороо">
-                    </div>
-                </div>
-                <div class="grid-2">
-                    <div>
-                        <label style="font-size: 9px; font-weight: 700; color: #64748b; display: block; margin-bottom: 3px;">БАЙР/ХОРООЛОЛ:</label>
-                        <input type="text" id="formBuilding" class="form-control" placeholder="12-р байр">
-                    </div>
-                    <div>
-                        <label style="font-size: 9px; font-weight: 700; color: #64748b; display: block; margin-bottom: 3px;">ТООТ:</label>
-                        <input type="text" id="formApartment" class="form-control" placeholder="45 тоот">
-                    </div>
-                </div>
+            <div class="bank-row">
+                <span style="color:#ef4444; font-weight:bold;">Гүйлгээний утга:</span>
+                <span class="bank-val" id="cartOrderCode" style="color:#ef4444; font-weight: 800;">---</span>
             </div>
-
-            <div class="form-group">
-                <div class="input-title">3. Төлбөрийн баримт оруулах:</div>
-                <input type="file" id="formReceipt" class="form-control">
-            </div>
-
-            <button class="btn-submit" onclick="submitOrder()">Захиалга илгээх</button>
         </div>
+
+        <div class="input-group">
+            <label>📞 Холбоо барих утас:</label>
+            <input type="number" id="cartUserPhone" placeholder="Жишээ: 80252050">
+        </div>
+
+        <div class="input-group">
+            <label>📍 Хүргэлтийн хаяг:</label>
+            <div class="address-grid">
+                <input type="text" id="cartAddrDistrict" placeholder="Дүүрэг (БГД...)">
+                <input type="text" id="cartAddrKhoroo" placeholder="Хороо (3-р хороо...)">
+                <input type="text" id="cartAddrBuilding" placeholder="Байр/Хороолол">
+                <input type="text" id="cartAddrDoor" placeholder="Тоот">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>📸 Төлбөрийн баримт оруулах:</label>
+            <input type="file" id="cartUserReceipt" accept="image/*" style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 8px; background: white;">
+        </div>
+
+        <button class="btn-submit" id="btnSubmitCart" onclick="submitCartOrder()">✅ Захиалга илгээх & Төлөх</button>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // Telegram ботын тохиргоо
-        var TG_BOT_TOKEN = "8791135920:AAEP7B1oC3e4cYbUT3ThHxH6QmHanMzsbdU"; 
-        var TG_CHAT_ID = "6759790987"; 
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
+            authDomain: "temka-shop.firebaseapp.com",
+            databaseURL: "https://temka-shop-default-rtdb.firebaseio.com",
+            projectId: "temka-shop",
+            storageBucket: "temka-shop.firebasestorage.app",
+            messagingSenderId: "1057963752042",
+            appId: "1:1057963752042:web:9e0c88d308ac1cc9c92813",
+            measurementId: "G-9H3NQML5TV"
+        };
 
-        var cart = JSON.parse(localStorage.getItem("cart")) || [];
-        var generatedOrderCode = "";
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
 
-        window.addEventListener("DOMContentLoaded", function() {
+        // Telegram Бот тохиргоо
+        const TG_BOT_TOKEN = "8791135920:AAEP7B1oC3e4cYbUT3ThHxH6QmHanMzsbdU"; 
+        const TG_CHAT_ID = "6759790987"; 
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let grandTotal = 0;
+
+        window.onload = function() {
             renderCart();
-        });
+            var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById("cartOrderCode").innerText = randomCode;
+        };
 
-        // Сагсны бараа зурах
         function renderCart() {
-            var listContainer = document.getElementById("cartItemsList");
-            if (!listContainer) return;
-
-            listContainer.innerHTML = "";
+            const listDiv = document.getElementById("cartItemsList");
+            listDiv.innerHTML = "";
+            let subtotal = 0;
 
             if (cart.length === 0) {
-                listContainer.innerHTML = '<div class="empty-cart"><i class="fa-solid fa-basket-shopping"></i><p>Таны сагс хоосон байна.</p></div>';
-                document.getElementById("subtotalPrice").innerText = "0₮";
-                document.getElementById("shippingPrice").innerText = "0₮";
-                document.getElementById("totalPrice").innerText = "0₮";
-                document.getElementById("totalItemsBadge").innerText = "0 бараа";
+                listDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding: 20px 0;'>Сагс хоосон байна.</p>";
+                document.getElementById("itemsSubtotal").innerText = "0₮";
+                document.getElementById("cartGrandTotal").innerText = "0₮";
                 return;
             }
 
-            var subtotal = 0;
-            var totalItems = 0;
-
-            cart.forEach(function(item, index) {
-                var itemPrice = parseInt(item.price) || 0;
-                var itemQty = parseInt(item.quantity) || 1;
-                var itemSubtotal = itemPrice * itemQty;
-                
-                subtotal += itemSubtotal;
-                totalItems += itemQty;
-
-                var imageUrl = item.image || item.imgUrl || item.img || "https://via.placeholder.com/100";
-
-                var itemDiv = document.createElement("div");
-                itemDiv.className = "cart-item";
-                itemDiv.innerHTML = '<img src="' + imageUrl + '" alt="' + item.name + '">' +
-                    '<div class="item-details">' +
-                        '<div class="item-title">' + item.name + '</div>' +
-                        '<div class="item-price">' + itemPrice.toLocaleString() + '₮</div>' +
-                    '</div>' +
-                    '<div class="quantity-control">' +
-                        '<button class="quantity-btn" onclick="changeQuantity(' + index + ', -1)">-</button>' +
-                        '<span class="quantity-val">' + itemQty + '</span>' +
-                        '<button class="quantity-btn" onclick="changeQuantity(' + index + ', 1)">+</button>' +
-                    '</div>';
-                listContainer.appendChild(itemDiv);
+            cart.forEach((item, index) => {
+                subtotal += item.price * item.quantity;
+                const row = document.createElement("div");
+                row.className = "cart-item";
+                row.innerHTML = `
+                    <img src="${item.image || 'https://via.placeholder.com/50'}" alt="">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${(item.price * item.quantity).toLocaleString()}₮</div>
+                    </div>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                    </div>
+                    <button class="btn-remove" onclick="removeItem(${index})"><i class="fa-solid fa-trash"></i></button>
+                `;
+                listDiv.appendChild(row);
             });
 
-            document.getElementById("subtotalPrice").innerText = subtotal.toLocaleString() + "₮";
-            document.getElementById("shippingPrice").innerText = "3,000₮";
-            
-            var totalSum = subtotal + 3000;
-            document.getElementById("totalPrice").innerText = totalSum.toLocaleString() + "₮";
-            document.getElementById("totalItemsBadge").innerText = totalItems + " бараа";
+            grandTotal = subtotal + 3000;
+            document.getElementById("itemsSubtotal").innerText = subtotal.toLocaleString() + "₮";
+            document.getElementById("cartGrandTotal").innerText = grandTotal.toLocaleString() + "₮";
         }
 
-        function changeQuantity(index, change) {
-            cart[index].quantity = (cart[index].quantity || 1) + change;
+        function changeQty(index, amount) {
+            cart[index].quantity += amount;
             if (cart[index].quantity <= 0) {
                 cart.splice(index, 1);
             }
-            localStorage.setItem("cart", JSON.stringify(cart));
+            localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
 
-        function clearCart() {
-            if (confirm("Та сагсаа хоослохдоо итгэлтэй байна уу?")) {
-                cart = [];
-                localStorage.setItem("cart", JSON.stringify(cart));
-                renderCart();
-            }
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
         }
 
-        // Данс хуулах функц
-        function copyAccount() {
-            navigator.clipboard.writeText("428025046");
-            alert("Дансны дугаар хуулагдлаа!");
-        }
+        function submitCartOrder() {
+            var phoneInput = document.getElementById("cartUserPhone").value.trim();
+            var orderCode = document.getElementById("cartOrderCode").innerText;
+            var receiptInput = document.getElementById("cartUserReceipt");
+            
+            var district = document.getElementById("cartAddrDistrict").value.trim();
+            var khoroo = document.getElementById("cartAddrKhoroo").value.trim();
+            var building = document.getElementById("cartAddrBuilding").value.trim();
+            var door = document.getElementById("cartAddrDoor").value.trim();
 
-        // Модал нээх
-        function openOrderModal() {
             if (cart.length === 0) {
                 alert("Сагс хоосон байна!");
                 return;
             }
 
-            generatedOrderCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
-            document.getElementById("modalOrderCode").innerText = generatedOrderCode;
+            if (!phoneInput || phoneInput.length < 6) {
+                alert("Захиалга баталгаажуулахын тулд утасны дугаараа зөв оруулна уу!");
+                return;
+            }
 
-            var subtotalText = document.getElementById("subtotalPrice").innerText;
-            var totalText = document.getElementById("totalPrice").innerText;
+            if (!district || !khoroo || !building || !door) {
+                alert("Хүргэлтийн хаягаа бүрэн оруулна уу!");
+                return;
+            }
+
+            if (!receiptInput.files || receiptInput.files.length === 0) {
+                alert("Төлбөр төлсөн баримтын зургаа оруулна уу!");
+                return;
+            }
+
+            var file = receiptInput.files[0];
+            var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
+
+            // Сагсанд байгаа бараануудыг текст болгох
+            var productsText = "";
+            var simpleProductsName = ""; 
             
-            document.getElementById("modalSubtotal").innerText = subtotalText;
-            document.getElementById("modalTotalPrice").innerText = totalText;
-
-            document.getElementById("orderModal").style.display = "flex";
-        }
-
-        function closeOrderModal() {
-            document.getElementById("orderModal").style.display = "none";
-        }
-
-        // Илгээх функц (Зураг ба текстийг нэгтгэсэн хувилбар)
-        function submitOrder() {
-            var phone = document.getElementById("formPhone").value.trim();
-            var district = document.getElementById("formDistrict").value.trim();
-            var khoroo = document.getElementById("formKhoroo").value.trim();
-            var building = document.getElementById("formBuilding").value.trim();
-            var apartment = document.getElementById("formApartment").value.trim();
-            var receiptFile = document.getElementById("formReceipt").files[0];
-
-            if (!phone || phone.length < 6) {
-                alert("Утасны дугаараа зөв оруулна уу!");
-                return;
-            }
-            if (!district || !khoroo || !building || !apartment) {
-                alert("Хүргэлтийн хаягаа гүйцэд бөглөнө үү!");
-                return;
-            }
-
-            var orderItemsText = "";
-            var subtotal = 0;
-            cart.forEach(function(item, idx) {
-                var price = parseInt(item.price) || 0;
-                var qty = parseInt(item.quantity) || 1;
-                var totalItem = price * qty;
-                subtotal += totalItem;
-                orderItemsText += (idx + 1) + ". " + item.name + " (" + qty + "ш) - " + totalItem.toLocaleString() + "₮\n";
+            cart.forEach((item, index) => {
+                productsText += " - " + item.name + " (" + item.quantity + "ш)\n";
+                simpleProductsName += item.name + (index < cart.length - 1 ? ", " : "");
             });
 
-            var finalTotalText = document.getElementById("modalTotalPrice").innerText;
+            var textMessage = "🔔 ШИНЭ САГСНЫ ЗАХИАЛГА ИРЛЭЭ!\n\n📞 Утас: " + phoneInput + "\n📦 Захиалсан бараанууд:\n" + productsText + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + grandTotal.toLocaleString() + "₮\n🔢 Гүйлгээний утга: " + orderCode;
 
-            var message = "🛒 САГСНААС ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n" +
-                          "📞 Утас: " + phone + "\n" +
-                          "📍 Хаяг: " + district + ", " + khoroo + ", " + building + ", " + apartment + "\n" +
-                          "🔢 Гүйлгээний утга: " + generatedOrderCode + "\n\n" +
-                          "📦 БАРААНУУД:\n" + orderItemsText + "\n" +
-                          "💵 Нийт дүн: " + finalTotalText;
+            var formData = new FormData();
+            formData.append("chat_id", TG_CHAT_ID);
+            formData.append("photo", file);
+            formData.append("caption", textMessage);
 
-            // ЗУРАГТАЙ БОЛ: Зөвхөн sendPhoto ажиллуулж текстийг Caption-д нь хийнэ. Давхардахгүй!
-            if (receiptFile) {
-                var formData = new FormData();
-                formData.append("chat_id", TG_CHAT_ID);
-                formData.append("photo", receiptFile);
-                formData.append("caption", message); 
+            var submitBtn = document.getElementById("btnSubmitCart");
+            submitBtn.innerText = "Илгээж байна...";
+            submitBtn.disabled = true;
 
-                fetch("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendPhoto", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data.ok) {
-                        playCashSound(); // МӨНГӨНИЙ ДУУ ТОГЛУУЛАХ ФУНКЦ
-                        alert("Захиалга болон төлбөрийн баримт амжилттай илгээгдлээ.");
-                        completeOrder();
-                    } else {
-                        alert("Алдаа гарлаа. Дахин оролдоно уу.");
-                    }
-                })
-                .catch(function(err) { alert("Холболтын алдаа: " + err.message); });
-            } else {
-                // ЗУРАГГҮЙ БОЛ: Зөвхөн sendMessage ажиллана.
-                fetch("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        chat_id: TG_CHAT_ID,
-                        text: message
-                    })
-                })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data.ok) {
-                        playCashSound(); // МӨНГӨНИЙ ДУУ ТОГЛУУЛАХ ФУНКЦ
-                        alert("Захиалга амжилттай бүртгэгдлээ. Төлбөр орсны дараа хүргэгдэнэ.");
-                        completeOrder();
-                    } else {
-                        alert("Алдаа гарлаа.");
-                    }
-                })
-                .catch(function(err) { alert("Холболтын алдаа: " + err.message); });
-            }
+            fetch("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendPhoto", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.ok) {
+                    // 1. Firebase "orders" хэсэгт захиалгыг бүртгэх
+                    database.ref('orders').push({ 
+                        phone: phoneInput, 
+                        productName: "[Сагснаас] " + simpleProductsName, 
+                        address: fullAddress,
+                        orderCode: orderCode, 
+                        timestamp: Date.now() 
+                    }).then(() => {
+                        
+                        // 2. СТАТИСТИКИЙН ТООГ ШУУД НЭМЭХ НАЙДВАРТАЙ АРГА (БҮХ БАРААГ Firebase-ээс шүүнэ)
+                        database.ref('products').once('value', function(snapshot) {
+                            if (snapshot.exists()) {
+                                snapshot.forEach(function(childSnapshot) {
+                                    var prodId = childSnapshot.key;
+                                    var prodData = childSnapshot.val();
+                                    
+                                    cart.forEach(item => {
+                                        // Барааны нэрийг том жижиг үсэг, хоосон зай хамаарахгүй тулгах
+                                        if (prodData.name && item.name && 
+                                            prodData.name.toLowerCase().trim() === item.name.toLowerCase().trim()) {
+                                            
+                                            var currentOrders = parseInt(prodData.orders || 0);
+                                            var itemQty = parseInt(item.quantity || 1);
+                                            
+                                            // Нийт захиалгын тоог нэмэх
+                                            database.ref('products/' + prodId + '/orders').set(currentOrders + itemQty);
+                                        }
+                                    });
+                                });
+                            }
+                        });
+
+                        alert("Захиалга амжилттай бүртгэгдлээ! 👍\n\nСагсан дахь захиалга орж, статистикийн тоо нэмэгдлээ.");
+                        localStorage.removeItem('cart'); // Сагсыг цэвэрлэх
+                        window.location.href = "index.html"; 
+                    }).catch(fbErr => {
+                        alert("Firebase алдаа: " + fbErr.message);
+                    });
+                } else {
+                    alert("Алдаа: Бот руу мэдээлэл илгээж чадсангүй.");
+                }
+            })
+            .catch(err => {
+                alert("Холболтын алдаа: " + err.message);
+            })
+            .finally(() => {
+                submitBtn.innerText = "✅ Захиалга илгээх & Төлөх";
+                submitBtn.disabled = false;
+            });
         }
 
-        // Мөнгөний дууг тоглуулах функц
-        function playCashSound() {
-            var sound = document.getElementById("cashSound");
-            if (sound) {
-                sound.play().catch(function(error) {
-                    console.log("Дуу тоглуулахыг хөтөч хориглосон байна: ", error);
-                });
-            }
-        }
-
-        // Сагс цэвэрлэх ба буцах
-        function completeOrder() {
-            cart = [];
-            localStorage.setItem("cart", JSON.stringify(cart));
-            window.location.href = "index.html";
+        function copyText(id, btn) {
+            navigator.clipboard.writeText(document.getElementById(id).innerText).then(function() {
+                var txt = btn.innerText;
+                btn.innerText = "Хуулагдлаа!";
+                setTimeout(function() { btn.innerText = txt; }, 2000);
+            });
         }
     </script>
 </body>
