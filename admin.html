@@ -3,179 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&E АДМИН ПАНЕЛЬ (Захиалга хянах)</title>
+    <title>T&S АДМИН ПАНЕЛЬ (Захиалга хянах)</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: #f8fafc;
-            padding: 12px;
-            color: #334155;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Нэвтрэх хэсгийн загвар */
-        .login-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .login-box {
-            background: white;
-            padding: 30px 24px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 380px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; padding: 12px; color: #334155; display: flex; flex-direction: column; align-items: center; }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f8fafc; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-box { background: white; padding: 30px 24px; border-radius: 20px; width: 90%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
         .login-box h3 { margin-bottom: 15px; font-weight: 800; color: #1e293b; }
-        .login-box input {
-            width: 100%; padding: 12px; border: 1px solid #e2e8f0;
-            border-radius: 10px; margin-bottom: 15px; outline: none;
-            font-size: 16px; text-align: center; background: #f8fafc;
-        }
+        .login-box input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; outline: none; font-size: 16px; text-align: center; background: #f8fafc; }
         .login-box input:focus { border-color: #1e293b; background: white; }
-        .btn-login {
-            background: #1e293b; color: white; border: none;
-            padding: 12px; width: 100%; border-radius: 10px;
-            font-size: 15px; font-weight: bold; cursor: pointer;
-        }
-
-        /* Үндсэн админ хэсэг (Нууц үг зөв үед харагдана) */
-        .admin-main-content {
-            display: none; /* Нууц үг хийтэл нууц байна */
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .admin-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 16px;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-top: 10px;
-        }
-
-        .back-link {
-            color: #b45309;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 20px;
-            display: inline-block;
-            margin-left: 5px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-            background-color: #f8fafc;
-            color: #334155;
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: #1e293b;
-            background-color: white;
-        }
-
-        .file-input-wrapper {
-            background-color: #f1f5f9;
-            border: 2px dashed #cbd5e1;
-            padding: 14px;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            left: 0; top: 0; opacity: 0;
-            width: 100%; height: 100%; cursor: pointer;
-        }
-        .preview-thumbnail {
-            max-width: 100px; max-height: 100px;
-            margin-top: 10px; border-radius: 8px;
-            display: none; object-fit: cover;
-        }
-
-        .btn-add {
-            background-color: #1e293b; color: white; border: none;
-            padding: 14px; width: 100%; border-radius: 12px;
-            font-size: 16px; font-weight: bold; cursor: pointer;
-            margin-top: 10px; display: flex; justify-content: center; align-items: center;
-        }
-
-        .section-title {
-            font-size: 16px; font-weight: 800; color: #1e293b;
-            margin: 25px 0 12px 0; width: 100%; text-align: left;
-        }
-
+        .btn-login { background: #1e293b; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .admin-main-content { display: none; width: 100%; max-width: 500px; }
+        .admin-box { background-color: white; padding: 20px; border-radius: 16px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 10px; }
+        .back-link { color: #b45309; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block; margin-bottom: 15px; }
+        h2 { font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 20px; display: inline-block; margin-left: 5px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background-color: #f8fafc; color: #334155; outline: none; }
+        .form-group input:focus { border-color: #1e293b; background-color: white; }
+        .file-input-wrapper { background-color: #f1f5f9; border: 2px dashed #cbd5e1; padding: 14px; border-radius: 10px; text-align: center; cursor: pointer; position: relative; }
+        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        
+        /* Зургийн жагсаалтыг гоё харагдуулах CSS */
+        .preview-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
+        .preview-item { position: relative; width: 70px; height: 70px; }
+        .preview-thumbnail { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; border: 1px solid #cbd5e1; }
+        .remove-img-btn { position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        
+        .btn-add { background-color: #1e293b; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; justify-content: center; align-items: center; }
+        .section-title { font-size: 16px; font-weight: 800; color: #1e293b; margin: 25px 0 12px 0; width: 100%; text-align: left; }
         .product-list, .order-list { width: 100%; }
-
-        .admin-prod-card, .order-card {
-            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
-            padding: 12px; margin-bottom: 10px; display: flex;
-            align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .admin-prod-card img {
-            width: 60px; height: 60px; object-fit: cover;
-            border-radius: 8px; margin-right: 12px;
-        }
-
+        .admin-prod-card, .order-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .admin-prod-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 12px; }
         .prod-info, .order-info { flex-grow: 1; text-align: left; }
         .prod-name, .order-title { font-size: 14px; font-weight: 700; color: #1e293b; }
         .prod-price, .order-sub { font-size: 13px; font-weight: 700; color: #ef4444; margin-top: 2px; }
-        
         .stats-container { margin-top: 5px; display: flex; gap: 10px; }
         .stat-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
         .stat-views { background-color: #e0f2fe; color: #0369a1; }
         .stat-orders { background-color: #fef3c7; color: #b45309; }
-
-        .btn-delete {
-            background-color: #fee2e2; color: #ef4444; border: none;
-            padding: 8px 12px; border-radius: 8px; font-size: 12px;
-            font-weight: 700; cursor: pointer;
-        }
+        .btn-delete { background-color: #fee2e2; color: #ef4444; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -191,14 +58,14 @@
     <div id="adminMainContent" class="admin-main-content">
         <div class="admin-box">
             <a href="index.html" class="back-link">← Буцах</a>
-            <h2>T&E АДМИН ПАНЕЛЬ</h2>
+            <h2>T&S АДМИН ПАНЕЛЬ</h2>
 
             <div class="form-group">
-                <label>Бүтээгдэхүүний зураг оруулах</label>
+                <label>Бүтээгдэхүүний зургууд оруулах (Олноор эсвэл дарааллуулж сонгож болно)</label>
                 <div class="file-input-wrapper">
-                    <span id="uploadStatusText">📁 Зураг сонгох уу, эсвэл чирч орхино уу</span>
-                    <input type="file" id="prodImageFile" accept="image/*" onchange="window.handleImageSelect(this)">
-                    <center><img id="imagePreview" class="preview-thumbnail" alt="Урьдчилсан харагдац"></center>
+                    <span id="uploadStatusText">📁 Энд дарж зургуудаа нэмнэ үү</span>
+                    <input type="file" id="prodImageFile" accept="image/*" multiple onchange="window.handleImageSelect(this)">
+                    <div id="imagePreviewContainer" class="preview-container"></div>
                 </div>
             </div>
 
@@ -241,34 +108,26 @@
             measurementId: "G-9H3NQML5TV"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        let selectedBase64Image = "";
+        // Зургуудыг хадгалах массив (Одоо урамтай нэмэгдэнэ)
+        let selectedBase64Images = [];
 
-        // ХУУДАС АЧААЛАГДАХАД НУУЦ ҮГ ШАЛГАХ
-        window.addEventListener('DOMContentLoaded', (event) => {
-            if(localStorage.getItem("admin_authenticated") === "true") {
-                showAdminPanel();
-            }
-            
+        window.addEventListener('DOMContentLoaded', () => {
+            if(localStorage.getItem("admin_authenticated") === "true") { showAdminPanel(); }
             document.getElementById("adminPasswordInput").addEventListener("keyup", function(event) {
                 if (event.key === "Enter") { window.checkAdminPassword(); }
             });
         });
 
-        // НҮҮЦ ҮГ ШАЛГАХ ФУНКЦ
         window.checkAdminPassword = function() {
             var enteredPass = document.getElementById("adminPasswordInput").value;
-            var correctPass = "20110917@";
-
-            if(enteredPass === correctPass) {
+            if(enteredPass === "20110917@") {
                 localStorage.setItem("admin_authenticated", "true");
                 showAdminPanel();
             } else {
-                alert("❌ Нууц үг буруу байна! Дахин оролдоно уу.");
+                alert("❌ Нууц үг буруу байна!");
                 document.getElementById("adminPasswordInput").value = "";
             }
         };
@@ -280,45 +139,79 @@
             loadOrders();
         }
 
+        // ШИНЭЧЛЭГДСЭН ФУНКЦ: Зургуудыг дарж сонгох тусам массив руу нэмж хадгална (Дээрээс нь дарж устгах боломжтой)
         window.handleImageSelect = function(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    selectedBase64Image = e.target.result;
-                    var preview = document.getElementById("imagePreview");
-                    preview.src = selectedBase64Image;
-                    preview.style.display = "block";
-                    document.getElementById("uploadStatusText").innerText = "✅ Зураг бэлэн боллоо!";
-                };
-                reader.readAsDataURL(input.files[0]);
+            if (input.files && input.files.length > 0) {
+                let currentFilesCount = input.files.length;
+                let filesProcessed = 0;
+
+                Array.from(input.files).forEach(file => {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Массив руу шинээр нэмэх
+                        selectedBase64Images.push(e.target.result);
+                        filesProcessed++;
+
+                        if(filesProcessed === currentFilesCount) {
+                            renderThumbnails();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+                // Сонгох бүрд input-ийг цэвэрлэж өгснөөр дахиж ижил зураг нэмж болно
+                input.value = ""; 
             }
+        };
+
+        // Жижиг зургуудыг дэлгэцэнд зурах ба X товчлуур нэмэх хэсэг
+        function renderThumbnails() {
+            var container = document.getElementById("imagePreviewContainer");
+            container.innerHTML = "";
+
+            selectedBase64Images.forEach((imgSrc, index) => {
+                var itemDiv = document.createElement("div");
+                itemDiv.className = "preview-item";
+
+                itemDiv.innerHTML = `
+                    <img src="${imgSrc}" class="preview-thumbnail">
+                    <button type="button" class="remove-img-btn" onclick="window.removeSelectedImage(${index})">✕</button>
+                `;
+                container.appendChild(itemDiv);
+            });
+
+            if (selectedBase64Images.length > 0) {
+                document.getElementById("uploadStatusText").innerText = "✅ Нийт " + selectedBase64Images.length + " зураг бэлэн байна!";
+            } else {
+                document.getElementById("uploadStatusText").innerText = "📁 Энд дарж зургуудаа нэмнэ үү";
+            }
+        }
+
+        // Буруу орсон зургийг жагсаалтаас хасах функц
+        window.removeSelectedImage = function(index) {
+            selectedBase64Images.splice(index, 1);
+            renderThumbnails();
         };
 
         function loadProducts() {
             var listDiv = document.getElementById("adminProductList");
             database.ref('products').on('value', function(snapshot) {
                 listDiv.innerHTML = "";
-                if (!snapshot.exists()) {
-                    listDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding:20px; background:white; border-radius:12px;'>Бараа байхгүй.</p>";
-                    return;
-                }
+                if (!snapshot.exists()) { return; }
                 snapshot.forEach(function(childSnapshot) {
                     var prodId = childSnapshot.key;
                     var prod = childSnapshot.val();
-                    var views = prod.views || 0;
-                    var orders = prod.orders || 0;
-                    var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+                    var mainImg = (prod.images && prod.images.length > 0) ? prod.images[0] : 'https://via.placeholder.com/60';
 
                     var row = document.createElement("div");
                     row.className = "admin-prod-card";
                     row.innerHTML = 
-                        '<img src="' + (prod.image || 'https://via.placeholder.com/60') + '" alt="">' +
+                        '<img src="' + mainImg + '" alt="">' +
                         '<div class="prod-info">' +
                             '<div class="prod-name">' + prod.name + '</div>' +
-                            '<div class="prod-price">' + numericPrice.toLocaleString() + '₮</div>' +
+                            '<div class="prod-price">' + parseInt(prod.price || 0).toLocaleString() + '₮</div>' +
                             '<div class="stats-container">' +
-                                '<span class="stat-badge stat-views">👀 Үзсэн: ' + views + '</span>' +
-                                '<span class="stat-badge stat-orders">🛒 Захиалга: ' + orders + '</span>' +
+                                '<span class="stat-badge stat-views">👀 Үзсэн: ' + (prod.views || 0) + '</span>' +
+                                '<span class="stat-badge stat-orders">🛒 Захиалга: ' + (prod.orders || 0) + '</span>' +
                             '</div>' +
                         '</div>' +
                         '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')">Устгах</button>';
@@ -331,14 +224,10 @@
             var orderDiv = document.getElementById("adminOrderList");
             database.ref('orders').on('value', function(snapshot) {
                 orderDiv.innerHTML = "";
-                if (!snapshot.exists()) {
-                    orderDiv.innerHTML = "<p style='color:#64748b; text-align:center; padding:15px; background:white; border-radius:12px;'>Шинэ захиалга байхгүй байна...</p>";
-                    return;
-                }
+                if (!snapshot.exists()) { return; }
                 snapshot.forEach(function(childSnapshot) {
                     var orderId = childSnapshot.key;
                     var order = childSnapshot.val();
-
                     var card = document.createElement("div");
                     card.className = "order-card";
                     card.innerHTML = 
@@ -357,22 +246,14 @@
             var price = document.getElementById("prodPrice").value.trim();
             var btn = document.getElementById("btnAddProduct");
 
-            if (!selectedBase64Image) {
-                alert("Барааны зургийг сонгож оруулна уу!");
-                return;
-            }
-            if (!name || !price) {
-                alert("Нэр болон үнийг оруулна уу!");
-                return;
-            }
+            if (selectedBase64Images.length === 0) { alert("Барааны зургийг оруулна уу!"); return; }
+            if (!name || !price) { alert("Нэр болон үнийг оруулна уу!"); return; }
 
-            btn.innerText = "Уншиж байна...";
-            btn.disabled = true;
-
+            btn.innerText = "Уншиж байна..."; btn.disabled = true;
             var numericPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
 
             database.ref('products').push({
-                image: selectedBase64Image,
+                images: selectedBase64Images,
                 name: name,
                 price: numericPrice,
                 views: 0,
@@ -380,39 +261,22 @@
             }).then(function() {
                 alert("Бараа амжилттай нэмэгдлээ!");
                 document.getElementById("prodImageFile").value = "";
-                document.getElementById("imagePreview").style.display = "none";
-                document.getElementById("uploadStatusText").innerText = "📁 Зураг сонгох уу, эсвэл чирч орхино уу";
+                document.getElementById("imagePreviewContainer").innerHTML = "";
+                document.getElementById("uploadStatusText").innerText = "📁 Энд дарж зургуудаа нэмнэ үү";
                 document.getElementById("prodName").value = "";
                 document.getElementById("prodPrice").value = "";
-                selectedBase64Image = "";
-            }).catch(function(err) {
-                alert("Алдаа гарлаа: " + err.message);
+                selectedBase64Images = [];
             }).finally(function() {
-                btn.innerText = "＋ Шинэ бараа нэмэх";
-                btn.disabled = false;
+                btn.innerText = "＋ Шинэ бараа нэмэх"; btn.disabled = false;
             });
         };
 
-        // НАЙДВАРТАЙ УСТГАХ ФУНКЦҮҮД (Утсан дээр шууд ажиллахаар confirm-ыг бүрэн авч хаяв)
         window.deleteProduct = function(prodId) {
-            // Утсан дээр гацдаг тул confirm() асуултыг арилгаж шууд устгадаг болгов
-            database.ref('products/' + prodId).remove()
-            .then(function() {
-                alert("Барааг амжилттай устгалаа! 🗑️");
-            })
-            .catch(function(err) {
-                alert("Алдаа гарлаа: " + err.message);
-            });
+            database.ref('products/' + prodId).remove().then(() => alert("Барааг устгалаа! 🗑️"));
         };
 
         window.completeOrder = function(orderId) {
-            database.ref('orders/' + orderId).remove()
-            .then(function() {
-                alert("Захиалга амжилттай хаагдлаа! 🤝");
-            })
-            .catch(function(err) {
-                alert("Алдаа гарлаа: " + err.message);
-            });
+            database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдлаа! 🤝"));
         };
     </script>
 </body>

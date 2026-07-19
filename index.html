@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&E Shopp - Онлайн дэлгүүр</title>
+    <title>T&S Shopp - Онлайн дэлгүүр</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -238,10 +238,19 @@
         .address-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; font-weight: 600; }
         .btn-close-modal { background: #0f172a; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 14px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); }
 
-        /* Зургийг томруулж харах Модал */
-        .image-preview-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; cursor: pointer; }
-        .image-preview-content { max-width: 90%; max-height: 80vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); object-fit: contain; animation: zoomIn 0.25s ease-out; }
-        .image-preview-title { position: absolute; bottom: 30px; color: white; font-size: 18px; font-weight: 700; background: rgba(15, 23, 42, 0.6); padding: 8px 20px; border-radius: 30px; }
+        /* Зургийг Олон Зурагтай Галерей болгож харах Модал ЗАСВАР */
+        .image-preview-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); justify-content: center; align-items: center; }
+        .image-preview-wrapper { position: relative; max-width: 90%; max-height: 75vh; display: flex; justify-content: center; align-items: center; }
+        .image-preview-content { max-width: 100%; max-height: 75vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); object-fit: contain; animation: zoomIn 0.25s ease-out; }
+        .image-preview-title { position: absolute; bottom: -55px; color: white; font-size: 15px; font-weight: 700; background: rgba(15, 23, 42, 0.7); padding: 6px 20px; border-radius: 30px; white-space: nowrap; }
+        .close-preview-btn { position: absolute; top: -50px; right: 0; color: white; font-size: 35px; cursor: pointer; background: none; border: none; }
+        
+        /* Зургийн баруун зүүн сум */
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .nav-arrow:hover { background: rgba(255,255,255,0.4); }
+        .arrow-left { left: -60px; }
+        .arrow-right { right: -60px; }
+
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         @media (max-width: 768px) {
@@ -249,13 +258,15 @@
             .search-container { max-width: 150px; }
             .nav-logo { font-size: 18px; }
             .cart-status { font-size: 13px; }
+            .arrow-left { left: -15px; background: rgba(0,0,0,0.5); }
+            .arrow-right { right: -15px; background: rgba(0,0,0,0.5); }
         }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="#" class="nav-logo">T&E Shopp</a>
+        <a href="#" class="nav-logo">T&S Shopp</a>
         
         <div class="nav-right">
             <div class="search-container">
@@ -270,7 +281,7 @@
     </nav>
 
     <header class="hero-section">
-        <h1>T&E Shopp</h1>
+        <h1>T&S Shopp</h1>
         <button class="btn-hero" onclick="document.getElementById('homeProductGrid').scrollIntoView({behavior: 'smooth'});">
             Бүтээгдэхүүн үзэх <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -331,11 +342,16 @@
             </div>
 
             <div class="phone-input-group">
-                <label>1. Холбоо барих утасны дугаар:</label>
+                <label>1. Gmail хаяг:</label>
+                <input type="email" id="userEmail" placeholder="Жишээ: yourname@gmail.com">
+            </div>
+
+            <div class="phone-input-group">
+                <label>2. Холбоо барих утасны дугаар:</label>
                 <input type="number" id="userPhone" placeholder="Жишээ: 99112233">
             </div>
 
-            <div style="text-align: left; margin-bottom: 4px;"><label style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase;">2. Хүргэлтийн хаяг:</label></div>
+            <div style="text-align: left; margin-bottom: 4px;"><label style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase;">3. Хүргэлтийн хаяг:</label></div>
             <div class="address-grid">
                 <div class="address-group">
                     <label>Дүүрэг:</label>
@@ -356,7 +372,7 @@
             </div>
 
             <div class="phone-input-group">
-                <label>3. Төлбөрийн баримт оруулах:</label>
+                <label>4. Төлбөрийн баримт оруулах:</label>
                 <input type="file" id="userReceipt" accept="image/*" style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 8px; background: white; font-weight: bold;">
             </div>
 
@@ -364,16 +380,20 @@
         </div>
     </div>
 
-    <div id="imagePreviewModal" class="image-preview-modal" onclick="window.closeImagePreview()">
-        <img id="previewModalImg" class="image-preview-content" src="" alt="Томруулсан зураг">
-        <div id="previewModalTitle" class="image-preview-title">Барааны нэр</div>
+    <div id="imagePreviewModal" class="image-preview-modal">
+        <div class="image-preview-wrapper">
+            <button class="close-preview-btn" onclick="window.closeImagePreview()">&times;</button>
+            <button class="nav-arrow arrow-left" onclick="window.changePreviewImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <img id="previewModalImg" class="image-preview-content" src="" alt="Томруулсан зураг">
+            <button class="nav-arrow arrow-right" onclick="window.changePreviewImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <div id="previewModalTitle" class="image-preview-title">Барааны нэр</div>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // Таны Firebase тохиргоо
         const firebaseConfig = {
             apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
             authDomain: "temka-shop.firebaseapp.com",
@@ -390,7 +410,6 @@
         }
         const database = firebase.database();
 
-        // Telegram Бот тохиргоо
         const TG_BOT_TOKEN = "8791135920:AAEP7B1oC3e4cYbUT3ThHxH6QmHanMzsbdU"; 
         const TG_CHAT_ID = "6759790987"; 
 
@@ -399,7 +418,10 @@
         let currentActiveProdPrice = 0;
         let allProductsArray = []; 
         
-        // Сагсны өгөгдлийг унших
+        let currentImagesArray = [];
+        let currentImageIndex = 0;
+        let currentActiveTitle = "";
+
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         window.onload = function() {
@@ -418,7 +440,6 @@
             });
         };
 
-        // Дээд талын Сагсны тоог шинэчлэх функц
         window.updateCartCount = function() {
             const countElement = document.getElementById('headerCartCount');
             if (countElement) {
@@ -427,15 +448,13 @@
             }
         };
 
-        // Сагсанд зурагтай нь хамт хадгалах шинэчилсэн Сагслах функц
         window.addToCart = function(name, price, imgUrl, event) {
-            if (event) event.stopPropagation(); // Карт дарагдахаас сэргийлнэ
+            if (event) event.stopPropagation(); 
             
             const existingItem = cart.find(item => item.name === name);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                // 'image' талбарт барааны зурагны URL-ийг цуг хадгална
                 cart.push({ name: name, price: parseInt(price), image: imgUrl, quantity: 1 });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -443,7 +462,6 @@
             alert(name + " сагсанд амжилттай нэмэгдлээ! 🛒");
         };
 
-        // Барааг зурах функц
         window.renderProducts = function(productsList) {
             var grid = document.getElementById("homeProductGrid");
             if (!grid) return;
@@ -458,14 +476,22 @@
                 var prodId = item.id;
                 var prod = item.data;
                 var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
-                var imgUrl = prod.image || 'https://via.placeholder.com/200';
                 
+                var imgUrl = 'https://via.placeholder.com/200';
+                if (prod.images && prod.images.length > 0) {
+                    imgUrl = prod.images[0];
+                } else if (prod.image) {
+                    imgUrl = prod.image;
+                }
+                
+                var encodedImages = encodeURIComponent(JSON.stringify(prod.images || [imgUrl]));
+
                 var card = document.createElement("div");
                 card.className = "product-card";
                 
                 card.innerHTML =
                     '<button class="wishlist-btn" onclick="window.toggleWishlist(this, event)"><i class="fa-solid fa-heart"></i></button>' +
-                    '<div class="product-clickable-area" onclick="window.openImagePreview(\'' + imgUrl + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + prodId + '\')">' +
+                    '<div class="product-clickable-area" onclick="window.openImagePreview(\'' + encodedImages + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + prodId + '\')">' +
                         '<img src="' + imgUrl + '" alt="' + prod.name + '">' +
                         '<div class="product-info">' +
                             '<h3 class="product-title">' + prod.name + '</h3>' +
@@ -480,21 +506,36 @@
             });
         };
 
-        // Зургийг томруулах
-        window.openImagePreview = function(imgSrc, title, prodId) {
-            document.getElementById("previewModalImg").src = imgSrc;
-            document.getElementById("previewModalTitle").innerText = title;
+        window.openImagePreview = function(encodedImages, title, prodId) {
+            currentImagesArray = JSON.parse(decodeURIComponent(encodedImages));
+            currentImageIndex = 0;
+            currentActiveTitle = title;
+            
+            updatePreviewDOM();
             document.getElementById("imagePreviewModal").style.display = "flex";
             
             var viewRef = database.ref('products/' + prodId + '/views');
             viewRef.transaction(function(v) { return (v || 0) + 1; });
         };
 
+        function updatePreviewDOM() {
+            if (currentImagesArray.length > 0) {
+                document.getElementById("previewModalImg").src = currentImagesArray[currentImageIndex];
+                document.getElementById("previewModalTitle").innerText = currentActiveTitle + " (" + (currentImageIndex + 1) + "/" + currentImagesArray.length + ")";
+            }
+        }
+
+        window.changePreviewImage = function(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex >= currentImagesArray.length) { currentImageIndex = 0; }
+            if (currentImageIndex < 0) { currentImageIndex = currentImagesArray.length - 1; }
+            updatePreviewDOM();
+        };
+
         window.closeImagePreview = function() {
             document.getElementById("imagePreviewModal").style.display = "none";
         };
 
-        // Хайх функц
         window.filterProducts = function() {
             var query = document.getElementById("searchInput").value.toLowerCase().trim();
             var filtered = allProductsArray.filter(function(item) {
@@ -509,7 +550,6 @@
             btn.classList.toggle('active');
         };
 
-        // Модал нээх (Шууд Захиалах товч)
         window.openModal = function(prodId, name, price, event) {
             if (event) event.stopPropagation();
             currentActiveProdId = prodId;
@@ -519,6 +559,9 @@
             document.getElementById("modalProductTitle").innerText = name;
             document.getElementById("modalProductPriceOnly").innerText = currentActiveProdPrice.toLocaleString() + "₮";
             document.getElementById("modalTotalWithShipping").innerText = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            
+            // НЭГТГЭСЭН ЗАСВАР: Модал нээгдэхэд Gmail талбарыг цэвэрлэнэ
+            document.getElementById("userEmail").value = "";
             document.getElementById("userPhone").value = "";
             document.getElementById("userReceipt").value = "";
             
@@ -533,8 +576,9 @@
             document.getElementById("orderModal").style.display = "flex";
         };
 
-        // Шууд захиалга илгээх
         window.submitOrder = function() {
+            // НЭГТГЭСЭН ЗАСВАР: Gmail утгыг авч байна
+            var emailInput = document.getElementById("userEmail").value.trim();
             var phoneInput = document.getElementById("userPhone").value.trim();
             var orderCode = document.getElementById("modalOrderCode").innerText;
             var receiptInput = document.getElementById("userReceipt");
@@ -543,6 +587,12 @@
             var khoroo = document.getElementById("addrKhoroo").value.trim();
             var building = document.getElementById("addrBuilding").value.trim();
             var door = document.getElementById("addrDoor").value.trim();
+
+            // НЭГТГЭСЭН ЗАСВАР: Gmail бөглөсөн эсэхийг шалгах хэсэг
+            if (!emailInput || !emailInput.includes("@")) {
+                alert("Захиалга баталгаажуулахын тулд Gmail хаягаа зөв оруулна уу!");
+                return;
+            }
 
             if (!phoneInput || phoneInput.length < 6) {
                 alert("Захиалга баталгаажуулахын тулд утасны дугаараа зөв оруулна уу!");
@@ -563,7 +613,8 @@
             var totalAmount = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
             var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
 
-            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
+            // НЭГТГЭСЭН ЗАСВАР: Telegram руу явах мессежинд Gmail-ийг нэмэв
+            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📧 Gmail: " + emailInput + "\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
 
             var formData = new FormData();
             formData.append("chat_id", TG_CHAT_ID);
@@ -582,14 +633,17 @@
             .then(data => {
                 if(data.ok) {
                     database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) { return (o || 0) + 1; });
+                    
+                    // НЭГТГЭСЭН ЗАСВАР: Firebase мэдээллийн санд Gmail хаягийг хамт хадгалж байна
                     database.ref('orders').push({ 
+                        email: emailInput,
                         phone: phoneInput, 
                         productName: currentActiveProdName, 
                         address: fullAddress,
                         orderCode: orderCode, 
                         timestamp: Date.now() 
                     });
-                    alert("Захиалга амжилттай бүртгэгдлээ! 👍\n\nХаяг болон төлбөрийн мэдээлэл Тэмүүжингийн Telegram руу зурагтайгаа очлоо.");
+                    alert("Захиалга амжилттай бүртгэгдлээ! 👍\n\nХаяг, и-мэйл болон төлбөрийн мэдээлэл Тэмүүжингийн Telegram руу зурагтайгаа очлоо.");
                     window.closeModal();
                 } else {
                     alert("Алдаа гарлаа: Бот руу илгээж чадсангүй.");
