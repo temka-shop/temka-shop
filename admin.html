@@ -3,46 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T&S АДМИН ПАНЕЛЬ (Захиалга хянах)</title>
+    <title>T&S АДМИН ПАНЕЛЬ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; padding: 12px; color: #334155; display: flex; flex-direction: column; align-items: center; }
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f8fafc; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-box { background: white; padding: 30px 24px; border-radius: 20px; width: 90%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-        .login-box h3 { margin-bottom: 15px; font-weight: 800; color: #1e293b; }
-        .login-box input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; outline: none; font-size: 16px; text-align: center; background: #f8fafc; }
-        .login-box input:focus { border-color: #1e293b; background: white; }
-        .btn-login { background: #1e293b; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
-        .admin-main-content { display: none; width: 100%; max-width: 500px; }
-        .admin-box { background-color: white; padding: 20px; border-radius: 16px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 10px; }
-        .back-link { color: #b45309; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block; margin-bottom: 15px; }
-        h2 { font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 20px; display: inline-block; margin-left: 5px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #060709; 
+            color: #ffffff; 
+            padding: 20px 4% 50px 4%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Нэвтрэх цонх */
+        .login-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: #060709; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+        }
+        .login-box { 
+            background: #0d1117; 
+            border: 1px solid #21262d; 
+            padding: 30px 24px; 
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 380px; 
+            text-align: center; 
+        }
+        .login-box h3 { margin-bottom: 15px; font-weight: 800; color: #ffffff; font-size: 18px; }
+        .login-box input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #21262d; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            outline: none; 
+            font-size: 16px; 
+            text-align: center; 
+            background: #060709; 
+            color: #ffffff; 
+        }
+        .login-box input:focus { border-color: #8b5cf6; }
+        .btn-login { 
+            background: #8b5cf6; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .btn-login:hover { background: #7c3aed; }
+
+        /* Үндсэн Админ самбар */
+        .admin-main-content { display: none; width: 100%; max-width: 600px; }
+        .header-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .btn-back { 
+            background: #0d1117; 
+            border: 1px solid #21262d; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #ffffff; 
+            text-decoration: none; 
+            font-size: 16px; 
+        }
+        .btn-back:hover { background: #161b22; }
+        h2 { font-size: 20px; font-weight: 800; color: #ffffff; }
+
+        .admin-box { 
+            background-color: #0d1117; 
+            border: 1px solid #21262d; 
+            padding: 20px; 
+            border-radius: 20px; 
+            width: 100%; 
+            margin-bottom: 25px;
+        }
+
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background-color: #f8fafc; color: #334155; outline: none; }
-        .form-group input:focus { border-color: #1e293b; background-color: white; }
-        .file-input-wrapper { background-color: #f1f5f9; border: 2px dashed #cbd5e1; padding: 14px; border-radius: 10px; text-align: center; cursor: pointer; position: relative; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #21262d; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            background-color: #060709; 
+            color: #ffffff; 
+            outline: none; 
+        }
+        .form-group input:focus { border-color: #8b5cf6; }
+
+        .file-input-wrapper { 
+            background-color: #060709; 
+            border: 2px dashed #30363d; 
+            padding: 20px; 
+            border-radius: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            position: relative; 
+            color: #8b949e;
+            font-size: 13px;
+            font-weight: 600;
+        }
         .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-        
-        /* Зургийн жагсаалтыг гоё харагдуулах CSS */
+
+        /* Зургийн урьдчилан харах жагсаалт */
         .preview-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
         .preview-item { position: relative; width: 70px; height: 70px; }
-        .preview-thumbnail { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; border: 1px solid #cbd5e1; }
-        .remove-img-btn { position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .preview-thumbnail { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; border: 1px solid #30363d; }
+        .remove-img-btn { 
+            position: absolute; 
+            top: -6px; 
+            right: -6px; 
+            background: #ef4444; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 20px; 
+            height: 20px; 
+            font-size: 11px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+
+        .btn-add { 
+            background-color: #8b5cf6; 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: 0.2s;
+        }
+        .btn-add:hover { background-color: #7c3aed; }
+
+        .section-title { font-size: 16px; font-weight: 800; color: #ffffff; margin: 25px 0 12px 0; width: 100%; text-align: left; display: flex; align-items: center; gap: 8px; }
         
-        .btn-add { background-color: #1e293b; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; justify-content: center; align-items: center; }
-        .section-title { font-size: 16px; font-weight: 800; color: #1e293b; margin: 25px 0 12px 0; width: 100%; text-align: left; }
         .product-list, .order-list { width: 100%; }
-        .admin-prod-card, .order-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .admin-prod-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 12px; }
-        .prod-info, .order-info { flex-grow: 1; text-align: left; }
-        .prod-name, .order-title { font-size: 14px; font-weight: 700; color: #1e293b; }
-        .prod-price, .order-sub { font-size: 13px; font-weight: 700; color: #ef4444; margin-top: 2px; }
-        .stats-container { margin-top: 5px; display: flex; gap: 10px; }
-        .stat-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
-        .stat-views { background-color: #e0f2fe; color: #0369a1; }
-        .stat-orders { background-color: #fef3c7; color: #b45309; }
-        .btn-delete { background-color: #fee2e2; color: #ef4444; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+        /* Картны загвар */
+        .admin-prod-card, .order-card { 
+            background: #0d1117; 
+            border: 1px solid #21262d; 
+            border-radius: 16px; 
+            padding: 14px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 12px;
+        }
+
+        .order-card { flex-direction: column; align-items: flex-start; }
+
+        .admin-prod-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; border: 1px solid #21262d; }
+        .prod-info, .order-info { flex-grow: 1; text-align: left; width: 100%; }
+        .prod-name { font-size: 14px; font-weight: 700; color: #ffffff; }
+        .prod-price { font-size: 14px; font-weight: 800; color: #a78bfa; margin-top: 2px; }
+
+        .order-row { font-size: 13px; color: #cbd5e1; margin-bottom: 4px; }
+        .order-row b { color: #ffffff; }
+        .order-code-badge { background: #161b22; border: 1px solid #30363d; padding: 2px 8px; border-radius: 6px; font-size: 11px; color: #ef4444; font-weight: bold; }
+
+        .stats-container { margin-top: 6px; display: flex; gap: 8px; }
+        .stat-badge { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+        .stat-views { background-color: #1e293b; color: #38bdf8; }
+        .stat-orders { background-color: #2e1065; color: #c084fc; }
+
+        .btn-delete { 
+            background-color: rgba(239, 68, 68, 0.15); 
+            color: #ef4444; 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            padding: 8px 14px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .btn-delete:hover { background-color: #ef4444; color: white; }
+
+        .btn-complete { 
+            background-color: rgba(16, 185, 129, 0.15); 
+            color: #10b981; 
+            border: 1px solid rgba(16, 185, 129, 0.3); 
+            padding: 10px 16px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 8px; 
+            transition: 0.2s;
+        }
+        .btn-complete:hover { background-color: #10b981; color: white; }
+
+        .empty-text { 
+            color:#6e7681; 
+            font-size:14px; 
+            text-align:center; 
+            padding: 25px; 
+            background: #0d1117; 
+            border-radius:16px; 
+            border: 1px solid #21262d; 
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -56,12 +246,14 @@
     </div>
 
     <div id="adminMainContent" class="admin-main-content">
-        <div class="admin-box">
-            <a href="index.html" class="back-link">← Буцах</a>
+        <div class="header-bar">
+            <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i></a>
             <h2>T&S АДМИН ПАНЕЛЬ</h2>
+        </div>
 
+        <div class="admin-box">
             <div class="form-group">
-                <label>Бүтээгдэхүүний зургууд оруулах (Олноор эсвэл дарааллуулж сонгож болно)</label>
+                <label>Бүтээгдэхүүний зургууд оруулах</label>
                 <div class="file-input-wrapper">
                     <span id="uploadStatusText">📁 Энд дарж зургуудаа нэмнэ үү</span>
                     <input type="file" id="prodImageFile" accept="image/*" multiple onchange="window.handleImageSelect(this)">
@@ -71,25 +263,25 @@
 
             <div class="form-group">
                 <label>Бүтээгдэхүүний нэр</label>
-                <input type="text" id="prodName" placeholder="Нэр оруулах...">
+                <input type="text" id="prodName" placeholder="Жишээ: Хар футболк">
             </div>
 
             <div class="form-group">
                 <label>Бүтээгдэхүүний үнэ</label>
-                <input type="text" id="prodPrice" placeholder="Үнээ оруулах... (Жишээ нь: 45,000)">
+                <input type="text" id="prodPrice" placeholder="Жишээ: 45,000">
             </div>
 
             <button class="btn-add" id="btnAddProduct" onclick="window.addProduct()">＋ Шинэ бараа нэмэх</button>
         </div>
 
-        <div class="section-title">🛒 Ирсэн бодит захиалгууд (Утасны дугаар)</div>
+        <div class="section-title"><i class="fa-solid fa-receipt" style="color: #a78bfa;"></i> Ирсэн бодит захиалгууд</div>
         <div class="order-list" id="adminOrderList">
-            <p style="color:#64748b; font-size:14px; text-align:center; padding: 15px; background: white; border-radius:12px; border: 1px solid #e2e8f0;">Шинэ захиалга байхгүй байна...</p>
+            <p class="empty-text">Шинэ захиалга байхгүй байна...</p>
         </div>
 
-        <div class="section-title">📊 Барааны хандалт & Статистик</div>
+        <div class="section-title"><i class="fa-solid fa-chart-simple" style="color: #38bdf8;"></i> Барааны хандалт & Статистик</div>
         <div class="product-list" id="adminProductList">
-            <p style="color:#64748b; font-size:14px; text-align:center; padding: 20px; background: white; border-radius:12px; border: 1px solid #e2e8f0;">Ачаалж байна...</p>
+            <p class="empty-text">Ачаалж байна...</p>
         </div>
     </div>
 
@@ -111,7 +303,6 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        // Зургуудыг хадгалах массив (Одоо урамтай нэмэгдэнэ)
         let selectedBase64Images = [];
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -123,7 +314,7 @@
 
         window.checkAdminPassword = function() {
             var enteredPass = document.getElementById("adminPasswordInput").value;
-            if(enteredPass === "20110917@") {
+            if(enteredPass === "0917@2050&2025") {
                 localStorage.setItem("admin_authenticated", "true");
                 showAdminPanel();
             } else {
@@ -139,7 +330,6 @@
             loadOrders();
         }
 
-        // ШИНЭЧЛЭГДСЭН ФУНКЦ: Зургуудыг дарж сонгох тусам массив руу нэмж хадгална (Дээрээс нь дарж устгах боломжтой)
         window.handleImageSelect = function(input) {
             if (input.files && input.files.length > 0) {
                 let currentFilesCount = input.files.length;
@@ -148,7 +338,6 @@
                 Array.from(input.files).forEach(file => {
                     var reader = new FileReader();
                     reader.onload = function(e) {
-                        // Массив руу шинээр нэмэх
                         selectedBase64Images.push(e.target.result);
                         filesProcessed++;
 
@@ -158,12 +347,10 @@
                     };
                     reader.readAsDataURL(file);
                 });
-                // Сонгох бүрд input-ийг цэвэрлэж өгснөөр дахиж ижил зураг нэмж болно
                 input.value = ""; 
             }
         };
 
-        // Жижиг зургуудыг дэлгэцэнд зурах ба X товчлуур нэмэх хэсэг
         function renderThumbnails() {
             var container = document.getElementById("imagePreviewContainer");
             container.innerHTML = "";
@@ -180,13 +367,12 @@
             });
 
             if (selectedBase64Images.length > 0) {
-                document.getElementById("uploadStatusText").innerText = "✅ Нийт " + selectedBase64Images.length + " зураг бэлэн байна!";
+                document.getElementById("uploadStatusText").innerText = "✅ Нийт " + selectedBase64Images.length + " зураг сонгогдсон байна";
             } else {
                 document.getElementById("uploadStatusText").innerText = "📁 Энд дарж зургуудаа нэмнэ үү";
             }
         }
 
-        // Буруу орсон зургийг жагсаалтаас хасах функц
         window.removeSelectedImage = function(index) {
             selectedBase64Images.splice(index, 1);
             renderThumbnails();
@@ -196,7 +382,10 @@
             var listDiv = document.getElementById("adminProductList");
             database.ref('products').on('value', function(snapshot) {
                 listDiv.innerHTML = "";
-                if (!snapshot.exists()) { return; }
+                if (!snapshot.exists()) { 
+                    listDiv.innerHTML = '<p class="empty-text">Бараа байхгүй байна...</p>';
+                    return; 
+                }
                 snapshot.forEach(function(childSnapshot) {
                     var prodId = childSnapshot.key;
                     var prod = childSnapshot.val();
@@ -210,11 +399,11 @@
                             '<div class="prod-name">' + prod.name + '</div>' +
                             '<div class="prod-price">' + parseInt(prod.price || 0).toLocaleString() + '₮</div>' +
                             '<div class="stats-container">' +
-                                '<span class="stat-badge stat-views">👀 Үзсэн: ' + (prod.views || 0) + '</span>' +
-                                '<span class="stat-badge stat-orders">🛒 Захиалга: ' + (prod.orders || 0) + '</span>' +
+                                '<span class="stat-badge stat-views"><i class="fa-regular fa-eye"></i> Үзсэн: ' + (prod.views || 0) + '</span>' +
+                                '<span class="stat-badge stat-orders"><i class="fa-solid fa-cart-shopping"></i> Захиалга: ' + (prod.orders || 0) + '</span>' +
                             '</div>' +
                         '</div>' +
-                        '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')">Устгах</button>';
+                        '<button class="btn-delete" onclick="window.deleteProduct(\'' + prodId + '\')"><i class="fa-solid fa-trash-can"></i></button>';
                     listDiv.appendChild(row);
                 });
             });
@@ -224,7 +413,10 @@
             var orderDiv = document.getElementById("adminOrderList");
             database.ref('orders').on('value', function(snapshot) {
                 orderDiv.innerHTML = "";
-                if (!snapshot.exists()) { return; }
+                if (!snapshot.exists()) { 
+                    orderDiv.innerHTML = '<p class="empty-text">Шинэ захиалга байхгүй байна...</p>';
+                    return; 
+                }
                 snapshot.forEach(function(childSnapshot) {
                     var orderId = childSnapshot.key;
                     var order = childSnapshot.val();
@@ -232,10 +424,13 @@
                     card.className = "order-card";
                     card.innerHTML = 
                         '<div class="order-info">' +
-                            '<div class="order-title">📞 Утас: ' + order.phone + '</div>' +
-                            '<div class="order-sub">📦 Бараа: ' + order.productName + ' | Код: ' + (order.orderCode || 'Байхгүй') + '</div>' +
+                            '<div class="order-row"><b>📧 Gmail:</b> ' + (order.email || 'Байхгүй') + '</div>' +
+                            '<div class="order-row"><b>📞 Утас:</b> ' + (order.phone || 'Байхгүй') + '</div>' +
+                            '<div class="order-row"><b>📦 Бараа:</b> ' + (order.items || order.productName || 'Мэдээлэлгүй') + '</div>' +
+                            '<div class="order-row"><b>📍 Хаяг:</b> ' + (order.address || 'Байхгүй') + '</div>' +
+                            '<div class="order-row" style="margin-top:6px;"><b>Гүйлгээний утга:</b> <span class="order-code-badge">' + (order.orderCode || 'Байхгүй') + '</span></div>' +
                         '</div>' +
-                        '<button class="btn-delete" style="background:#d1fae5; color:#065f46;" onclick="window.completeOrder(\'' + orderId + '\')">Хүргэсэн</button>';
+                        '<button class="btn-complete" onclick="window.completeOrder(\'' + orderId + '\')">✅ Хүргэгдсэн (Хаах)</button>';
                     orderDiv.appendChild(card);
                 });
             });
@@ -272,11 +467,15 @@
         };
 
         window.deleteProduct = function(prodId) {
-            database.ref('products/' + prodId).remove().then(() => alert("Барааг устгалаа! 🗑️"));
+            if(confirm("Энэ барааг устгахдаа итгэлтэй байна уу?")) {
+                database.ref('products/' + prodId).remove().then(() => alert("Барааг устгалаа! 🗑️"));
+            }
         };
 
         window.completeOrder = function(orderId) {
-            database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдлаа! 🤝"));
+            if(confirm("Энэ захиалгыг хүргэгдсэн гэж хаах уу?")) {
+                database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдлаа! 🤝"));
+            }
         };
     </script>
 </body>
