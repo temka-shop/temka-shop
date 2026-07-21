@@ -21,7 +21,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 1. Навбар */
         .navbar {
             background-color: rgba(10, 12, 16, 0.95);
             backdrop-filter: blur(10px);
@@ -88,7 +87,6 @@
             margin: 0 auto;
         }
 
-        /* 2. Баннер */
         .hero-banner {
             margin: 12px 0 18px 0;
             background-color: #0d1117;
@@ -160,7 +158,6 @@
             background: #f1f5f9;
         }
 
-        /* 3. Хайлтын хэсэг */
         .search-bar-wrapper {
             margin-bottom: 16px;
             position: relative;
@@ -191,7 +188,6 @@
             font-size: 13px; 
         }
 
-        /* 4. Ангиллууд */
         .categories-grid {
             display: flex;
             gap: 8px;
@@ -217,7 +213,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            touch-action: manipulation;
         }
 
         .category-card:hover { 
@@ -236,7 +231,6 @@
             color: #cbd5e1; 
         }
 
-        /* 5. Барааны жагсаалт ба Хэмжээ (Size) тохиргоо */
         .section-header { 
             margin-bottom: 12px; 
         }
@@ -282,7 +276,6 @@
             cursor: pointer; 
             z-index: 10; 
             font-size: 12px;
-            touch-action: manipulation;
         }
 
         .wishlist-btn.active { 
@@ -328,11 +321,8 @@
             margin: 4px 0 6px 0; 
         }
 
-        /* Хэмжээ сонгох (XS, S, M, L) хэсэг */
         .size-selection-wrapper {
             margin: 6px 0 8px 0;
-            position: relative;
-            z-index: 20;
         }
 
         .size-label {
@@ -352,14 +342,13 @@
             background: #161b22;
             border: 1px solid #30363d;
             color: #8b949e;
-            padding: 4px 0;
+            padding: 3px 0;
             border-radius: 4px;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
-            touch-action: manipulation;
         }
 
         .size-btn.selected {
@@ -373,8 +362,6 @@
             gap: 4px; 
             margin-top: auto; 
             width: 100%; 
-            position: relative;
-            z-index: 30;
         }
 
         .btn-buy { 
@@ -382,7 +369,7 @@
             background: #8b5cf6; 
             color: #ffffff; 
             border: none; 
-            padding: 9px 0; 
+            padding: 8px 0; 
             border-radius: 8px; 
             font-size: 11px; 
             cursor: pointer; 
@@ -391,7 +378,6 @@
             align-items: center; 
             justify-content: center; 
             gap: 3px; 
-            touch-action: manipulation;
         }
 
         .btn-cart { 
@@ -399,15 +385,13 @@
             background: #161b22; 
             color: #ffffff; 
             border: 1px solid #30363d; 
-            padding: 9px 0; 
+            padding: 8px 0; 
             border-radius: 8px; 
             font-size: 11px; 
             cursor: pointer; 
             font-weight: 600; 
-            touch-action: manipulation;
         }
 
-        /* Модал Цонхнууд */
         .modal { 
             display: none; 
             position: fixed; 
@@ -658,7 +642,6 @@
             background: rgba(0,0,0,0.6); 
         }
 
-        /* Responsive Тохиргоо */
         @media (min-width: 768px) { 
             .product-container { grid-template-columns: repeat(4, 1fr) !important; gap: 16px !important; } 
             .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
@@ -837,10 +820,10 @@
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
-            authDomain: "temka-shop.firebaseapp.com",
-            databaseURL: "https://temka-shop-default-rtdb.firebaseio.com",
-            projectId: "temka-shop",
-            storageBucket: "temka-shop.firebasestorage.app",
+            authDomain: "ts-shopp.firebaseapp.com",
+            databaseURL: "https://ts-shopp-default-rtdb.firebaseio.com",
+            projectId: "ts-shopp",
+            storageBucket: "ts-shopp.firebasestorage.app",
             messagingSenderId: "1057963752042",
             appId: "1:1057963752042:web:9e0c88d308ac1cc9c92813",
             measurementId: "G-9H3NQML5TV"
@@ -887,11 +870,8 @@
             }
         };
 
-        // Size сонгох функц
         window.selectSize = function(btn, size, event) {
-            if (event) {
-                event.stopPropagation();
-            }
+            if (event) event.stopPropagation();
             const parent = btn.parentElement;
             const buttons = parent.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('selected'));
@@ -899,11 +879,8 @@
             btn.closest('.product-card').setAttribute('data-selected-size', size);
         };
 
-        // Сагслах Функц (Гар утасны touch дэмждэг болгосон)
         window.addToCart = function(name, price, imgUrl, prodId, btnElem, event) {
-            if (event) {
-                event.stopPropagation(); 
-            }
+            if (event) event.stopPropagation(); 
 
             const card = btnElem ? btnElem.closest('.product-card') : null;
             const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
@@ -919,58 +896,100 @@
             alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
         };
 
+        /* Бараануудыг аюулгүй DOM элементээр үүсгэн зурах засагдсан функц */
         window.renderProducts = function(productsList) {
             var grid = document.getElementById("homeProductGrid");
             if (!grid) return;
             grid.innerHTML = "";
 
-            if (productsList.length === 0) {
+            if (!productsList || productsList.length === 0) {
                 grid.innerHTML = "<p style='color:#6e7681; font-size:12px; padding: 10px 4px;'>Бараа олдсонгүй.</p>";
                 return;
             }
 
             productsList.forEach(function(item) {
                 var prodId = item.id;
-                var prod = item.data;
-                var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+                var prod = item.data || {};
+                
+                var prodName = prod.name ? String(prod.name) : 'Нэргүй бараа';
+                
+                var rawPrice = (prod.price !== undefined && prod.price !== null) ? String(prod.price) : "0";
+                var numericPrice = parseInt(rawPrice.replace(/[^0-9]/g, '')) || 0;
                 
                 var imgUrl = 'https://via.placeholder.com/200';
-                if (prod.images && prod.images.length > 0) {
+                var imagesArray = [];
+                
+                if (Array.isArray(prod.images) && prod.images.length > 0) {
                     imgUrl = prod.images[0];
+                    imagesArray = prod.images;
                 } else if (prod.image) {
                     imgUrl = prod.image;
+                    imagesArray = [prod.image];
+                } else {
+                    imagesArray = [imgUrl];
                 }
-                
-                var encodedImages = encodeURIComponent(JSON.stringify(prod.images || [imgUrl]));
 
                 var card = document.createElement("div");
                 card.className = "product-card";
                 card.setAttribute('data-selected-size', 'M');
-                
-                var safeName = prod.name ? prod.name.replace(/'/g, "\\'") : 'Бараа';
 
-                card.innerHTML =
-                    '<button class="wishlist-btn" onclick="window.toggleWishlist(this, event)"><i class="fa-solid fa-heart"></i></button>' +
-                    '<div class="product-clickable-area" onclick="window.openImagePreview(\'' + encodedImages + '\', \'' + safeName + '\', \'' + prodId + '\')">' +
-                        '<img src="' + imgUrl + '" alt="' + safeName + '">' +
-                        '<div class="product-info">' +
-                            '<h3 class="product-title">' + prod.name + '</h3>' +
-                            '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="size-selection-wrapper">' +
-                        '<div class="size-label">Хэмжээ сонгох:</div>' +
-                        '<div class="size-buttons-group">' +
-                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'XS\', event)">XS</button>' +
-                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'S\', event)">S</button>' +
-                            '<button type="button" class="size-btn selected" onclick="window.selectSize(this, \'M\', event)">M</button>' +
-                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'L\', event)">L</button>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="btn-group">' +
-                        '<button type="button" class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + safeName + '\', \'' + numericPrice + '\', event)"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>' +
-                        '<button type="button" class="btn-cart" onclick="window.addToCart(\'' + safeName + '\', ' + numericPrice + ', \'' + imgUrl + '\', \'' + prodId + '\', this, event)">Сагслах</button>' +
+                var wishBtn = document.createElement("button");
+                wishBtn.className = "wishlist-btn";
+                wishBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+                wishBtn.onclick = function(e) { window.toggleWishlist(this, e); };
+
+                var clickableArea = document.createElement("div");
+                clickableArea.className = "product-clickable-area";
+                clickableArea.onclick = function() {
+                    try {
+                        window.openImagePreview(encodeURIComponent(JSON.stringify(imagesArray)), prodName, prodId);
+                    } catch(e) { console.error(e); }
+                };
+                clickableArea.innerHTML = 
+                    '<img src="' + imgUrl + '" alt="' + prodName.replace(/"/g, '&quot;') + '">' +
+                    '<div class="product-info">' +
+                        '<h3 class="product-title">' + prodName + '</h3>' +
+                        '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
                     '</div>';
+
+                var sizeWrapper = document.createElement("div");
+                sizeWrapper.className = "size-selection-wrapper";
+                sizeWrapper.innerHTML = 
+                    '<div class="size-label">Хэмжээ сонгох:</div>' +
+                    '<div class="size-buttons-group">' +
+                        '<button type="button" class="size-btn" onclick="window.selectSize(this, \'XS\', event)">XS</button>' +
+                        '<button type="button" class="size-btn" onclick="window.selectSize(this, \'S\', event)">S</button>' +
+                        '<button type="button" class="size-btn selected" onclick="window.selectSize(this, \'M\', event)">M</button>' +
+                        '<button type="button" class="size-btn" onclick="window.selectSize(this, \'L\', event)">L</button>' +
+                    '</div>';
+
+                var btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+
+                var buyBtn = document.createElement("button");
+                buyBtn.type = "button";
+                buyBtn.className = "btn-buy";
+                buyBtn.innerHTML = '<i class="fa-solid fa-bag-shopping"></i> Захиалах';
+                buyBtn.onclick = function(e) {
+                    window.openModal(prodId, prodName, numericPrice, e);
+                };
+
+                var cartBtn = document.createElement("button");
+                cartBtn.type = "button";
+                cartBtn.className = "btn-cart";
+                cartBtn.textContent = "Сагслах";
+                cartBtn.onclick = function(e) {
+                    window.addToCart(prodName, numericPrice, imgUrl, prodId, this, e);
+                };
+
+                btnGroup.appendChild(buyBtn);
+                btnGroup.appendChild(cartBtn);
+
+                card.appendChild(wishBtn);
+                card.appendChild(clickableArea);
+                card.appendChild(sizeWrapper);
+                card.appendChild(btnGroup);
+
                 grid.appendChild(card);
             });
         };
