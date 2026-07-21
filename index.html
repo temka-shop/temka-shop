@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             background-color: #060709; 
@@ -16,7 +21,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Навбар */
+        /* 1. Навбар */
         .navbar {
             background-color: rgba(10, 12, 16, 0.95);
             backdrop-filter: blur(10px);
@@ -30,7 +35,39 @@
             z-index: 100;
             border-bottom: 1px solid #161a23;
         }
-        .nav-logo { font-size: 18px; font-weight: 800; color: #ffffff; text-decoration: none; }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active { 
+            color: #ffffff; 
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .cart-status {
             font-weight: 700;
             font-size: 12px;
@@ -40,14 +77,18 @@
             gap: 6px;
             text-decoration: none;
             background: #161b22;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
             border: 1px solid #30363d;
         }
 
-        .main-container { width: 94%; max-width: 1200px; margin: 0 auto; }
+        .main-container {
+            width: 94%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-        /* Баннер */
+        /* 2. Баннер */
         .hero-banner {
             margin: 12px 0 18px 0;
             background-color: #0d1117;
@@ -57,45 +98,155 @@
             background-position: center center;
             background-size: cover;
             border-radius: 16px;
-            padding: 24px 18px;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             border: 1px solid #1f242d;
         }
-        .hero-banner h1 { font-size: 1.8rem; font-weight: 900; color: #ffffff; margin-bottom: 4px; }
-        .hero-banner p { color: #e2e8f0; font-size: 12px; }
 
-        /* Дизайнлаг Ангилал / Категори сонгох хэсэг */
-        .category-scroll-container {
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+        }
+
+        .hero-subtitle { 
+            color: #a78bfa; 
+            font-size: 10px; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            margin-bottom: 6px; 
+            text-transform: uppercase; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hero-banner h1 { 
+            font-size: 2.2rem; 
+            font-weight: 900; 
+            color: #ffffff; 
+            margin-bottom: 6px; 
+            letter-spacing: 1px; 
+            line-height: 1.1;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .hero-banner p { 
+            color: #e2e8f0; 
+            font-size: 12px; 
+            margin-bottom: 18px; 
+            line-height: 1.4;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .btn-hero {
+            background: #ffffff;
+            color: #060709;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: 0.2s;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            background: #f1f5f9;
+        }
+
+        /* 3. Хайлтын хэсэг */
+        .search-bar-wrapper {
+            margin-bottom: 16px;
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .search-input:focus { 
+            border-color: #8b5cf6; 
+        }
+
+        .search-icon { 
+            position: absolute; 
+            left: 14px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #6e7681; 
+            font-size: 13px; 
+        }
+
+        /* 4. Ангиллууд */
+        .categories-grid {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding: 4px 0 14px 0;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
             scrollbar-width: none;
         }
-        .category-scroll-container::-webkit-scrollbar { display: none; }
-        
-        .cat-chip {
-            background: #0d1117;
-            border: 1px solid #21262d;
-            color: #8b949e;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .cat-chip.active {
-            background: #8b5cf6;
-            color: #ffffff;
-            border-color: #8b5cf6;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+
+        .categories-grid::-webkit-scrollbar { 
+            display: none; 
         }
 
-        /* Барааны тор (Grid) */
+        .category-card {
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            touch-action: manipulation;
+        }
+
+        .category-card:hover { 
+            border-color: #8b5cf6; 
+            background: #161b22; 
+        }
+
+        .category-card i { 
+            font-size: 14px; 
+            color: #a78bfa; 
+        }
+
+        .category-card span { 
+            font-size: 12px; 
+            font-weight: 600; 
+            color: #cbd5e1; 
+        }
+
+        /* 5. Барааны жагсаалт ба Хэмжээ (Size) тохиргоо */
+        .section-header { 
+            margin-bottom: 12px; 
+        }
+
+        .section-title { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+        }
+
         .product-container { 
             display: grid !important; 
             grid-template-columns: repeat(2, 1fr) !important; 
@@ -115,17 +266,47 @@
             position: relative; 
         }
 
-        .product-img-box {
-            width: 100%;
-            height: 140px;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #060709;
-            cursor: pointer;
+        .wishlist-btn { 
+            position: absolute; 
+            top: 14px; 
+            right: 14px; 
+            background: rgba(13, 17, 23, 0.8); 
+            border: 1px solid #30363d; 
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #6e7681; 
+            cursor: pointer; 
+            z-index: 10; 
+            font-size: 12px;
+            touch-action: manipulation;
         }
-        .product-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .product-info { padding: 6px 2px 0 2px; }
+        .wishlist-btn.active { 
+            color: #ef4444 !important; 
+        }
+
+        .product-clickable-area { 
+            cursor: pointer; 
+            display: block; 
+            width: 100%; 
+        }
+
+        .product-card img { 
+            width: 100% !important; 
+            height: 135px !important; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            background-color: #060709; 
+        }
+
+        .product-info { 
+            padding: 6px 2px 0 2px; 
+        }
+
         .product-title { 
             font-size: 12px; 
             font-weight: 600; 
@@ -139,28 +320,63 @@
             height: 32px; 
             line-height: 1.3; 
         }
-        .product-price { font-weight: 800; color: #ffffff; font-size: 14px; margin: 4px 0 6px 0; }
 
-        /* Хэмжээ сонгох хэсэг */
-        .size-selection-wrapper { margin: 4px 0 8px 0; }
-        .size-label { font-size: 9px; color: #8b949e; margin-bottom: 4px; font-weight: 600; }
-        .size-buttons-group { display: flex; gap: 4px; }
+        .product-price { 
+            font-weight: 800; 
+            color: #ffffff; 
+            font-size: 14px; 
+            margin: 4px 0 6px 0; 
+        }
+
+        /* Хэмжээ сонгох (XS, S, M, L) хэсэг */
+        .size-selection-wrapper {
+            margin: 6px 0 8px 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .size-label {
+            font-size: 9px;
+            color: #8b949e;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .size-buttons-group {
+            display: flex;
+            gap: 4px;
+        }
+
         .size-btn {
             flex: 1;
             background: #161b22;
             border: 1px solid #30363d;
             color: #8b949e;
-            padding: 5px 0;
+            padding: 4px 0;
             border-radius: 4px;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
+            transition: all 0.2s;
+            touch-action: manipulation;
         }
-        .size-btn.selected { background: #8b5cf6; border-color: #8b5cf6; color: #ffffff; }
 
-        /* Товчнууд */
-        .btn-group { display: flex; gap: 4px; margin-top: auto; width: 100%; position: relative; z-index: 10; }
+        .size-btn.selected {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            color: #ffffff;
+        }
+
+        .btn-group { 
+            display: flex; 
+            gap: 4px; 
+            margin-top: auto; 
+            width: 100%; 
+            position: relative;
+            z-index: 30;
+        }
+
         .btn-buy { 
             flex: 1.2; 
             background: #8b5cf6; 
@@ -175,7 +391,9 @@
             align-items: center; 
             justify-content: center; 
             gap: 3px; 
+            touch-action: manipulation;
         }
+
         .btn-cart { 
             flex: 1; 
             background: #161b22; 
@@ -186,9 +404,10 @@
             font-size: 11px; 
             cursor: pointer; 
             font-weight: 600; 
+            touch-action: manipulation;
         }
 
-        /* Модал Цонх */
+        /* Модал Цонхнууд */
         .modal { 
             display: none; 
             position: fixed; 
@@ -202,61 +421,413 @@
             justify-content: center; 
             align-items: center; 
         }
+
         .modal-content { 
             background-color: #0d1117; 
             border: 1px solid #21262d; 
             color: white; 
-            padding: 20px; 
+            padding: 18px; 
             border-radius: 18px; 
             width: 92%; 
             max-width: 400px; 
             position: relative; 
+            max-height: 90vh; 
+            overflow-y: auto; 
         }
-        .close-btn { position: absolute; right: 16px; top: 12px; font-size: 22px; cursor: pointer; color: #6e7681; }
-        .btn-close-modal { background: #8b5cf6; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-size: 13px; cursor: pointer; font-weight: bold; margin-top: 14px; }
 
+        .close-btn { 
+            position: absolute; 
+            right: 16px; 
+            top: 12px; 
+            font-size: 22px; 
+            cursor: pointer; 
+            color: #6e7681; 
+        }
+
+        .price-details { 
+            background-color: #060709; 
+            padding: 12px; 
+            border-radius: 12px; 
+            margin: 12px 0; 
+            border: 1px solid #161a23; 
+        }
+
+        .price-text { 
+            font-weight: 700; 
+            color: #ffffff; 
+            font-size: 14px; 
+            text-align: center; 
+            margin-bottom: 4px; 
+        }
+
+        .price-row { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 12px; 
+            margin-bottom: 4px; 
+            color: #94a3b8; 
+        }
+
+        .total-text { 
+            color: #10b981; 
+            font-size: 14px; 
+            font-weight: 700; 
+            margin-top: 8px; 
+            border-top: 1px dashed #21262d; 
+            padding-top: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
+        .modal-bank-card { 
+            background: #060709; 
+            border-radius: 12px; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            border: 1px solid #161a23; 
+        }
+
+        .bank-info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 11px; 
+            margin-bottom: 6px; 
+        }
+
+        .bank-info-label { 
+            color: #94a3b8; 
+        }
+
+        .bank-info-value { 
+            font-weight: 700; 
+            color: #ffffff; 
+        }
+
+        .btn-copy { 
+            background-color: #161b22; 
+            color: white; 
+            border: 1px solid #30363d; 
+            padding: 2px 6px; 
+            font-size: 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+
+        .phone-input-group { 
+            margin-bottom: 10px; 
+            text-align: left; 
+        }
+
+        .phone-input-group label { 
+            display: block; 
+            font-size: 10px; 
+            font-weight: 700; 
+            color: #cbd5e1; 
+            margin-bottom: 4px; 
+            text-transform: uppercase; 
+        }
+
+        .phone-input-group input { 
+            width: 100%; 
+            padding: 10px; 
+            background: #060709; 
+            border: 1px solid #21262d; 
+            color: white; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            outline: none; 
+        }
+
+        .address-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 8px; 
+            margin-bottom: 10px; 
+        }
+
+        .address-group label { 
+            display: block; 
+            font-size: 9px; 
+            font-weight: 700; 
+            color: #cbd5e1; 
+            margin-bottom: 3px; 
+            text-transform: uppercase; 
+        }
+
+        .address-group input { 
+            width: 100%; 
+            padding: 8px; 
+            background: #060709; 
+            border: 1px solid #21262d; 
+            color: white; 
+            border-radius: 6px; 
+            font-size: 12px; 
+            outline: none; 
+        }
+
+        .btn-close-modal { 
+            background: #8b5cf6; 
+            color: #ffffff; 
+            border: none; 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 10px; 
+            font-size: 13px; 
+            cursor: pointer; 
+            font-weight: bold; 
+        }
+
+        .image-preview-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(10px); 
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .image-preview-wrapper { 
+            position: relative; 
+            max-width: 90%; 
+            max-height: 75vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .image-preview-content { 
+            max-width: 100%; 
+            max-height: 75vh; 
+            border-radius: 12px; 
+            object-fit: contain; 
+        }
+
+        .image-preview-title { 
+            position: absolute; 
+            bottom: -45px; 
+            color: white; 
+            font-size: 13px; 
+            font-weight: 700; 
+            background: rgba(13, 17, 23, 0.9); 
+            padding: 5px 16px; 
+            border-radius: 20px; 
+            border: 1px solid #30363d; 
+        }
+
+        .close-preview-btn { 
+            position: absolute; 
+            top: -40px; 
+            right: 0; 
+            color: white; 
+            font-size: 30px; 
+            cursor: pointer; 
+            background: none; 
+            border: none; 
+        }
+
+        .nav-arrow { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border: none; 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            font-size: 16px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+
+        .arrow-left { 
+            left: -10px; 
+            background: rgba(0,0,0,0.6); 
+        }
+
+        .arrow-right { 
+            right: -10px; 
+            background: rgba(0,0,0,0.6); 
+        }
+
+        /* Responsive Тохиргоо */
         @media (min-width: 768px) { 
             .product-container { grid-template-columns: repeat(4, 1fr) !important; gap: 16px !important; } 
-            .product-img-box { height: 180px; }
+            .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+            .hero-banner { padding: 60px 40px; }
+            .hero-banner h1 { font-size: 3rem; }
+            .product-card img { height: 190px !important; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="nav-logo">T&S SHOPP</a>
-        <a href="cart.html" class="cart-status">
-            <i class="fa-solid fa-cart-shopping"></i> Сагс (<span id="headerCartCount">0</span>)
-        </a>
+        <a href="#" class="nav-logo">T&S SHOPP</a>
+        
+        <ul class="nav-links">
+            <li><a href="#" class="active">Нүүр</a></li>
+            <li><a href="#categories">Ангилал</a></li>
+            <li><a href="#homeProductGrid">Шинэ бараа</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <a href="cart.html" class="cart-status">
+                <i class="fa-solid fa-cart-shopping"></i> Сагс (<span id="headerCartCount">0</span>)
+            </a>
+        </div>
     </nav>
 
     <main class="main-container">
         <header class="hero-banner">
-            <h1>T&S SHOPP</h1>
-            <p>Дэлгүүрийн шинэ ба трэнд загварууд.</p>
+            <div class="hero-content">
+                <div class="hero-subtitle">ТАНЫ ХҮССЭН БҮХНИЙГ</div>
+                <h1>T&S SHOPP</h1>
+                <p>НЭГ ДОРООС. Сүүлийн үеийн трэнд загвар.</p>
+                <button class="btn-hero" onclick="document.getElementById('homeProductGrid').scrollIntoView({behavior: 'smooth'});">
+                    ДЭЛГҮҮР ҮЗЭХ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
         </header>
 
-        <div class="category-scroll-container" id="categoryContainer">
-            <button class="cat-chip active" onclick="window.filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> Бүгд</button>
-            <button class="cat-chip" onclick="window.filterCategory('Шинэ', this)"><i class="fa-solid fa-fire"></i> Шинэ</button>
-            <button class="cat-chip" onclick="window.filterCategory('Цамц', this)"><i class="fa-solid fa-shirt"></i> Цамц</button>
-            <button class="cat-chip" onclick="window.filterCategory('Өмд', this)"><i class="fa-solid fa-user-ninja"></i> Өмд</button>
-            <button class="cat-chip" onclick="window.filterCategory('Гутал', this)"><i class="fa-solid fa-shoe-prints"></i> Гутал</button>
-            <button class="cat-chip" onclick="window.filterCategory('Аксессуар', this)"><i class="fa-solid fa-gem"></i> Аксессуар</button>
+        <div class="search-bar-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Та юу хайж байна?" oninput="window.filterProducts()">
+        </div>
+
+        <div id="categories" class="categories-grid">
+            <div class="category-card" onclick="window.filterByCategory('')">
+                <i class="fa-solid fa-border-all"></i>
+                <span>Бүгд</span>
+            </div>
+            <div class="category-card" onclick="window.filterByCategory('хувцас')">
+                <i class="fa-solid fa-shirt"></i>
+                <span>Хувцас</span>
+            </div>
+            <div class="category-card" onclick="window.filterByCategory('гутал')">
+                <i class="fa-solid fa-shoe-prints"></i>
+                <span>Гутал</span>
+            </div>
+            <div class="category-card" onclick="window.filterByCategory('аксессуар')">
+                <i class="fa-solid fa-clock"></i>
+                <span>Аксессуар</span>
+            </div>
+            <div class="category-card" onclick="window.filterByCategory('технологи')">
+                <i class="fa-solid fa-headphones"></i>
+                <span>Технологи</span>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Манай бүтээгдэхүүнүүд</h2>
         </div>
 
         <div class="product-container" id="homeProductGrid">
-            <p style='color:#6e7681; font-size:12px;'>Бараа ачаалж байна...</p>
+            <p style='color:#6e7681; font-size:12px; padding: 10px 0;'>Барааг ачаалж байна...</p>
         </div>
     </main>
 
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="window.closeModal()">&times;</span>
-            <h3 style="text-align: center; font-size: 15px; font-weight: 800; margin-bottom:8px;">🛒 Захиалах</h3>
-            <p id="modalProductTitle" style="text-align: center; font-size: 13px; color: #a78bfa; margin-bottom: 12px;"></p>
-            <p style="font-size: 12px; color: #8b949e; text-align: center;">Сагс хуудас руу шилжин төлбөрөө баталгаажуулна уу.</p>
-            <button class="btn-close-modal" onclick="window.location.href='cart.html'">Сагс руу очих</button>
+            <h3 style="text-align: center; font-size: 15px; font-weight: 800; margin-bottom:8px;">🛒 Захиалга Баталгаажуулах</h3>
+            
+            <div class="price-details">
+                <p class="price-text" id="modalProductTitle"></p>
+                <div class="price-row">
+                    <span>Барааны үнэ:</span>
+                    <span id="modalProductPriceOnly">0₮</span>
+                </div>
+                <div class="price-row">
+                    <span>Хүргэлт:</span>
+                    <span style="color: #a78bfa;">+3,000₮</span>
+                </div>
+                <div class="total-text">
+                    <span>Нийт дүн:</span>
+                    <span id="modalTotalWithShipping">0₮</span>
+                </div>
+            </div>
+            
+            <div class="modal-bank-card">
+                <div class="bank-info-row">
+                    <span class="bank-info-label">Банк:</span>
+                    <span class="bank-info-value">ХХБ (TDB)</span>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-info-label">Данс:</span>
+                    <div>
+                        <span class="bank-info-value" id="bankAcc">428025046</span>
+                        <button class="btn-copy" onclick="window.copyText('bankAcc', this)">Хуулах</button>
+                    </div>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-info-label">Хүлээн авагч:</span>
+                    <span class="bank-info-value">Б.Тэмүүжин</span>
+                </div>
+                <div class="bank-info-row">
+                    <span class="bank-info-label" style="color:#ef4444; font-weight:bold;">Гүйлгээний утга:</span>
+                    <span class="bank-info-value" id="modalOrderCode" style="color:#ef4444; font-weight: 800;">---</span>
+                </div>
+            </div>
+
+            <div class="phone-input-group">
+                <label>1. Gmail хаяг:</label>
+                <input type="email" id="userEmail" placeholder="Жишээ: yourname@gmail.com">
+            </div>
+
+            <div class="phone-input-group">
+                <label>2. Холбоо барих утасны дугаар:</label>
+                <input type="number" id="userPhone" placeholder="Жишээ: 99112233">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 4px;"><label style="font-size: 10px; font-weight: bold; color: #cbd5e1; text-transform: uppercase;">3. Хүргэлтийн хаяг:</label></div>
+            <div class="address-grid">
+                <div class="address-group">
+                    <label>Дүүрэг:</label>
+                    <input type="text" id="addrDistrict" placeholder="БГД, БЗД">
+                </div>
+                <div class="address-group">
+                    <label>Хороо:</label>
+                    <input type="text" id="addrKhoroo" placeholder="3-р хороо">
+                </div>
+                <div class="address-group">
+                    <label>Байр/Хороолол:</label>
+                    <input type="text" id="addrBuilding" placeholder="12-р байр">
+                </div>
+                <div class="address-group">
+                    <label>Тоот:</label>
+                    <input type="text" id="addrDoor" placeholder="45 тоот">
+                </div>
+            </div>
+
+            <div class="phone-input-group">
+                <label>4. Төлбөрийн баримт оруулах:</label>
+                <input type="file" id="userReceipt" accept="image/*" style="width: 100%; padding: 6px; border: 1px solid #21262d; border-radius: 6px; background: #060709; color: white; font-size: 11px;">
+            </div>
+
+            <button class="btn-close-modal" onclick="window.submitOrder()">✅ Захиалга илгээх & Төлөх</button>
+        </div>
+    </div>
+
+    <div id="imagePreviewModal" class="image-preview-modal">
+        <div class="image-preview-wrapper">
+            <button class="close-preview-btn" onclick="window.closeImagePreview()">&times;</button>
+            <button class="nav-arrow arrow-left" onclick="window.changePreviewImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <img id="previewModalImg" class="image-preview-content" src="" alt="Томруулсан зураг">
+            <button class="nav-arrow arrow-right" onclick="window.changePreviewImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            <div id="previewModalTitle" class="image-preview-title">Барааны нэр</div>
         </div>
     </div>
 
@@ -278,19 +849,33 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        let allProductsCache = [];
+        const TG_BOT_TOKEN = "8791135920:AAEP7B1oC3e4cYbUT3ThHxH6QmHanMzsbdU"; 
+        const TG_CHAT_ID = "6759790987"; 
+
+        let currentActiveProdId = "";
+        let currentActiveProdName = "";
+        let currentActiveProdPrice = 0;
+        let selectedSize = ""; 
+        let allProductsArray = []; 
+        let currentImagesArray = [];
+        let currentImageIndex = 0;
+        let currentActiveTitle = "";
+
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         window.onload = function() {
             window.updateCartCount();
             database.ref('products').on('value', function(snapshot) {
-                allProductsCache = [];
+                allProductsArray = []; 
                 if (snapshot.exists()) {
-                    snapshot.forEach(function(child) {
-                        allProductsCache.push({ id: child.key, data: child.val() });
+                    snapshot.forEach(function(childSnapshot) {
+                        allProductsArray.push({
+                            id: childSnapshot.key,
+                            data: childSnapshot.val()
+                        });
                     });
                 }
-                window.renderProducts(allProductsCache);
+                window.renderProducts(allProductsArray); 
             });
         };
 
@@ -302,110 +887,230 @@
             }
         };
 
-        window.filterCategory = function(categoryName, btn) {
-            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-
-            if (categoryName === 'all') {
-                window.renderProducts(allProductsCache);
-            } else {
-                let filtered = allProductsCache.filter(item => {
-                    let cat = item.data.category || '';
-                    return cat.toLowerCase().includes(categoryName.toLowerCase());
-                });
-                window.renderProducts(filtered);
+        // Size сонгох функц
+        window.selectSize = function(btn, size, event) {
+            if (event) {
+                event.stopPropagation();
             }
-        };
-
-        window.selectSize = function(btn, size, e) {
-            if (e) e.stopPropagation();
             const parent = btn.parentElement;
-            parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            const buttons = parent.querySelectorAll('.size-btn');
+            buttons.forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            
-            const card = btn.closest('.product-card');
-            if (card) { card.setAttribute('data-selected-size', size); }
+            btn.closest('.product-card').setAttribute('data-selected-size', size);
         };
 
-        window.addToCart = function(name, price, imgUrl, btnElement, e) {
-            if (e) e.stopPropagation();
+        // Сагслах Функц (Гар утасны touch дэмждэг болгосон)
+        window.addToCart = function(name, price, imgUrl, prodId, btnElem, event) {
+            if (event) {
+                event.stopPropagation(); 
+            }
 
-            const card = btnElement.closest('.product-card');
+            const card = btnElem ? btnElem.closest('.product-card') : null;
             const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
 
             let existingItem = cart.find(item => item.name === name && item.size === chosenSize);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                cart.push({ 
-                    name: name, 
-                    price: parseInt(price), 
-                    image: imgUrl, 
-                    size: chosenSize, 
-                    quantity: 1 
-                });
+                cart.push({ name: name, price: parseInt(price), image: imgUrl, size: chosenSize, quantity: 1 });
             }
-
             localStorage.setItem('cart', JSON.stringify(cart));
             window.updateCartCount();
-            alert("✅ " + name + " (" + chosenSize + ") сагсанд нэмэгдлээ!");
+            alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
         };
 
         window.renderProducts = function(productsList) {
-            const grid = document.getElementById("homeProductGrid");
+            var grid = document.getElementById("homeProductGrid");
             if (!grid) return;
             grid.innerHTML = "";
 
             if (productsList.length === 0) {
-                grid.innerHTML = "<p style='color:#6e7681; font-size:12px; grid-column: 1/-1; text-align:center;'>Энэ ангилалд бараа олдсонгүй.</p>";
+                grid.innerHTML = "<p style='color:#6e7681; font-size:12px; padding: 10px 4px;'>Бараа олдсонгүй.</p>";
                 return;
             }
 
             productsList.forEach(function(item) {
-                let prod = item.data;
-                let numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
-                let imgUrl = (prod.images && prod.images.length > 0) ? prod.images[0] : (prod.image || 'https://via.placeholder.com/200');
+                var prodId = item.id;
+                var prod = item.data;
+                var numericPrice = parseInt(prod.price ? prod.price.toString().replace(/[^0-9]/g, '') : 0) || 0;
+                
+                var imgUrl = 'https://via.placeholder.com/200';
+                if (prod.images && prod.images.length > 0) {
+                    imgUrl = prod.images[0];
+                } else if (prod.image) {
+                    imgUrl = prod.image;
+                }
+                
+                var encodedImages = encodeURIComponent(JSON.stringify(prod.images || [imgUrl]));
 
-                let card = document.createElement("div");
+                var card = document.createElement("div");
                 card.className = "product-card";
                 card.setAttribute('data-selected-size', 'M');
+                
+                var safeName = prod.name ? prod.name.replace(/'/g, "\\'") : 'Бараа';
 
-                let safeName = prod.name ? prod.name.replace(/'/g, "\\'") : 'Бараа';
-
-                card.innerHTML = `
-                    <div class="product-img-box">
-                        <img src="${imgUrl}" alt="${safeName}">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${prod.name}</h3>
-                        <p class="product-price">${numericPrice.toLocaleString()}₮</p>
-                    </div>
-                    <div class="size-selection-wrapper">
-                        <div class="size-label">Хэмжээ сонгох:</div>
-                        <div class="size-buttons-group">
-                            <button type="button" class="size-btn" onclick="window.selectSize(this, 'XS', event)">XS</button>
-                            <button type="button" class="size-btn" onclick="window.selectSize(this, 'S', event)">S</button>
-                            <button type="button" class="size-btn selected" onclick="window.selectSize(this, 'M', event)">M</button>
-                            <button type="button" class="size-btn" onclick="window.selectSize(this, 'L', event)">L</button>
-                        </div>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn-buy" onclick="window.openModal('${safeName}', '${numericPrice}')"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>
-                        <button type="button" class="btn-cart" onclick="window.addToCart('${safeName}', ${numericPrice}, '${imgUrl}', this, event)">Сагслах</button>
-                    </div>
-                `;
+                card.innerHTML =
+                    '<button class="wishlist-btn" onclick="window.toggleWishlist(this, event)"><i class="fa-solid fa-heart"></i></button>' +
+                    '<div class="product-clickable-area" onclick="window.openImagePreview(\'' + encodedImages + '\', \'' + safeName + '\', \'' + prodId + '\')">' +
+                        '<img src="' + imgUrl + '" alt="' + safeName + '">' +
+                        '<div class="product-info">' +
+                            '<h3 class="product-title">' + prod.name + '</h3>' +
+                            '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="size-selection-wrapper">' +
+                        '<div class="size-label">Хэмжээ сонгох:</div>' +
+                        '<div class="size-buttons-group">' +
+                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'XS\', event)">XS</button>' +
+                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'S\', event)">S</button>' +
+                            '<button type="button" class="size-btn selected" onclick="window.selectSize(this, \'M\', event)">M</button>' +
+                            '<button type="button" class="size-btn" onclick="window.selectSize(this, \'L\', event)">L</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="btn-group">' +
+                        '<button type="button" class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + safeName + '\', \'' + numericPrice + '\', event)"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>' +
+                        '<button type="button" class="btn-cart" onclick="window.addToCart(\'' + safeName + '\', ' + numericPrice + ', \'' + imgUrl + '\', \'' + prodId + '\', this, event)">Сагслах</button>' +
+                    '</div>';
                 grid.appendChild(card);
             });
         };
 
-        window.openModal = function(name, price) {
-            document.getElementById("modalProductTitle").innerText = name + " - " + parseInt(price).toLocaleString() + "₮";
+        window.openImagePreview = function(encodedImages, title, prodId) {
+            currentImagesArray = JSON.parse(decodeURIComponent(encodedImages));
+            currentImageIndex = 0;
+            currentActiveTitle = title;
+            updatePreviewDOM();
+            document.getElementById("imagePreviewModal").style.display = "flex";
+            var viewRef = database.ref('products/' + prodId + '/views');
+            viewRef.transaction(function(v) { return (v || 0) + 1; });
+        };
+
+        function updatePreviewDOM() {
+            if (currentImagesArray.length > 0) {
+                document.getElementById("previewModalImg").src = currentImagesArray[currentImageIndex];
+                document.getElementById("previewModalTitle").innerText = currentActiveTitle + " (" + (currentImageIndex + 1) + "/" + currentImagesArray.length + ")";
+            }
+        }
+
+        window.changePreviewImage = function(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex >= currentImagesArray.length) { currentImageIndex = 0; }
+            if (currentImageIndex < 0) { currentImageIndex = currentImagesArray.length - 1; }
+            updatePreviewDOM();
+        };
+
+        window.closeImagePreview = function() { document.getElementById("imagePreviewModal").style.display = "none"; };
+        
+        window.filterProducts = function() {
+            var query = document.getElementById("searchInput").value.toLowerCase().trim();
+            var filtered = allProductsArray.filter(function(item) {
+                var name = item.data.name ? item.data.name.toLowerCase() : "";
+                return name.includes(query);
+            });
+            window.renderProducts(filtered);
+        };
+
+        window.filterByCategory = function(category) {
+            if (!category) {
+                window.renderProducts(allProductsArray);
+                return;
+            }
+            var filtered = allProductsArray.filter(function(item) {
+                var name = item.data.name ? item.data.name.toLowerCase() : "";
+                var cat = item.data.category ? item.data.category.toLowerCase() : "";
+                return name.includes(category) || cat.includes(category);
+            });
+            window.renderProducts(filtered);
+        };
+
+        window.toggleWishlist = function(btn, event) {
+            if (event) event.stopPropagation();
+            btn.classList.toggle('active');
+        };
+
+        window.openModal = function(prodId, name, price, event) {
+            if (event) event.stopPropagation();
+            currentActiveProdId = prodId;
+            
+            const card = event.target ? event.target.closest('.product-card') : null;
+            const chosenSize = card ? card.getAttribute('data-selected-size') : 'M';
+            currentActiveProdName = name + " (Хэмжээ: " + chosenSize + ")";
+            currentActiveProdPrice = parseInt(price) || 0;
+            
+            document.getElementById("modalProductTitle").innerText = currentActiveProdName;
+            document.getElementById("modalProductPriceOnly").innerText = currentActiveProdPrice.toLocaleString() + "₮";
+            document.getElementById("modalTotalWithShipping").innerText = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            
+            document.getElementById("userEmail").value = "";
+            document.getElementById("userPhone").value = "";
+            document.getElementById("userReceipt").value = "";
+            document.getElementById("addrDistrict").value = "";
+            document.getElementById("addrKhoroo").value = "";
+            document.getElementById("addrBuilding").value = "";
+            document.getElementById("addrDoor").value = "";
+
+            var randomCode = "TE-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById("modalOrderCode").innerText = randomCode;
             document.getElementById("orderModal").style.display = "flex";
         };
 
-        window.closeModal = function() {
-            document.getElementById("orderModal").style.display = "none";
+        window.submitOrder = function() {
+            var emailInput = document.getElementById("userEmail").value.trim();
+            var phoneInput = document.getElementById("userPhone").value.trim();
+            var orderCode = document.getElementById("modalOrderCode").innerText;
+            var receiptInput = document.getElementById("userReceipt");
+            
+            var district = document.getElementById("addrDistrict").value.trim();
+            var khoroo = document.getElementById("addrKhoroo").value.trim();
+            var building = document.getElementById("addrBuilding").value.trim();
+            var door = document.getElementById("addrDoor").value.trim();
+
+            if (!emailInput || !emailInput.includes("@")) { alert("Gmail хаягаа зөв оруулна уу!"); return; }
+            if (!phoneInput || phoneInput.length < 6) { alert("Утасны дугаараа зөв оруулна уу!"); return; }
+            if (!district || !khoroo || !building || !door) { alert("Хүргэлтийн хаягаа бүрэн оруулна уу!"); return; }
+            if (!receiptInput.files || receiptInput.files.length === 0) { alert("Төлбөр төлсөн баримтын зургаа оруулна уу!"); return; }
+
+            var file = receiptInput.files[0];
+            var totalAmount = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
+
+            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📧 Gmail: " + emailInput + "\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
+
+            var formData = new FormData();
+            formData.append("chat_id", TG_CHAT_ID);
+            formData.append("photo", file);
+            formData.append("caption", textMessage);
+
+            var submitBtn = document.querySelector(".btn-close-modal");
+            submitBtn.innerText = "Илгээж байна...";
+            submitBtn.disabled = true;
+
+            fetch("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendPhoto", { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if(data.ok) {
+                    database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) { return (o || 0) + 1; });
+                    database.ref('orders').push({ 
+                        email: emailInput,
+                        phone: phoneInput, 
+                        productName: currentActiveProdName, 
+                        address: fullAddress,
+                        orderCode: orderCode, 
+                        timestamp: Date.now() 
+                    });
+                    alert("Захиалга амжилттай бүртгэгдлээ! 👍");
+                    window.closeModal();
+                } else { alert("Алдаа гарлаа: Илгээж чадсангүй."); }
+            })
+            .catch(err => { alert("Холболтын алдаа: " + err.message); })
+            .finally(() => {
+                submitBtn.innerText = "✅ Захиалга илгээх & Төлөх";
+                submitBtn.disabled = false;
+            });
         };
+
+        window.closeModal = function() { document.getElementById("orderModal").style.display = "none"; };
+        window.copyText = function(id, btn) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(function() { var txt = btn.innerText; btn.innerText = "Хуулагдлаа!"; setTimeout(function() { btn.innerText = txt; }, 2000); }); };
     </script>
 </body>
 </html>
