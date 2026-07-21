@@ -158,6 +158,27 @@
             background: #f1f5f9;
         }
 
+        /* 📍 Дэлгүүр үзэх товчны доорх мэдээллийн текст */
+        .hero-discount-info {
+            margin-top: 12px;
+            font-size: 11px;
+            color: #f1f5f9;
+            background: rgba(139, 92, 246, 0.25);
+            border: 1px solid rgba(167, 139, 250, 0.4);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(4px);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .hero-discount-info i {
+            color: #a78bfa;
+            font-size: 12px;
+        }
+
         .search-bar-wrapper {
             margin-bottom: 16px;
             position: relative;
@@ -685,6 +706,13 @@
                 <button class="btn-hero" onclick="document.getElementById('homeProductGrid').scrollIntoView({behavior: 'smooth'});">
                     ДЭЛГҮҮР ҮЗЭХ <i class="fa-solid fa-arrow-right"></i>
                 </button>
+                
+                <div>
+                    <div class="hero-discount-info">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Хямдралтай авахыг хүсвэл Улаанбаатар их дэлгүүрийн 1 давхарт</span>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -738,7 +766,7 @@
                 </div>
                 <div class="price-row">
                     <span>Хүргэлт:</span>
-                    <span style="color: #a78bfa;">хүргэлт үнэгүй</span>
+                    <span style="color: #10b981; font-weight: bold;">ҮНЭГҮЙ</span>
                 </div>
                 <div class="total-text">
                     <span>Нийт дүн:</span>
@@ -847,7 +875,6 @@
         let currentImageIndex = 0;
         let currentActiveTitle = "";
 
-        // Сагсыг уншиж авах хэсэг
         let cart = [];
         try {
             cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -888,14 +915,12 @@
             btn.closest('.product-card').setAttribute('data-selected-size', size);
         };
 
-        // 🚨 ТОМ БОЛЖ ДҮҮРДЭГ АСУУДЛЫГ ЗАССАН addToCart
         window.addToCart = function(name, price, imgUrl, prodId, btnElem, event) {
             if (event) event.stopPropagation(); 
 
             const card = btnElem ? btnElem.closest('.product-card') : null;
             const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
 
-            // Зөвхөн богино URL байвал хадгална, урт Base64 байвал хоосон үлдээнэ
             let safeImg = (imgUrl && imgUrl.startsWith('http')) ? imgUrl : '';
 
             let existingItem = cart.find(item => item.id === prodId && item.size === chosenSize);
@@ -1094,7 +1119,7 @@
             
             document.getElementById("modalProductTitle").innerText = currentActiveProdName;
             document.getElementById("modalProductPriceOnly").innerText = currentActiveProdPrice.toLocaleString() + "₮";
-            document.getElementById("modalTotalWithShipping").innerText = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            document.getElementById("modalTotalWithShipping").innerText = currentActiveProdPrice.toLocaleString() + "₮";
             
             document.getElementById("userEmail").value = "";
             document.getElementById("userPhone").value = "";
@@ -1126,10 +1151,10 @@
             if (!receiptInput.files || receiptInput.files.length === 0) { alert("Төлбөр төлсөн баримтын зургаа оруулна уу!"); return; }
 
             var file = receiptInput.files[0];
-            var totalAmount = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
+            var totalAmount = currentActiveProdPrice.toLocaleString() + "₮";
             var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
 
-            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📧 Gmail: " + emailInput + "\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
+            var textMessage = "🔔 ШИНЭ ЗАХИАЛГА ИРЛЭЭ!\n\n📧 Gmail: " + emailInput + "\n📞 Утас: " + phoneInput + "\n📦 Бараа: " + currentActiveProdName + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн (Хүргэлт үнэгүй): " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
 
             var formData = new FormData();
             formData.append("chat_id", TG_CHAT_ID);
