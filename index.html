@@ -847,7 +847,13 @@
         let currentImageIndex = 0;
         let currentActiveTitle = "";
 
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // Safely initialize cart from localStorage
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+        } catch (e) {
+            cart = [];
+        }
 
         window.onload = function() {
             window.updateCartCount();
@@ -882,21 +888,53 @@
             btn.closest('.product-card').setAttribute('data-selected-size', size);
         };
 
+        // 🚨 ЗАССАН: LocalStorage-д Base64 зураг чихэгдэж QuotaExceededError гарахаас бүрэн хамгаалсан addToCart
         window.addToCart = function(name, price, imgUrl, prodId, btnElem, event) {
             if (event) event.stopPropagation(); 
 
             const card = btnElem ? btnElem.closest('.product-card') : null;
             const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
 
+            // Барааны урт Base64 зураг сагсанд чихэгдэж дүүрэхээс хамгаална
+            let safeImg = imgUrl;
+            if (safeImg && safeImg.length > 300) {
+                safeImg = 'https://via.placeholder.com/200';
+            }
+
             let existingItem = cart.find(item => item.id === prodId && item.size === chosenSize);
             if (existingItem) {
-                existingItem.quantity += 1;
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
             } else {
-                cart.push({ id: prodId, name: name, price: parseInt(price), image: imgUrl, size: chosenSize, quantity: 1 });
+                cart.push({ 
+                    id: prodId, 
+                    name: name, 
+                    price: parseInt(price) || 0, 
+                    image: safeImg, 
+                    size: chosenSize, 
+                    quantity: 1 
+                });
             }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            window.updateCartCount();
-            alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
+
+            try {
+                localStorage.setItem('cart', JSON.stringify(cart));
+                window.updateCartCount();
+                alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
+            } catch (e) {
+                console.error("Storage Error Caught:", e);
+                // Хэрэв дүүрвэл сагсыг суллаж зөвхөн одоогийн нэмсэн барааг хадгална
+                localStorage.removeItem('cart');
+                cart = [{ 
+                    id: prodId, 
+                    name: name, 
+                    price: parseInt(price) || 0, 
+                    image: safeImg, 
+                    size: chosenSize, 
+                    quantity: 1 
+                }];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                window.updateCartCount();
+                alert(name + " сагсанд нэмэгдлээ!");
+            }
         };
 
         window.renderProducts = function(productsList) {
