@@ -155,11 +155,6 @@
             transition: 0.2s;
         }
 
-        .btn-hero:hover {
-            transform: translateY(-2px);
-            background: #f1f5f9;
-        }
-
         /* 3. Хайлтын хэсэг */
         .search-bar-wrapper {
             margin-bottom: 16px;
@@ -176,10 +171,6 @@
             color: white;
             font-size: 13px;
             outline: none;
-        }
-
-        .search-input:focus { 
-            border-color: #8b5cf6; 
         }
 
         .search-icon { 
@@ -201,10 +192,6 @@
             scrollbar-width: none;
         }
 
-        .categories-grid::-webkit-scrollbar { 
-            display: none; 
-        }
-
         .category-card {
             background: #0d1117;
             border: 1px solid #21262d;
@@ -219,23 +206,7 @@
             gap: 8px;
         }
 
-        .category-card:hover { 
-            border-color: #8b5cf6; 
-            background: #161b22; 
-        }
-
-        .category-card i { 
-            font-size: 14px; 
-            color: #a78bfa; 
-        }
-
-        .category-card span { 
-            font-size: 12px; 
-            font-weight: 600; 
-            color: #cbd5e1; 
-        }
-
-        /* 5. Барааны жагсаалт ба Хэмжээ (Size) тохиргоо */
+        /* 5. Барааны жагсаалт */
         .section-header { 
             margin-bottom: 12px; 
         }
@@ -267,8 +238,8 @@
 
         .wishlist-btn { 
             position: absolute; 
-            top: 14px; 
-            right: 14px; 
+            top: 12px; 
+            right: 12px; 
             background: rgba(13, 17, 23, 0.8); 
             border: 1px solid #30363d; 
             width: 28px; 
@@ -326,9 +297,11 @@
             margin: 4px 0 6px 0; 
         }
 
-        /* Хэмжээ сонгох (XS, S, M, L) хэсэг */
+        /* Size хэсэг */
         .size-selection-wrapper {
             margin: 6px 0 8px 0;
+            position: relative;
+            z-index: 5;
         }
 
         .size-label {
@@ -348,13 +321,12 @@
             background: #161b22;
             border: 1px solid #30363d;
             color: #8b949e;
-            padding: 3px 0;
+            padding: 4px 0;
             border-radius: 4px;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s;
         }
 
         .size-btn.selected {
@@ -368,6 +340,8 @@
             gap: 4px; 
             margin-top: auto; 
             width: 100%; 
+            position: relative;
+            z-index: 5; /* Товчлууруудыг хамгийн дээд үед гаргана */
         }
 
         .btn-buy { 
@@ -375,7 +349,7 @@
             background: #8b5cf6; 
             color: #ffffff; 
             border: none; 
-            padding: 8px 0; 
+            padding: 10px 0; 
             border-radius: 8px; 
             font-size: 11px; 
             cursor: pointer; 
@@ -391,7 +365,7 @@
             background: #161b22; 
             color: #ffffff; 
             border: 1px solid #30363d; 
-            padding: 8px 0; 
+            padding: 10px 0; 
             border-radius: 8px; 
             font-size: 11px; 
             cursor: pointer; 
@@ -639,20 +613,11 @@
             justify-content: center; 
         }
 
-        .arrow-left { 
-            left: -10px; 
-            background: rgba(0,0,0,0.6); 
-        }
+        .arrow-left { left: -10px; background: rgba(0,0,0,0.6); }
+        .arrow-right { right: -10px; background: rgba(0,0,0,0.6); }
 
-        .arrow-right { 
-            right: -10px; 
-            background: rgba(0,0,0,0.6); 
-        }
-
-        /* Responsive Тохиргоо */
         @media (min-width: 768px) { 
             .product-container { grid-template-columns: repeat(4, 1fr) !important; gap: 16px !important; } 
-            .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
             .hero-banner { padding: 60px 40px; }
             .hero-banner h1 { font-size: 3rem; }
             .product-card img { height: 190px !important; }
@@ -846,7 +811,6 @@
         let currentActiveProdId = "";
         let currentActiveProdName = "";
         let currentActiveProdPrice = 0;
-        let selectedSize = ""; // Сонгосон size-ийг хадгалах
         let allProductsArray = []; 
         let currentImagesArray = [];
         let currentImageIndex = 0;
@@ -878,22 +842,24 @@
             }
         };
 
-        // Size сонгох функц
+        // Size сонгох
         window.selectSize = function(btn, size, event) {
-            if (event) event.stopPropagation();
+            if (event) { event.stopPropagation(); event.preventDefault(); }
             const parent = btn.parentElement;
             const buttons = parent.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            btn.closest('.product-card').setAttribute('data-selected-size', size);
+            
+            const card = btn.closest('.product-card');
+            if (card) { card.setAttribute('data-selected-size', size); }
         };
 
-        window.addToCart = function(name, price, imgUrl, prodId, event) {
-            if (event) event.stopPropagation(); 
+        // Сагслах
+        window.addToCart = function(name, price, imgUrl, btnElement, event) {
+            if (event) { event.stopPropagation(); event.preventDefault(); }
 
-            // Сонгосон size-ийг авна
-            const card = event.target.closest('.product-card');
-            const chosenSize = card.getAttribute('data-selected-size') || 'M';
+            const card = btnElement.closest('.product-card');
+            const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
 
             const existingItem = cart.find(item => item.name === name && item.size === chosenSize);
             if (existingItem) {
@@ -932,7 +898,7 @@
 
                 var card = document.createElement("div");
                 card.className = "product-card";
-                card.setAttribute('data-selected-size', 'M'); // Default size M
+                card.setAttribute('data-selected-size', 'M');
                 
                 card.innerHTML =
                     '<button class="wishlist-btn" onclick="window.toggleWishlist(this, event)"><i class="fa-solid fa-heart"></i></button>' +
@@ -953,8 +919,8 @@
                         '</div>' +
                     '</div>' +
                     '<div class="btn-group">' +
-                        '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + numericPrice + '\', event)"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>' +
-                        '<button class="btn-cart" onclick="window.addToCart(\'' + prod.name.replace(/'/g, "\\'") + '\', ' + numericPrice + ', \'' + imgUrl + '\', \'' + prodId + '\', event)">Сагслах</button>' +
+                        '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + numericPrice + '\', this, event)"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>' +
+                        '<button class="btn-cart" onclick="window.addToCart(\'' + prod.name.replace(/'/g, "\\'") + '\', ' + numericPrice + ', \'' + imgUrl + '\', this, event)">Сагслах</button>' +
                     '</div>';
                 grid.appendChild(card);
             });
@@ -1009,17 +975,16 @@
         };
 
         window.toggleWishlist = function(btn, event) {
-            if (event) event.stopPropagation();
+            if (event) { event.stopPropagation(); event.preventDefault(); }
             btn.classList.toggle('active');
         };
 
-        window.openModal = function(prodId, name, price, event) {
-            if (event) event.stopPropagation();
+        window.openModal = function(prodId, name, price, btnElement, event) {
+            if (event) { event.stopPropagation(); event.preventDefault(); }
             currentActiveProdId = prodId;
             
-            // Захиалах товч дарагдсан картын хэмжээг авна
-            const card = event.target.closest('.product-card');
-            const chosenSize = card ? card.getAttribute('data-selected-size') : 'M';
+            const card = btnElement.closest('.product-card');
+            const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
             currentActiveProdName = name + " (Хэмжээ: " + chosenSize + ")";
             currentActiveProdPrice = parseInt(price) || 0;
             
