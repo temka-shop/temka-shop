@@ -258,6 +258,7 @@
             justify-content: space-between; 
             height: 100%; 
             position: relative; 
+            z-index: 1;
         }
 
         .wishlist-btn { 
@@ -362,6 +363,8 @@
             gap: 4px; 
             margin-top: auto; 
             width: 100%; 
+            position: relative;
+            z-index: 5;
         }
 
         .btn-buy { 
@@ -865,7 +868,7 @@
         window.updateCartCount = function() {
             const countElement = document.getElementById('headerCartCount');
             if (countElement) {
-                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
                 countElement.textContent = totalItems;
             }
         };
@@ -885,18 +888,17 @@
             const card = btnElem ? btnElem.closest('.product-card') : null;
             const chosenSize = card ? (card.getAttribute('data-selected-size') || 'M') : 'M';
 
-            let existingItem = cart.find(item => item.name === name && item.size === chosenSize);
+            let existingItem = cart.find(item => item.id === prodId && item.size === chosenSize);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                cart.push({ name: name, price: parseInt(price), image: imgUrl, size: chosenSize, quantity: 1 });
+                cart.push({ id: prodId, name: name, price: parseInt(price), image: imgUrl, size: chosenSize, quantity: 1 });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
             window.updateCartCount();
             alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
         };
 
-        /* Бараануудыг аюулгүй DOM элементээр үүсгэн зурах засагдсан функц */
         window.renderProducts = function(productsList) {
             var grid = document.getElementById("homeProductGrid");
             if (!grid) return;
