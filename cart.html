@@ -62,13 +62,25 @@
             font-weight: 700; 
             color: #f1f5f9; 
             text-transform: capitalize; 
-            margin-bottom: 4px; 
+            margin-bottom: 2px; 
             display: -webkit-box; 
             -webkit-line-clamp: 2; 
             line-clamp: 2;
             -webkit-box-orient: vertical; 
             overflow: hidden; 
         }
+
+        .item-size {
+            font-size: 11px;
+            color: #8b5cf6;
+            font-weight: 700;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
         .item-price { font-size: 15px; font-weight: 800; color: #ffffff; }
         
         .quantity-controls { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
@@ -313,7 +325,7 @@
         const TG_CHAT_ID = "6759790987"; 
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let firebaseProductsCache = []; // Сүлжээний саатлаас сэргийлж кэшлэх
+        let firebaseProductsCache = [];
         
         let currentImagesArray = [];
         let currentImageIndex = 0;
@@ -321,12 +333,13 @@
         let calculatedSubtotal = 0; 
 
         window.onload = function() {
-            // Эхэнд нь ганцхан удаа Firebase-ээс мэдээллээ татаж авна
             database.ref('products').once('value', function(snapshot) {
                 firebaseProductsCache = [];
-                snapshot.forEach(function(childSnapshot) {
-                    firebaseProductsCache.push(childSnapshot.val());
-                });
+                if(snapshot.exists()) {
+                    snapshot.forEach(function(childSnapshot) {
+                        firebaseProductsCache.push(childSnapshot.val());
+                    });
+                }
                 window.renderCart();
             });
         };
@@ -360,6 +373,7 @@
                 }
 
                 let encodedImages = encodeURIComponent(JSON.stringify(imagesList));
+                let itemSize = item.size || 'M';
 
                 const card = document.createElement("div");
                 card.className = "cart-item";
@@ -367,6 +381,7 @@
                     '<img src="' + mainImg + '" alt="' + item.name + '" onclick="window.openCartImagePreview(\'' + encodedImages + '\', \'' + item.name.replace(/'/g, "\\'") + '\')">' +
                     '<div class="item-details">' +
                         '<h3 class="item-name">' + item.name + '</h3>' +
+                        '<span class="item-size">Хэмжээ: ' + itemSize + '</span>' +
                         '<p class="item-price">' + itemTotal.toLocaleString() + '₮</p>' +
                         '<div class="quantity-controls">' +
                             '<button class="btn-qty" onclick="window.changeQuantity(' + index + ', -1)">-</button>' +
@@ -383,7 +398,6 @@
             document.getElementById("summaryGrandTotal").innerText = (calculatedSubtotal + 3000).toLocaleString() + "₮";
         };
 
-        // Хурдан хугацаанд тоо хэмжээ нэмэх/хасах
         window.changeQuantity = function(index, delta) {
             cart[index].quantity += delta;
             if (cart[index].quantity <= 0) {
@@ -475,7 +489,8 @@
             var totalAmount = (calculatedSubtotal + 3000).toLocaleString() + "₮";
             var fullAddress = district + ", " + khoroo + ", " + building + ", " + door;
 
-            let itemsText = cart.map(item => item.name + " (" + item.quantity + "ш)").join(", ");
+            // Сагсан дахь бүх барааг нэр, хэмжээ, тоо ширхэгтэй нь жагсаах
+            let itemsText = cart.map(item => item.name + " [" + (item.size || 'M') + "] (" + item.quantity + "ш)").join(", ");
 
             var textMessage = "🔔 САГСНЫ ШИНЭ ЗАХИАЛГА!\n\n📧 Gmail: " + emailInput + "\n📞 Утас: " + phoneInput + "\n📦 Бараанууд: " + itemsText + "\n📍 Хаяг: " + fullAddress + "\n💰 Нийт дүн: " + totalAmount + "\n🔢 Гүйлгээний утга: " + orderCode;
 
