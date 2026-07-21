@@ -235,7 +235,7 @@
             color: #cbd5e1; 
         }
 
-        /* 5. Барааны жагсаалт */
+        /* 5. Барааны жагсаалт ба Хэмжээ (Size) тохиргоо */
         .section-header { 
             margin-bottom: 12px; 
         }
@@ -323,7 +323,44 @@
             font-weight: 800; 
             color: #ffffff; 
             font-size: 14px; 
-            margin: 4px 0 8px 0; 
+            margin: 4px 0 6px 0; 
+        }
+
+        /* Хэмжээ сонгох (XS, S, M, L) хэсэг */
+        .size-selection-wrapper {
+            margin: 6px 0 8px 0;
+        }
+
+        .size-label {
+            font-size: 9px;
+            color: #8b949e;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .size-buttons-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .size-btn {
+            flex: 1;
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 3px 0;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .size-btn.selected {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            color: #ffffff;
         }
 
         .btn-group { 
@@ -809,6 +846,7 @@
         let currentActiveProdId = "";
         let currentActiveProdName = "";
         let currentActiveProdPrice = 0;
+        let selectedSize = ""; // Сонгосон size-ийг хадгалах
         let allProductsArray = []; 
         let currentImagesArray = [];
         let currentImageIndex = 0;
@@ -840,17 +878,32 @@
             }
         };
 
-        window.addToCart = function(name, price, imgUrl, event) {
+        // Size сонгох функц
+        window.selectSize = function(btn, size, event) {
+            if (event) event.stopPropagation();
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.size-btn');
+            buttons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            btn.closest('.product-card').setAttribute('data-selected-size', size);
+        };
+
+        window.addToCart = function(name, price, imgUrl, prodId, event) {
             if (event) event.stopPropagation(); 
-            const existingItem = cart.find(item => item.name === name);
+
+            // Сонгосон size-ийг авна
+            const card = event.target.closest('.product-card');
+            const chosenSize = card.getAttribute('data-selected-size') || 'M';
+
+            const existingItem = cart.find(item => item.name === name && item.size === chosenSize);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
-                cart.push({ name: name, price: parseInt(price), image: imgUrl, quantity: 1 });
+                cart.push({ name: name, price: parseInt(price), image: imgUrl, size: chosenSize, quantity: 1 });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
             window.updateCartCount();
-            alert(name + " сагсанд амжилттай нэмэгдлээ! 🛒");
+            alert(name + " (" + chosenSize + ") сагсанд амжилттай нэмэгдлээ! 🛒");
         };
 
         window.renderProducts = function(productsList) {
@@ -879,6 +932,7 @@
 
                 var card = document.createElement("div");
                 card.className = "product-card";
+                card.setAttribute('data-selected-size', 'M'); // Default size M
                 
                 card.innerHTML =
                     '<button class="wishlist-btn" onclick="window.toggleWishlist(this, event)"><i class="fa-solid fa-heart"></i></button>' +
@@ -889,9 +943,18 @@
                             '<p class="product-price">' + numericPrice.toLocaleString() + '₮</p>' +
                         '</div>' +
                     '</div>' +
+                    '<div class="size-selection-wrapper">' +
+                        '<div class="size-label">Хэмжээ сонгох:</div>' +
+                        '<div class="size-buttons-group">' +
+                            '<button class="size-btn" onclick="window.selectSize(this, \'XS\', event)">XS</button>' +
+                            '<button class="size-btn" onclick="window.selectSize(this, \'S\', event)">S</button>' +
+                            '<button class="size-btn selected" onclick="window.selectSize(this, \'M\', event)">M</button>' +
+                            '<button class="size-btn" onclick="window.selectSize(this, \'L\', event)">L</button>' +
+                        '</div>' +
+                    '</div>' +
                     '<div class="btn-group">' +
                         '<button class="btn-buy" onclick="window.openModal(\'' + prodId + '\', \'' + prod.name.replace(/'/g, "\\'") + '\', \'' + numericPrice + '\', event)"><i class="fa-solid fa-bag-shopping"></i> Захиалах</button>' +
-                        '<button class="btn-cart" onclick="window.addToCart(\'' + prod.name.replace(/'/g, "\\'") + '\', ' + numericPrice + ', \'' + imgUrl + '\', event)">Сагслах</button>' +
+                        '<button class="btn-cart" onclick="window.addToCart(\'' + prod.name.replace(/'/g, "\\'") + '\', ' + numericPrice + ', \'' + imgUrl + '\', \'' + prodId + '\', event)">Сагслах</button>' +
                     '</div>';
                 grid.appendChild(card);
             });
@@ -953,10 +1016,14 @@
         window.openModal = function(prodId, name, price, event) {
             if (event) event.stopPropagation();
             currentActiveProdId = prodId;
-            currentActiveProdName = name;
+            
+            // Захиалах товч дарагдсан картын хэмжээг авна
+            const card = event.target.closest('.product-card');
+            const chosenSize = card ? card.getAttribute('data-selected-size') : 'M';
+            currentActiveProdName = name + " (Хэмжээ: " + chosenSize + ")";
             currentActiveProdPrice = parseInt(price) || 0;
             
-            document.getElementById("modalProductTitle").innerText = name;
+            document.getElementById("modalProductTitle").innerText = currentActiveProdName;
             document.getElementById("modalProductPriceOnly").innerText = currentActiveProdPrice.toLocaleString() + "₮";
             document.getElementById("modalTotalWithShipping").innerText = (currentActiveProdPrice + 3000).toLocaleString() + "₮";
             
