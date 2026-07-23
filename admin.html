@@ -19,7 +19,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Нэвтрэх цонх */
         .login-overlay { 
             position: fixed; 
             top: 0; 
@@ -69,7 +68,6 @@
         }
         .btn-login:hover { background: #7c3aed; }
 
-        /* Үндсэн Админ самбар */
         .admin-main-content { display: none; width: 100%; max-width: 600px; }
         .header-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .btn-back { 
@@ -113,32 +111,45 @@
         .form-group textarea { resize: vertical; min-height: 80px; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #8b5cf6; }
 
-        /* Size Checkbox Загвар */
-        .size-checkboxes {
-            display: flex;
-            flex-wrap: wrap;
+        .size-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 10px;
             background: #060709;
             padding: 12px;
             border: 1px solid #21262d;
             border-radius: 10px;
         }
-        .size-item {
+        .size-row {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 13px;
-            color: #ffffff;
-            cursor: pointer;
+            justify-content: space-between;
             background: #161b22;
             padding: 6px 10px;
             border-radius: 6px;
             border: 1px solid #30363d;
+            gap: 5px;
         }
-        .size-item input[type="checkbox"] {
+        .size-row label {
+            font-size: 12px;
+            color: #ffffff;
+            cursor: pointer;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .size-row input[type="checkbox"] {
             width: auto;
             accent-color: #8b5cf6;
             cursor: pointer;
+        }
+        .size-qty-input {
+            width: 45px !important;
+            padding: 4px !important;
+            font-size: 12px !important;
+            text-align: center;
+            border-radius: 4px !important;
         }
 
         .file-input-wrapper { 
@@ -155,7 +166,6 @@
         }
         .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 
-        /* Зургийн урьдчилан харах жагсаалт */
         .preview-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
         .preview-item { position: relative; width: 70px; height: 70px; }
         .preview-thumbnail { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; border: 1px solid #30363d; }
@@ -196,7 +206,6 @@
         
         .product-list, .order-list { width: 100%; }
 
-        /* Картны загвар */
         .admin-prod-card, .order-card { 
             background: #0d1117; 
             border: 1px solid #21262d; 
@@ -285,7 +294,6 @@
             width: 100%;
         }
 
-        /* Edit Modal (Засах цонх) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -302,7 +310,7 @@
             border-radius: 20px;
             padding: 24px;
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -366,31 +374,13 @@
             </div>
 
             <div class="form-group">
-                <label>Бэлэн байгаа хэмжээ (Sizes)</label>
-                <div class="size-checkboxes">
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="XS"> XS</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="S"> S</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="M"> M</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="L"> L</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="XL"> XL</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="2XL"> 2XL</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="38"> 38</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="39"> 39</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="40"> 40</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="41"> 41</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="42"> 42</label>
-                    <label class="size-item"><input type="checkbox" name="prodSize" value="43"> 43</label>
-                </div>
+                <label>Бэлэн байгаа хэмжээ болон тоо ширхэг (Sizes & Quantity)</label>
+                <div class="size-container" id="addSizeContainer"></div>
             </div>
 
             <div class="form-group">
                 <label>Бүтээгдэхүүний үнэ (₮)</label>
                 <input type="text" id="prodPrice" placeholder="Жишээ: 45,000">
-            </div>
-
-            <div class="form-group">
-                <label>Үлдэгдэл тоо (Stock)</label>
-                <input type="number" id="prodStock" placeholder="Жишээ: 14" value="14">
             </div>
 
             <div class="form-group">
@@ -444,31 +434,13 @@
             </div>
 
             <div class="form-group">
-                <label>Бэлэн байгаа хэмжээ (Sizes)</label>
-                <div class="size-checkboxes">
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="XS"> XS</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="S"> S</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="M"> M</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="L"> L</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="XL"> XL</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="2XL"> 2XL</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="38"> 38</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="39"> 39</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="40"> 40</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="41"> 41</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="42"> 42</label>
-                    <label class="size-item"><input type="checkbox" name="editProdSize" value="43"> 43</label>
-                </div>
+                <label>Бэлэн байгаа хэмжээ ба тоо ширхэг (Sizes & Qty)</label>
+                <div class="size-container" id="editSizeContainer"></div>
             </div>
 
             <div class="form-group">
                 <label>Үнэ (₮)</label>
                 <input type="text" id="editProdPrice">
-            </div>
-
-            <div class="form-group">
-                <label>Үлдэгдэл тоо (Stock)</label>
-                <input type="number" id="editProdStock">
             </div>
 
             <div class="form-group">
@@ -490,7 +462,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyD7htpIxGtVfJ0HGd7-8DVXtwGwj2mHlOQ",
             authDomain: "temka-shop.firebaseapp.com",
             databaseURL: "https://temka-shop-default-rtdb.firebaseio.com",
@@ -502,17 +474,45 @@
         };
 
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const database = firebase.database();
+        var database = firebase.database();
 
-        let selectedBase64Images = [];
-        let allProductsCache = {};
+        var selectedBase64Images = [];
+        var allProductsCache = {};
 
-        window.addEventListener('DOMContentLoaded', () => {
+        var AVAILABLE_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "38", "39", "40", "41", "42", "43"];
+
+        window.addEventListener('DOMContentLoaded', function() {
+            renderSizeInputs('addSizeContainer', 'add');
+            renderSizeInputs('editSizeContainer', 'edit');
+
             if(localStorage.getItem("admin_authenticated") === "true") { showAdminPanel(); }
             document.getElementById("adminPasswordInput").addEventListener("keyup", function(event) {
                 if (event.key === "Enter") { window.checkAdminPassword(); }
             });
         });
+
+        function renderSizeInputs(containerId, prefix) {
+            var container = document.getElementById(containerId);
+            container.innerHTML = "";
+            AVAILABLE_SIZES.forEach(function(sz) {
+                var row = document.createElement("div");
+                row.className = "size-row";
+                row.innerHTML = 
+                    '<label>' +
+                        '<input type="checkbox" id="' + prefix + 'cb' + sz + '" onchange="window.toggleSizeInput(\'' + prefix + '\', \'' + sz + '\')"> ' + sz +
+                    '</label>' +
+                    '<input type="number" id="' + prefix + 'qty' + sz + '" class="size-qty-input" value="1" min="1" disabled>';
+                container.appendChild(row);
+            });
+        }
+
+        window.toggleSizeInput = function(prefix, sz) {
+            var cb = document.getElementById(prefix + 'cb' + sz);
+            var qtyInput = document.getElementById(prefix + 'qty' + sz);
+            if (cb && qtyInput) {
+                qtyInput.disabled = !cb.checked;
+            }
+        };
 
         window.checkAdminPassword = function() {
             var enteredPass = document.getElementById("adminPasswordInput").value;
@@ -534,10 +534,10 @@
 
         window.handleImageSelect = function(input) {
             if (input.files && input.files.length > 0) {
-                let currentFilesCount = input.files.length;
-                let filesProcessed = 0;
+                var currentFilesCount = input.files.length;
+                var filesProcessed = 0;
 
-                Array.from(input.files).forEach(file => {
+                Array.from(input.files).forEach(function(file) {
                     var reader = new FileReader();
                     reader.onload = function(e) {
                         selectedBase64Images.push(e.target.result);
@@ -557,14 +557,13 @@
             var container = document.getElementById("imagePreviewContainer");
             container.innerHTML = "";
 
-            selectedBase64Images.forEach((imgSrc, index) => {
+            selectedBase64Images.forEach(function(imgSrc, index) {
                 var itemDiv = document.createElement("div");
                 itemDiv.className = "preview-item";
 
-                itemDiv.innerHTML = `
-                    <img src="${imgSrc}" class="preview-thumbnail">
-                    <button type="button" class="remove-img-btn" onclick="window.removeSelectedImage(${index})">✕</button>
-                `;
+                itemDiv.innerHTML = 
+                    '<img src="' + imgSrc + '" class="preview-thumbnail">' +
+                    '<button type="button" class="remove-img-btn" onclick="window.removeSelectedImage(' + index + ')">✕</button>';
                 container.appendChild(itemDiv);
             });
 
@@ -595,14 +594,25 @@
                     allProductsCache[prodId] = prod;
 
                     var mainImg = (prod.images && prod.images.length > 0) ? prod.images[0] : 'https://via.placeholder.com/60';
-                    var stockCount = (prod.stock !== undefined) ? prod.stock : 14;
+                    var stockCount = (prod.stock !== undefined) ? prod.stock : 0;
                     var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
                     
                     var statusBadge = isOutOfStock 
                         ? '<span class="stat-badge stat-status-out">❌ Дууссан</span>' 
                         : '<span class="stat-badge stat-status-in">✅ Бэлэн</span>';
 
-                    var sizesText = (prod.sizes && prod.sizes.length > 0) ? prod.sizes.join(', ') : 'Байхгүй';
+                    var sizesText = "Байхгүй";
+                    if (prod.sizes) {
+                        if (Array.isArray(prod.sizes)) {
+                            sizesText = prod.sizes.join(', ');
+                        } else if (typeof prod.sizes === 'object') {
+                            sizesText = Object.entries(prod.sizes)
+                                .map(function(item) { 
+                                    return item[0] + ': ' + (item[1] > 0 ? item[1] + 'ш' : 'Дууссан'); 
+                                })
+                                .join(', ');
+                        }
+                    }
 
                     var row = document.createElement("div");
                     row.className = "admin-prod-card";
@@ -614,7 +624,7 @@
                             (prod.description ? '<div class="prod-desc">' + prod.description + '</div>' : '') +
                             '<div class="stats-container">' +
                                 statusBadge +
-                                '<span class="stat-badge stat-stock">📦 Үлдэгдэл: ' + stockCount + '</span>' +
+                                '<span class="stat-badge stat-stock">📦 Нийт үлдэгдэл: ' + stockCount + '</span>' +
                                 '<span class="stat-badge stat-category">🏷️ ' + (prod.category || 'Гутал') + '</span>' +
                                 '<span class="stat-badge stat-sizes">📏 ' + sizesText + '</span>' +
                                 '<span class="stat-badge stat-views"><i class="fa-regular fa-eye"></i> ' + (prod.views || 0) + '</span>' +
@@ -651,7 +661,7 @@
                             '<div class="order-row"><b>📍 Хаяг:</b> ' + (order.address || 'Байхгүй') + '</div>' +
                             '<div class="order-row" style="margin-top:6px;"><b>Гүйлгээний утга:</b> <span class="order-code-badge">' + (order.orderCode || 'Байхгүй') + '</span></div>' +
                         '</div>' +
-                        '<button class="btn-complete" onclick="window.completeOrder(\'' + orderId + '\', \'' + (order.productId || '') + '\')">✅ Хүргэгдсэн (Хаах)</button>';
+                        '<button class="btn-complete" onclick="window.completeOrder(\'' + orderId + '\', \'' + (order.productId || '') + '\', \'' + (order.selectedSize || '') + '\')">✅ Хүргэгдсэн (Хаах)</button>';
                     orderDiv.appendChild(card);
                 });
             });
@@ -663,15 +673,19 @@
             var category = document.getElementById("prodCategory").value;
             var description = document.getElementById("prodDesc").value.trim();
             var status = document.getElementById("prodStatus").value;
-            var stockVal = document.getElementById("prodStock").value;
             var btn = document.getElementById("btnAddProduct");
 
-            var stock = parseInt(stockVal) >= 0 ? parseInt(stockVal) : 14;
+            var selectedSizes = {};
+            var totalStock = 0;
 
-            // Сонгогдсон хэмжээг цуглуулах
-            var selectedSizes = [];
-            document.querySelectorAll('input[name="prodSize"]:checked').forEach(cb => {
-                selectedSizes.push(cb.value);
+            AVAILABLE_SIZES.forEach(function(sz) {
+                var cb = document.getElementById('add_cb_' + sz);
+                var qtyInput = document.getElementById('add_qty_' + sz);
+                if (cb && cb.checked) {
+                    var q = parseInt(qtyInput.value) || 1;
+                    selectedSizes[sz] = q;
+                    totalStock += q;
+                }
             });
 
             if (selectedBase64Images.length === 0) { alert("Барааны зургийг оруулна уу!"); return; }
@@ -680,12 +694,14 @@
             btn.innerText = "Уншиж байна..."; btn.disabled = true;
             var numericPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
 
+            if (totalStock <= 0) { status = 'out_of_stock'; }
+
             database.ref('products').push({
                 images: selectedBase64Images,
                 name: name,
                 category: category,
                 price: numericPrice,
-                stock: stock,
+                stock: totalStock,
                 description: description,
                 status: status,
                 sizes: selectedSizes,
@@ -698,20 +714,16 @@
                 document.getElementById("uploadStatusText").innerText = "📁 Энд дарж зургуудаа нэмнэ үү";
                 document.getElementById("prodName").value = "";
                 document.getElementById("prodPrice").value = "";
-                document.getElementById("prodStock").value = "14";
                 document.getElementById("prodDesc").value = "";
                 document.getElementById("prodStatus").value = "in_stock";
                 
-                // Checkbox-уудыг цэвэрлэх
-                document.querySelectorAll('input[name="prodSize"]').forEach(cb => cb.checked = false);
-
+                renderSizeInputs('addSizeContainer', 'add');
                 selectedBase64Images = [];
             }).finally(function() {
                 btn.innerText = "＋ Шинэ бараа нэмэх"; btn.disabled = false;
             });
         };
 
-        /* EDIT MODAL СУУРЬ ФУНКЦҮҮД */
         window.openEditModal = function(prodId) {
             var prod = allProductsCache[prodId];
             if(!prod) return;
@@ -720,15 +732,35 @@
             document.getElementById("editProdName").value = prod.name || "";
             document.getElementById("editProdCategory").value = prod.category || "Гутал";
             document.getElementById("editProdPrice").value = prod.price || 0;
-            document.getElementById("editProdStock").value = (prod.stock !== undefined) ? prod.stock : 14;
             document.getElementById("editProdDesc").value = prod.description || "";
             document.getElementById("editProdStatus").value = prod.status || "in_stock";
 
-            // Хэмжээг тохируулах Checkboxes
-            var currentSizes = prod.sizes || [];
-            document.querySelectorAll('input[name="editProdSize"]').forEach(cb => {
-                cb.checked = currentSizes.includes(cb.value);
-            });
+            renderSizeInputs('editSizeContainer', 'edit');
+            if (prod.sizes) {
+                if (typeof prod.sizes === 'object' && !Array.isArray(prod.sizes)) {
+                    Object.entries(prod.sizes).forEach(function(item) {
+                        var sz = item[0];
+                        var qty = item[1];
+                        var cb = document.getElementById('edit_cb_' + sz);
+                        var qtyInput = document.getElementById('edit_qty_' + sz);
+                        if(cb && qtyInput) {
+                            cb.checked = true;
+                            qtyInput.disabled = false;
+                            qtyInput.value = qty;
+                        }
+                    });
+                } else if (Array.isArray(prod.sizes)) {
+                    prod.sizes.forEach(function(sz) {
+                        var cb = document.getElementById('edit_cb_' + sz);
+                        var qtyInput = document.getElementById('edit_qty_' + sz);
+                        if(cb && qtyInput) {
+                            cb.checked = true;
+                            qtyInput.disabled = false;
+                            qtyInput.value = 1;
+                        }
+                    });
+                }
+            }
 
             document.getElementById("editModal").style.display = "flex";
         };
@@ -742,15 +774,20 @@
             var name = document.getElementById("editProdName").value.trim();
             var category = document.getElementById("editProdCategory").value;
             var price = document.getElementById("editProdPrice").value.toString().trim();
-            var stockVal = document.getElementById("editProdStock").value;
             var description = document.getElementById("editProdDesc").value.trim();
             var status = document.getElementById("editProdStatus").value;
 
-            var stock = parseInt(stockVal) >= 0 ? parseInt(stockVal) : 0;
+            var selectedSizes = {};
+            var totalStock = 0;
 
-            var selectedSizes = [];
-            document.querySelectorAll('input[name="editProdSize"]:checked').forEach(cb => {
-                selectedSizes.push(cb.value);
+            AVAILABLE_SIZES.forEach(function(sz) {
+                var cb = document.getElementById('edit_cb_' + sz);
+                var qtyInput = document.getElementById('edit_qty_' + sz);
+                if (cb && cb.checked) {
+                    var q = parseInt(qtyInput.value) || 0;
+                    selectedSizes[sz] = q;
+                    totalStock += q;
+                }
             });
 
             if(!name || !price) {
@@ -759,41 +796,51 @@
             }
 
             var numericPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
+            if (totalStock <= 0) { status = 'out_of_stock'; }
 
             database.ref('products/' + prodId).update({
                 name: name,
                 category: category,
                 price: numericPrice,
-                stock: stock,
+                stock: totalStock,
                 description: description,
                 status: status,
                 sizes: selectedSizes
-            }).then(() => {
+            }).then(function() {
                 alert("Барааны мэдээлэл амжилттай шинэчлэгдлээ! ✨");
                 window.closeEditModal();
-            }).catch((err) => {
+            }).catch(function(err) {
                 alert("Алдаа гарлаа: " + err.message);
             });
         };
 
         window.deleteProduct = function(prodId) {
             if(confirm("Энэ барааг устгахдаа итгэлтэй байна уу?")) {
-                database.ref('products/' + prodId).remove().then(() => alert("Барааг устгалаа! 🗑️"));
+                database.ref('products/' + prodId).remove().then(function() { 
+                    alert("Барааг устгалаа! 🗑️"); 
+                });
             }
         };
 
-        window.completeOrder = function(orderId, productId) {
+        window.completeOrder = function(orderId, productId, selectedSize) {
             if(confirm("Энэ захиалгыг хүргэгдсэн гэж хаах уу?")) {
-                // Хэрэв productId захиалгад байвал барааны үлдэгдлээс хасна
                 if (productId) {
                     database.ref('products/' + productId).transaction(function(product) {
                         if (product) {
-                            var currentStock = (product.stock !== undefined) ? product.stock : 14;
-                            var newStock = currentStock > 0 ? currentStock - 1 : 0;
-                            product.stock = newStock;
+                            if (product.sizes && typeof product.sizes === 'object') {
+                                if (selectedSize && product.sizes[selectedSize] !== undefined) {
+                                    product.sizes[selectedSize] = Math.max(0, product.sizes[selectedSize] - 1);
+                                }
+                                var vals = Object.values(product.sizes);
+                                var sum = 0;
+                                for(var i = 0; i < vals.length; i++) { sum += vals[i]; }
+                                product.stock = sum;
+                            } else {
+                                var currentStock = (product.stock !== undefined) ? product.stock : 0;
+                                product.stock = Math.max(0, currentStock - 1);
+                            }
                             
-                            // 0 болбол статусыг дууссан болгоно
-                            if (newStock === 0) {
+                            if (product.stock <= 0) {
                                 product.status = 'out_of_stock';
                             }
                             product.orders = (product.orders || 0) + 1;
@@ -802,7 +849,9 @@
                     });
                 }
 
-                database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдаж, үлдэгдэл тоо хасагдлаа! 🤝"));
+                database.ref('orders/' + orderId).remove().then(function() { 
+                    alert("Захиалга хаагдаж, үлдэгдэл тоо хасагдлаа! 🤝"); 
+                });
             }
         };
     </script>

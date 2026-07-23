@@ -941,6 +941,7 @@
         let currentActiveProdName = "";
         let currentActiveProdPrice = 0;
         let selectedDetailSize = ""; 
+        let currentOrderSelectedSize = "";
         let allProductsArray = []; 
         let currentImagesArray = [];
         let currentImageIndex = 0;
@@ -989,14 +990,19 @@
 
         // Админаас ирсэн хэмжээний датаг форматад оруулах туслах функц
         function getParsedSizes(prod) {
-            if (prod.sizes && Array.isArray(prod.sizes) && prod.sizes.length > 0) {
-                return prod.sizes;
-            } else if (prod.sizes && typeof prod.sizes === 'string') {
-                return prod.sizes.split(',').map(s => s.trim()).filter(s => s);
-            } else if (prod.size) {
+            if (prod.sizes) {
+                if (typeof prod.sizes === 'object' && !Array.isArray(prod.sizes)) {
+                    return Object.keys(prod.sizes);
+                } else if (Array.isArray(prod.sizes) && prod.sizes.length > 0) {
+                    return prod.sizes;
+                } else if (typeof prod.sizes === 'string') {
+                    return prod.sizes.split(',').map(s => s.trim()).filter(s => s);
+                }
+            }
+            if (prod.size) {
                 return [prod.size];
             }
-            return ['']; // Байхгүй бол стандарт сонголт
+            return ['M']; // Байхгүй бол стандарт сонголт
         }
 
         window.selectSize = function(btn, size, event) {
@@ -1065,8 +1071,8 @@
                 
                 var prodName = prod.name ? String(prod.name) : 'Нэргүй бараа';
                 
-                // Үлдэгдэл тоо (байхгүй бол анхны утга 14)
-                var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 14;
+                // Үлдэгдэл тоо (байхгүй бол 0)
+                var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 0;
                 var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
                 
                 var rawPrice = (prod.price !== undefined && prod.price !== null) ? String(prod.price) : "0";
@@ -1121,7 +1127,9 @@
                 
                 var sizeButtonsHtml = availableSizes.map(function(s, index) {
                     var isSelected = (index === 0) ? 'selected' : '';
-                    return '<button type="button" class="size-btn ' + isSelected + '" onclick="window.selectSize(this, \'' + s + '\', event)">' + s + '</button>';
+                    var sizeQty = (prod.sizes && typeof prod.sizes === 'object' && prod.sizes[s] !== undefined) ? prod.sizes[s] : '';
+                    var sizeLabel = sizeQty !== '' ? s + ' (' + sizeQty + 'ш)' : s;
+                    return '<button type="button" class="size-btn ' + isSelected + '" onclick="window.selectSize(this, \'' + s + '\', event)">' + sizeLabel + '</button>';
                 }).join('');
 
                 sizeWrapper.innerHTML = 
@@ -1180,7 +1188,7 @@
             var numericPrice = parseInt(prod.price) || 0;
             var description = prod.description || prod.desc || "Энэхүү бүтээгдэхүүнд одоогоор нэмэлт тайлбар оруулаагүй байна.";
             
-            var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 14;
+            var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 0;
             var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
 
             var imgUrl = 'https://via.placeholder.com/300';
@@ -1206,7 +1214,8 @@
                 var btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = "size-btn" + (idx === 0 ? " selected" : "");
-                btn.innerText = s;
+                var sizeQty = (prod.sizes && typeof prod.sizes === 'object' && prod.sizes[s] !== undefined) ? prod.sizes[s] : '';
+                btn.innerText = sizeQty !== '' ? s + ' (' + sizeQty + 'ш)' : s;
                 btn.onclick = function() { window.selectModalSize(this, s); };
                 detailSizeGroup.appendChild(btn);
             });
@@ -1310,6 +1319,7 @@
             currentActiveProdId = prodId;
             
             chosenSize = chosenSize || 'M';
+            currentOrderSelectedSize = chosenSize;
             currentActiveProdName = name + " (Хэмжээ: " + chosenSize + ")";
             currentActiveProdPrice = parseInt(price) || 0;
             
@@ -1365,22 +1375,33 @@
             .then(response => response.json())
             .then(data => {
                 if(data.ok) {
-                    database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) { return (o || 0) + 1; });
-                    
-                    // Үлдэгдэл тооноос 1-ийг хасаж, 0 болбол status-ийг out_of_stock болгох
+                    // Админ шиг тухайн сонгогдсон хэмжээний үлдэгдлийг хасч, нийт stock-ийг тооцох
                     database.ref('products/' + currentActiveProdId).transaction(function(product) {
                         if (product) {
-                            var currentStock = (product.stock !== undefined && product.stock !== null) ? parseInt(product.stock) : 14;
-                            var newStock = Math.max(0, currentStock - 1);
-                            product.stock = newStock;
-                            if (newStock === 0) {
+                            if (product.sizes && typeof product.sizes === 'object') {
+                                if (currentOrderSelectedSize && product.sizes[currentOrderSelectedSize] !== undefined) {
+                                    product.sizes[currentOrderSelectedSize] = Math.max(0, product.sizes[currentOrderSelectedSize] - 1);
+                                }
+                                var vals = Object.values(product.sizes);
+                                var sum = 0;
+                                for(var i = 0; i < vals.length; i++) { sum += vals[i]; }
+                                product.stock = sum;
+                            } else {
+                                var currentStock = (product.stock !== undefined && product.stock !== null) ? parseInt(product.stock) : 0;
+                                product.stock = Math.max(0, currentStock - 1);
+                            }
+                            
+                            if (product.stock <= 0) {
                                 product.status = 'out_of_stock';
                             }
+                            product.orders = (product.orders || 0) + 1;
                         }
                         return product;
                     });
 
                     database.ref('orders').push({ 
+                        productId: currentActiveProdId,
+                        selectedSize: currentOrderSelectedSize,
                         email: emailInput,
                         phone: phoneInput, 
                         productName: currentActiveProdName, 
