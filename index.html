@@ -300,6 +300,21 @@
             letter-spacing: 0.5px;
         }
 
+        .stock-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #10b981;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .wishlist-btn { 
             position: absolute; 
             top: 14px; 
@@ -1049,7 +1064,10 @@
                 var prod = item.data || {};
                 
                 var prodName = prod.name ? String(prod.name) : 'Нэргүй бараа';
-                var isOutOfStock = prod.status === 'out_of_stock';
+                
+                // Үлдэгдэл тоо (байхгүй бол анхны утга 14)
+                var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 14;
+                var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
                 
                 var rawPrice = (prod.price !== undefined && prod.price !== null) ? String(prod.price) : "0";
                 var numericPrice = parseInt(rawPrice.replace(/[^0-9]/g, '')) || 0;
@@ -1085,7 +1103,10 @@
                     window.openProductDetailModal(prodId);
                 };
                 
-                var badgeHtml = isOutOfStock ? '<div class="out-of-stock-badge">Дууссан</div>' : '';
+                // Үлдэгдэл болон Дууссан төлвийн тэмдэглэгээ
+                var badgeHtml = isOutOfStock 
+                    ? '<div class="out-of-stock-badge">Дууссан</div>' 
+                    : '<div class="stock-badge">Үлдэгдэл: ' + stockCount + '</div>';
 
                 clickableArea.innerHTML = 
                     badgeHtml +
@@ -1158,7 +1179,9 @@
             var prodName = prod.name || 'Нэргүй бараа';
             var numericPrice = parseInt(prod.price) || 0;
             var description = prod.description || prod.desc || "Энэхүү бүтээгдэхүүнд одоогоор нэмэлт тайлбар оруулаагүй байна.";
-            var isOutOfStock = prod.status === 'out_of_stock';
+            
+            var stockCount = (prod.stock !== undefined && prod.stock !== null) ? parseInt(prod.stock) : 14;
+            var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
 
             var imgUrl = 'https://via.placeholder.com/300';
             var imagesArray = [];
@@ -1343,6 +1366,20 @@
             .then(data => {
                 if(data.ok) {
                     database.ref('products/' + currentActiveProdId + '/orders').transaction(function(o) { return (o || 0) + 1; });
+                    
+                    // Үлдэгдэл тооноос 1-ийг хасаж, 0 болбол status-ийг out_of_stock болгох
+                    database.ref('products/' + currentActiveProdId).transaction(function(product) {
+                        if (product) {
+                            var currentStock = (product.stock !== undefined && product.stock !== null) ? parseInt(product.stock) : 14;
+                            var newStock = Math.max(0, currentStock - 1);
+                            product.stock = newStock;
+                            if (newStock === 0) {
+                                product.status = 'out_of_stock';
+                            }
+                        }
+                        return product;
+                    });
+
                     database.ref('orders').push({ 
                         email: emailInput,
                         phone: phoneInput, 

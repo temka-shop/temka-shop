@@ -229,6 +229,7 @@
         .stat-status-in { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
         .stat-status-out { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
         .stat-sizes { background-color: #312e81; color: #a5b4fc; }
+        .stat-stock { background-color: #065f46; color: #34d399; }
 
         .prod-actions { display: flex; flex-direction: column; gap: 6px; }
 
@@ -388,6 +389,11 @@
             </div>
 
             <div class="form-group">
+                <label>Үлдэгдэл тоо (Stock)</label>
+                <input type="number" id="prodStock" placeholder="Жишээ: 14" value="14">
+            </div>
+
+            <div class="form-group">
                 <label>Бүтээгдэхүүний тайлбар</label>
                 <textarea id="prodDesc" placeholder="Хэмжээ, материал, онцлог шинжийг энд бичнэ үү..."></textarea>
             </div>
@@ -459,6 +465,12 @@
                 <label>Үнэ (₮)</label>
                 <input type="text" id="editProdPrice">
             </div>
+
+            <div class="form-group">
+                <label>Үлдэгдэл тоо (Stock)</label>
+                <input type="number" id="editProdStock">
+            </div>
+
             <div class="form-group">
                 <label>Тайлбар</label>
                 <textarea id="editProdDesc"></textarea>
@@ -583,7 +595,9 @@
                     allProductsCache[prodId] = prod;
 
                     var mainImg = (prod.images && prod.images.length > 0) ? prod.images[0] : 'https://via.placeholder.com/60';
-                    var isOutOfStock = prod.status === 'out_of_stock';
+                    var stockCount = (prod.stock !== undefined) ? prod.stock : 14;
+                    var isOutOfStock = prod.status === 'out_of_stock' || stockCount <= 0;
+                    
                     var statusBadge = isOutOfStock 
                         ? '<span class="stat-badge stat-status-out">❌ Дууссан</span>' 
                         : '<span class="stat-badge stat-status-in">✅ Бэлэн</span>';
@@ -600,6 +614,7 @@
                             (prod.description ? '<div class="prod-desc">' + prod.description + '</div>' : '') +
                             '<div class="stats-container">' +
                                 statusBadge +
+                                '<span class="stat-badge stat-stock">📦 Үлдэгдэл: ' + stockCount + '</span>' +
                                 '<span class="stat-badge stat-category">🏷️ ' + (prod.category || 'Гутал') + '</span>' +
                                 '<span class="stat-badge stat-sizes">📏 ' + sizesText + '</span>' +
                                 '<span class="stat-badge stat-views"><i class="fa-regular fa-eye"></i> ' + (prod.views || 0) + '</span>' +
@@ -636,7 +651,7 @@
                             '<div class="order-row"><b>📍 Хаяг:</b> ' + (order.address || 'Байхгүй') + '</div>' +
                             '<div class="order-row" style="margin-top:6px;"><b>Гүйлгээний утга:</b> <span class="order-code-badge">' + (order.orderCode || 'Байхгүй') + '</span></div>' +
                         '</div>' +
-                        '<button class="btn-complete" onclick="window.completeOrder(\'' + orderId + '\')">✅ Хүргэгдсэн (Хаах)</button>';
+                        '<button class="btn-complete" onclick="window.completeOrder(\'' + orderId + '\', \'' + (order.productId || '') + '\')">✅ Хүргэгдсэн (Хаах)</button>';
                     orderDiv.appendChild(card);
                 });
             });
@@ -648,7 +663,10 @@
             var category = document.getElementById("prodCategory").value;
             var description = document.getElementById("prodDesc").value.trim();
             var status = document.getElementById("prodStatus").value;
+            var stockVal = document.getElementById("prodStock").value;
             var btn = document.getElementById("btnAddProduct");
+
+            var stock = parseInt(stockVal) >= 0 ? parseInt(stockVal) : 14;
 
             // Сонгогдсон хэмжээг цуглуулах
             var selectedSizes = [];
@@ -667,6 +685,7 @@
                 name: name,
                 category: category,
                 price: numericPrice,
+                stock: stock,
                 description: description,
                 status: status,
                 sizes: selectedSizes,
@@ -679,6 +698,7 @@
                 document.getElementById("uploadStatusText").innerText = "📁 Энд дарж зургуудаа нэмнэ үү";
                 document.getElementById("prodName").value = "";
                 document.getElementById("prodPrice").value = "";
+                document.getElementById("prodStock").value = "14";
                 document.getElementById("prodDesc").value = "";
                 document.getElementById("prodStatus").value = "in_stock";
                 
@@ -700,6 +720,7 @@
             document.getElementById("editProdName").value = prod.name || "";
             document.getElementById("editProdCategory").value = prod.category || "Гутал";
             document.getElementById("editProdPrice").value = prod.price || 0;
+            document.getElementById("editProdStock").value = (prod.stock !== undefined) ? prod.stock : 14;
             document.getElementById("editProdDesc").value = prod.description || "";
             document.getElementById("editProdStatus").value = prod.status || "in_stock";
 
@@ -721,8 +742,11 @@
             var name = document.getElementById("editProdName").value.trim();
             var category = document.getElementById("editProdCategory").value;
             var price = document.getElementById("editProdPrice").value.toString().trim();
+            var stockVal = document.getElementById("editProdStock").value;
             var description = document.getElementById("editProdDesc").value.trim();
             var status = document.getElementById("editProdStatus").value;
+
+            var stock = parseInt(stockVal) >= 0 ? parseInt(stockVal) : 0;
 
             var selectedSizes = [];
             document.querySelectorAll('input[name="editProdSize"]:checked').forEach(cb => {
@@ -740,6 +764,7 @@
                 name: name,
                 category: category,
                 price: numericPrice,
+                stock: stock,
                 description: description,
                 status: status,
                 sizes: selectedSizes
@@ -757,9 +782,27 @@
             }
         };
 
-        window.completeOrder = function(orderId) {
+        window.completeOrder = function(orderId, productId) {
             if(confirm("Энэ захиалгыг хүргэгдсэн гэж хаах уу?")) {
-                database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдлаа! 🤝"));
+                // Хэрэв productId захиалгад байвал барааны үлдэгдлээс хасна
+                if (productId) {
+                    database.ref('products/' + productId).transaction(function(product) {
+                        if (product) {
+                            var currentStock = (product.stock !== undefined) ? product.stock : 14;
+                            var newStock = currentStock > 0 ? currentStock - 1 : 0;
+                            product.stock = newStock;
+                            
+                            // 0 болбол статусыг дууссан болгоно
+                            if (newStock === 0) {
+                                product.status = 'out_of_stock';
+                            }
+                            product.orders = (product.orders || 0) + 1;
+                        }
+                        return product;
+                    });
+                }
+
+                database.ref('orders/' + orderId).remove().then(() => alert("Захиалга хаагдаж, үлдэгдэл тоо хасагдлаа! 🤝"));
             }
         };
     </script>
